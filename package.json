@@ -55,7 +55,7 @@
     "react-dom": "19.1.1",
     "speech-rule-engine": "4.1.4",
     "three": "^0.180.0",
-    "voice-glow": "0.2.1",
+    "voice-glow": "0.5.0",
     "zustand": "^5.1.0"
   },
   "devDependencies": {
