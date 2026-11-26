@@ -23,6 +23,7 @@ const ACADEMY_CALLS = ['state', 'listCourses', 'getCourse', 'deleteCourse', 'rec
 const DESIGN_CALLS = ['state', 'listProjects', 'getProject', 'createProject', 'deleteProject', 'scanRepo', 'updateDesignMd', 'updateTokens', 'generate', 'refineScreen', 'critiqueScreen', 'duplicateScreen', 'deleteScreen', 'moveScreen', 'exportToRepo', 'publishPage'];
 const STUDIO_CALLS = ['state', 'list', 'get', 'media', 'generateImage', 'generateVideo', 'generateMusic', 'delete', 'favorite', 'exportToWork'];
 const WORLDS_CALLS = ['state', 'list', 'get', 'startSession', 'endSession', 'delete', 'saveSnapshotToStudio'];
+const GAME_CALLS = ['state', 'list', 'get', 'create', 'delete', 'saveRoom', 'saveConfig', 'savePrefab', 'importStudioAsset', 'importWorldFrame', 'readAsset', 'generateRoomWithAI'];
 contextBridge.exposeInMainWorld('fairy', {
   companionChat: text => ipcRenderer.invoke('fairy:companion-chat', text),
   // Two Macs: on a face (face-main.cjs), its link to the Fairy on the other Mac; on the full Fairy, becoming a face.
@@ -260,6 +261,7 @@ contextBridge.exposeInMainWorld('fairy', {
   gitCommitFileDiff: (sha, path) => ipcRenderer.invoke('fairy:git-commit-file-diff', sha, path),
   gitPathOf: link => ipcRenderer.invoke('fairy:git-path-of', link),
   openInProton: (folder, fallbackName) => ipcRenderer.invoke('fairy:open-in-proton', folder, fallbackName),
+  openInPhoton: gamePath => ipcRenderer.invoke('fairy:open-in-photon', gamePath),
   gitBranches: () => ipcRenderer.invoke('fairy:git-branches'),
   gitAct: (action, value) => ipcRenderer.invoke('fairy:git-act', action, value),
   gitCompare: options => ipcRenderer.invoke('fairy:git-compare', options),
@@ -419,6 +421,8 @@ contextBridge.exposeInMainWorld('fairy', {
   onStudio: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:studio', listener); return () => ipcRenderer.removeListener('fairy:studio', listener); },
   worlds: (name, ...args) => WORLDS_CALLS.includes(name) ? ipcRenderer.invoke(`fairy:worlds-${name}`, ...args) : Promise.reject(new Error(`No worlds call ${name}.`)),
   onWorlds: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:worlds', listener); return () => ipcRenderer.removeListener('fairy:worlds', listener); },
+  game: (name, ...args) => GAME_CALLS.includes(name) ? ipcRenderer.invoke(`fairy:game-${name}`, ...args) : Promise.reject(new Error(`No game call ${name}.`)),
+  onGame: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:game', listener); return () => ipcRenderer.removeListener('fairy:game', listener); },
   onNotebookTutor: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:notebook-tutor', listener); return () => ipcRenderer.removeListener('fairy:notebook-tutor', listener); },
   onNotebookVoice: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:notebook-voice', listener); return () => ipcRenderer.removeListener('fairy:notebook-voice', listener); },
   onNotebookChanged: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:notebook-changed', listener); return () => ipcRenderer.removeListener('fairy:notebook-changed', listener); },

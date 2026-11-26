@@ -130,13 +130,16 @@ export const REMOTE = Object.freeze([
   'studio-generateImage', 'studio-generateVideo', 'studio-generateMusic',
   'studio-delete', 'studio-favorite', 'studio-exportToWork',
   // Baryon Worlds (Pro): real-time Genie 4 interactive world simulation & Studio snapshot hand-off.
-  'worlds-state', 'worlds-list', 'worlds-get', 'worlds-startSession', 'worlds-endSession', 'worlds-delete', 'worlds-saveSnapshotToStudio']);
+  'worlds-state', 'worlds-list', 'worlds-get', 'worlds-startSession', 'worlds-endSession', 'worlds-delete', 'worlds-saveSnapshotToStudio',
+  // Baryon Game Dev Mode (Pro): Photon-compatible game projects, room architecture, Studio/Worlds asset hand-off.
+  'game-state', 'game-list', 'game-get', 'game-create', 'game-delete', 'game-saveRoom', 'game-saveConfig', 'game-savePrefab',
+  'game-importStudioAsset', 'game-importWorldFrame', 'game-readAsset', 'game-generateRoomWithAI']);
 
 export const LOCAL = Object.freeze([
   'minimize', 'close', 'around-notch', 'cursor-position', 'ride', 'sprite-hidden', 'window-position', 'startup-usable', 'ink-voice', 'attach-choose',
   'mini-browse-dir',
   // A web link in a reply opens in this Mac's browser; Proton opens work folders locally on this Mac.
-  'open-source', 'open-in-proton', 'capture-rect',
+  'open-source', 'open-in-proton', 'open-in-photon', 'capture-rect',
   'browser-state', 'browser-go', 'browser-command', 'browser-place', 'browser-show', 'event-loop-stats',
   // Sweep: each Mac's window asks its own Mac's disk cleaner (sweep.mjs); Relay, its own repo syncer (relay.mjs).
   'sweep', 'relay',
@@ -234,10 +237,12 @@ export const READS = Object.freeze(['btw', 'state', 'speak', 'transcribe', 'prep
   // Baryon Studio reads & media streaming don't touch chat state.
   'studio-state', 'studio-list', 'studio-get', 'studio-media',
   // Baryon Worlds reads don't touch chat state.
-  'worlds-state', 'worlds-list', 'worlds-get']);
+  'worlds-state', 'worlds-list', 'worlds-get',
+  // Baryon Game Mode reads don't touch chat state.
+  'game-state', 'game-list', 'game-get', 'game-readAsset']);
 
 // Away 4: the channels that carry a recording or a file, which may be up to 60 MB; any other call is at most 1 MB.
-export const BYTE_CHANNELS = Object.freeze(['transcribe', 'attach-bytes', 'notebook-paste', 'notebook-saveImage', 'analytics-upload', 'studio-media', 'worlds-saveSnapshotToStudio']);
+export const BYTE_CHANNELS = Object.freeze(['transcribe', 'attach-bytes', 'notebook-paste', 'notebook-saveImage', 'analytics-upload', 'studio-media', 'worlds-saveSnapshotToStudio', 'game-importWorldFrame', 'game-readAsset']);
 
 // Allowing a step from the face's Mac needs its approve key (Touch ID there), as from the companion; denying doesn't.
 // A step marked Mac-only may be allowed from the face's Mac too, each with its own Touch ID (Away 5).
@@ -298,10 +303,12 @@ export const WINDOW_EVENTS = Object.freeze([
   'studio',
   // Baryon Worlds session lifecycle & snapshot updates.
   'worlds',
+  // Baryon Game Mode room & asset updates.
+  'game',
 ]);
 
-// The notebook's calls change only the notebook, whose own events keep this Mac's window up to date; so do Research's, Academy's, Design Mode's, Studio's, and Worlds'.
-export const isRead = channel => READS.includes(channel) || String(channel).startsWith('notebook-') || String(channel).startsWith('research-') || String(channel).startsWith('academy-') || String(channel).startsWith('design-') || String(channel).startsWith('studio-') || String(channel).startsWith('worlds-');
+// The notebook's calls change only the notebook, whose own events keep this Mac's window up to date; so do Research's, Academy's, Design Mode's, Studio's, Worlds', and Game Mode's.
+export const isRead = channel => READS.includes(channel) || String(channel).startsWith('notebook-') || String(channel).startsWith('research-') || String(channel).startsWith('academy-') || String(channel).startsWith('design-') || String(channel).startsWith('studio-') || String(channel).startsWith('worlds-') || String(channel).startsWith('game-');
 
 const kinds = new Map([...REMOTE.map(name => [name, 'remote']), ...LOCAL.map(name => [name, 'local']), ...OTHER.map(name => [name, 'other']), ...MINI_ONLY.map(name => [name, 'mini-only'])]);
 export const kindOf = channel => kinds.get(String(channel)) ?? 'mini-only';
@@ -338,6 +345,8 @@ const LONG = new Set(['btw', 'chat', 'speak', 'eval-save', 'evals-run', 'benchma
   // Baryon Studio generation calls (especially Omni 1.2 Flash video polling & Lyria music) exceed 20s.
   'studio-generateImage', 'studio-generateVideo', 'studio-generateMusic',
   // Baryon Worlds Genie 4 session minting & cleanup.
-  'worlds-startSession', 'worlds-endSession']);
+  'worlds-startSession', 'worlds-endSession',
+  // Baryon Game Mode AI room generation can exceed 20s.
+  'game-generateRoomWithAI']);
 // Research's calls may wait on its helper reading PDFs or asking the connections which seats can sit.
 export const isLong = channel => LONG.has(String(channel)) || String(channel).startsWith('notebook-') || String(channel).startsWith('research-');

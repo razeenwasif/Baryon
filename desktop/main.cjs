@@ -3148,6 +3148,21 @@ app.whenReady().then(async () => {
     });
     for (const [name, fn] of Object.entries(worldsApi)) handle(`worlds-${name}`, fn, { refresh: false });
   }
+  if (edition.FEATURES.game) {
+    const gameStore = new (await import('./game/store.mjs')).GameStore();
+    const { detectPhotonApp } = await import('./game/photon-open.mjs');
+    const askGameAI = opts => askEmbeddedAI({ ...opts, surface: 'Baryon Game Mode' });
+    const emitGameEvent = event => sendToWindow('fairy:game', event);
+    const gameApi = (await import('./game/calls.mjs')).gameCalls({
+      store: gameStore,
+      studioStore,
+      askAI: askGameAI,
+      getPhotonStatus: () => detectPhotonApp(),
+      getProviders: getStudioProviders,
+      onEvent: emitGameEvent,
+    });
+    for (const [name, fn] of Object.entries(gameApi)) handle(`game-${name}`, fn, { refresh: false });
+  }
   // The Today panel: your next events and unread count, shown to you only. None of this goes to a model.
   let todayCache = null;
   handle('today-data', async force => {
@@ -4402,6 +4417,7 @@ app.whenReady().then(async () => {
     return sessions.setWork({ isolate: value === true });
   }, { refresh: false });
   handle('open-in-proton', async (folder, fallbackName = '') => (await import('./proton-open.mjs')).openFolderInProton(folder, { fallbackName }), { refresh: false });
+  handle('open-in-photon', async gamePath => (await import('./game/photon-open.mjs')).openGameInPhoton(gamePath), { refresh: false });
   // Puts the files back and takes the chat back to before this message. What commands did can't be undone this way.
   handle('work-rewind', async at => {
     const id = sessions.active, work = sessions.work();

@@ -69,6 +69,12 @@ export const PRO_FEATURE_GROUPS = Object.freeze({
     'src/worlds-view.js',
     'src/worlds-view.css',
   ]),
+  game: Object.freeze([
+    'desktop/game',
+    'src/game',
+    'src/game-view.js',
+    'src/game-view.css',
+  ]),
 });
 
 export const PRO_EXCLUDED_PATHS = Object.freeze(
@@ -93,7 +99,8 @@ export function resolveEdition({ env = process.env, rootDir = DEFAULT_ROOT } = {
   const hasNotebooks = existsSync(join(rootDir, 'desktop/notebook/calls.mjs'));
   const hasStudio = existsSync(join(rootDir, 'desktop/studio/calls.mjs'));
   const hasWorlds = existsSync(join(rootDir, 'desktop/worlds/calls.mjs'));
-  const anyProPresent = hasResearch || hasReproduce || hasAnalytics || hasAcademy || hasNotebooks || hasStudio || hasWorlds;
+  const hasGame = existsSync(join(rootDir, 'desktop/game/calls.mjs'));
+  const anyProPresent = hasResearch || hasReproduce || hasAnalytics || hasAcademy || hasNotebooks || hasStudio || hasWorlds || hasGame;
 
   const requested = String(env?.BARYON_EDITION || '').trim().toLowerCase();
   const manifest = readPackageEdition(rootDir);
@@ -116,6 +123,7 @@ export function resolveEdition({ env = process.env, rootDir = DEFAULT_ROOT } = {
     notebooks: allowPro && hasNotebooks,
     studio: allowPro && hasStudio,
     worlds: allowPro && hasWorlds,
+    game: allowPro && hasGame,
   });
 
   const resolvedEdition = Object.values(features).some(Boolean) ? 'pro' : 'core';
