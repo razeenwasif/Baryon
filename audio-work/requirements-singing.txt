@@ -1,6 +1,6 @@
 # Minimal inference environment for Seed-VC commit 51383efd921027683c89e5348211d93ff12ac2a8.
 # Python 3.11 on Apple Silicon. Install in an isolated virtual environment.
-torch==2.5.1
+torch==2.13.0
 torchaudio==2.5.1
 torchvision==0.20.1
 numpy==1.26.4
