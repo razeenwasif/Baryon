@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
+import { resolveEdition } from './desktop/edition.mjs';
 
-const isCore = process.env.BARYON_EDITION === 'core';
+const isCore = resolveEdition().isCore;
 const STUB_VIEWS = {
   './notebook-view.js': 'virtual:baryon-core-stub-notebook',
   './research-view.js': 'virtual:baryon-core-stub-research',
