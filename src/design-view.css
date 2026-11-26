@@ -1,4 +1,4 @@
-/* Baryon UI Design Mode: Stitch-style infinite canvas studio in Precision Dark Instrument Obsidian */
+/* Baryon UI Design Mode: Minimal Stratus Obsidian + Hairline Canvas Studio */
 
 html:not(.floating) {
   &.design-open main,
@@ -23,21 +23,21 @@ html:not(.floating) {
 }
 
 #design-view {
-  --ds-bg: #050507;
-  --ds-side: #0b0b0e;
-  --ds-raised: #111114;
-  --ds-hover: #17171d;
+  --ds-bg: #030304;
+  --ds-panel: #050507;
+  --ds-raised: #0c0c10;
+  --ds-hover: rgba(255, 255, 255, 0.048);
   --ds-ink: #f4f4f6;
   --ds-soft: #d5d8e2;
   --ds-dim: #8e8e99;
-  --ds-muted: #6e7382;
+  --ds-muted: #5c5c66;
   --ds-accent: #3e5aec;
   --ds-cyan: #18b8cc;
   --ds-emerald: #74e2a6;
   --ds-amber: #fbbf24;
   --ds-red: #f87171;
-  --ds-line: rgba(255, 255, 255, 0.08);
-  --ds-line-strong: rgba(255, 255, 255, 0.16);
+  --ds-line: rgba(255, 255, 255, 0.055);
+  --ds-line-strong: rgba(255, 255, 255, 0.11);
   grid-column: 2;
   grid-row: 1;
   position: relative;
@@ -71,7 +71,7 @@ html:not(.floating) {
   margin: 0;
 }
 
-/* ── Top Chrome Bar ── */
+/* ── Minimal Top Chrome Bar ── */
 
 #design-view .ds-topbar {
   flex: none;
@@ -79,9 +79,9 @@ html:not(.floating) {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 18px;
+  padding: 9px 14px;
   border-bottom: 1px solid var(--ds-line);
-  background: rgba(5, 5, 7, 0.92);
+  background: var(--ds-bg);
   -webkit-app-region: drag;
   z-index: 5;
 }
@@ -93,7 +93,7 @@ html:not(.floating) {
 #design-view .ds-bar-group {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
 }
 
@@ -101,39 +101,83 @@ html:not(.floating) {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-weight: 600;
-  font-size: 13.5px;
+  font-weight: 500;
+  font-size: 13px;
   color: var(--ds-ink);
-  margin-right: 4px;
 }
 
 #design-view .ds-brand-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--ds-cyan);
-  box-shadow: 0 0 10px rgba(24, 184, 204, 0.65);
 }
 
+#design-view .ds-crumb-sep {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 13px;
+}
+
+#design-view .ds-ghost-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--ds-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+#design-view .ds-ghost-icon:hover {
+  background: var(--ds-hover);
+  color: var(--ds-ink);
+}
+
+#design-view .ds-ghost-icon.is-on {
+  color: var(--ds-ink);
+}
+
+#design-view .ds-ghost-select,
 #design-view .ds-select,
 #design-view .ds-input {
-  height: 29px;
-  padding: 0 10px;
-  border-radius: 8px;
-  border: 1px solid var(--ds-line);
-  background: var(--ds-raised);
+  height: 27px;
+  padding: 0 8px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
   color: var(--ds-ink);
   font: inherit;
   font-size: 12px;
 }
 
-#design-view .ds-btn {
-  height: 29px;
-  padding: 0 11px;
-  border-radius: 8px;
-  border: 1px solid var(--ds-line);
-  background: transparent;
+#design-view .ds-ghost-select:hover,
+#design-view .ds-select:hover {
+  background: var(--ds-hover);
+}
+
+#design-view .ds-select {
   color: var(--ds-soft);
+  border-color: var(--ds-line);
+  background: var(--ds-bg);
+}
+
+#design-view .ds-input {
+  border-color: var(--ds-line-strong);
+  background: var(--ds-bg);
+}
+
+#design-view .ds-btn {
+  height: 27px;
+  padding: 0 10px;
+  border-radius: 7px;
+  border: 0;
+  background: transparent;
+  color: var(--ds-dim);
   font: inherit;
   font-size: 12px;
   font-weight: 500;
@@ -142,12 +186,12 @@ html:not(.floating) {
   align-items: center;
   gap: 5px;
   white-space: nowrap;
-  transition: background 140ms cubic-bezier(0.16, 1, 0.3, 1), transform 120ms ease, border-color 140ms ease;
+  transition: background 140ms cubic-bezier(0.16, 1, 0.3, 1), color 140ms ease, transform 120ms ease;
 }
 
 #design-view .ds-btn:hover:not(:disabled) {
   background: var(--ds-hover);
-  border-color: var(--ds-line-strong);
+  color: var(--ds-ink);
 }
 
 #design-view .ds-btn:active:not(:disabled) {
@@ -155,13 +199,12 @@ html:not(.floating) {
 }
 
 #design-view .ds-btn:disabled {
-  opacity: 0.45;
+  opacity: 0.38;
   cursor: not-allowed;
 }
 
 #design-view .ds-btn.is-primary {
   background: var(--ds-accent);
-  border-color: transparent;
   color: #fff;
   font-weight: 600;
 }
@@ -170,115 +213,140 @@ html:not(.floating) {
   background: #4e69f5;
 }
 
-#design-view .ds-btn.is-on {
-  background: rgba(62, 90, 236, 0.2);
-  border-color: rgba(62, 90, 236, 0.5);
-  color: #c7d4ff;
-}
-
 #design-view .ds-seg {
   display: inline-flex;
   padding: 2px;
-  border-radius: 9px;
-  background: var(--ds-raised);
+  border-radius: 8px;
   border: 1px solid var(--ds-line);
+  background: transparent;
 }
 
 #design-view .ds-seg button {
-  height: 24px;
-  padding: 0 9px;
+  height: 22px;
+  padding: 0 8px;
   border: 0;
-  border-radius: 7px;
+  border-radius: 6px;
   background: transparent;
-  color: var(--ds-dim);
+  color: var(--ds-muted);
   font: inherit;
   font-size: 11.5px;
   font-weight: 500;
   cursor: pointer;
 }
 
+#design-view .ds-seg button:hover {
+  color: var(--ds-soft);
+}
+
 #design-view .ds-seg button.is-on {
-  background: var(--ds-hover);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--ds-ink);
 }
 
-#design-view .ds-repo-pill {
-  max-width: 170px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding: 3px 9px;
-  border-radius: 999px;
-  border: 1px solid var(--ds-line);
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--ds-dim);
-  font-size: 11px;
-}
-
-/* ── Main 3-Pane Stitch Workspace ── */
+/* ── 3-Pane Workspace with Collapsible Side Panels ── */
 
 #design-view .ds-workspace {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: 316px minmax(0, 1fr) 338px;
+  grid-template-columns: 300px minmax(0, 1fr) 320px;
+}
+
+#design-view .ds-workspace.no-left {
+  grid-template-columns: minmax(0, 1fr) 320px;
 }
 
 #design-view .ds-workspace.no-inspector {
-  grid-template-columns: 316px minmax(0, 1fr) 0px;
+  grid-template-columns: 300px minmax(0, 1fr);
 }
 
-/* ── Left Stitch Prompt & Pipeline Rail ── */
+#design-view .ds-workspace.no-left.no-inspector {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+#design-view .ds-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 4px;
+}
+
+#design-view .ds-panel-close {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ds-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#design-view .ds-panel-close:hover {
+  background: var(--ds-hover);
+  color: var(--ds-ink);
+}
+
+/* ── Left Prompt & Pipeline Panel (Stratus Minimal) ── */
 
 #design-view .ds-left {
   display: flex;
   flex-direction: column;
   min-height: 0;
   border-right: 1px solid var(--ds-line);
-  background: var(--ds-side);
+  background: var(--ds-panel);
 }
 
 #design-view .ds-pipeline {
-  padding: 12px 14px;
+  padding: 8px 14px 12px;
   border-bottom: 1px solid var(--ds-line);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 #design-view .ds-phases {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
 }
 
 #design-view .ds-phase {
-  padding: 5px 4px;
-  border-radius: 7px;
-  border: 1px solid var(--ds-line);
-  background: var(--ds-raised);
-  text-align: center;
-  font-size: 10.5px;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
   color: var(--ds-muted);
-  transition: border-color 180ms ease, color 180ms ease, background 180ms ease;
+}
+
+#design-view .ds-phase-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.45;
 }
 
 #design-view .ds-phase.is-done {
-  border-color: rgba(116, 226, 166, 0.38);
   color: var(--ds-emerald);
 }
 
+#design-view .ds-phase.is-done .ds-phase-dot,
+#design-view .ds-phase.is-active .ds-phase-dot {
+  opacity: 1;
+}
+
 #design-view .ds-phase.is-active {
-  border-color: rgba(24, 184, 204, 0.65);
-  background: rgba(24, 184, 204, 0.12);
   color: var(--ds-cyan);
 }
 
 #design-view .ds-pipeline-status {
   font-size: 11.5px;
-  color: var(--ds-dim);
-  min-height: 17px;
+  color: var(--ds-muted);
+  min-height: 16px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -288,20 +356,23 @@ html:not(.floating) {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 12px 14px;
+  padding: 6px 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
 }
 
-#design-view .ds-turn-card {
-  padding: 11px 12px;
-  border-radius: 11px;
-  border: 1px solid var(--ds-line);
-  background: var(--ds-raised);
+#design-view .ds-turn-row {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ds-line);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
+}
+
+#design-view .ds-turn-row:last-child {
+  border-bottom: 0;
 }
 
 #design-view .ds-turn-prompt {
@@ -316,51 +387,61 @@ html:not(.floating) {
   justify-content: space-between;
   gap: 6px;
   font-size: 11px;
+  color: var(--ds-muted);
+}
+
+#design-view .ds-turn-sum {
+  font-size: 11.5px;
   color: var(--ds-dim);
 }
 
+#design-view .ds-turns-empty {
+  padding: 18px 0;
+  font-size: 12px;
+  color: var(--ds-muted);
+}
+
 #design-view .ds-score-pill {
-  padding: 2px 7px;
+  padding: 1px 7px;
   border-radius: 999px;
   font-size: 10.5px;
-  font-weight: 700;
-  background: rgba(116, 226, 166, 0.14);
+  font-weight: 600;
+  background: rgba(116, 226, 166, 0.12);
   color: var(--ds-emerald);
-  border: 1px solid rgba(116, 226, 166, 0.35);
 }
 
 #design-view .ds-score-pill.is-fail {
-  background: rgba(251, 191, 36, 0.14);
+  background: rgba(251, 191, 36, 0.12);
   color: var(--ds-amber);
-  border-color: rgba(251, 191, 36, 0.35);
 }
 
 #design-view .ds-composer {
   padding: 12px 14px 14px;
   border-top: 1px solid var(--ds-line);
-  background: rgba(17, 17, 20, 0.72);
+  background: var(--ds-panel);
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 8px;
 }
 
 #design-view .ds-composer textarea {
   width: 100%;
-  min-height: 76px;
+  min-height: 68px;
   max-height: 150px;
   resize: vertical;
-  padding: 10px 11px;
-  border-radius: 10px;
-  border: 1px solid var(--ds-line);
-  background: var(--ds-bg);
+  padding: 6px 2px;
+  border: 0;
+  border-bottom: 1px solid var(--ds-line);
+  border-radius: 0;
+  background: transparent;
   color: var(--ds-ink);
   font: inherit;
   font-size: 12.5px;
 }
 
 #design-view .ds-composer textarea:focus {
-  outline: 1px solid var(--ds-accent);
-  border-color: var(--ds-accent);
+  outline: none;
+  border-bottom-color: var(--ds-accent);
 }
 
 #design-view .ds-ctrl-grid {
@@ -372,8 +453,7 @@ html:not(.floating) {
 #design-view .ds-toggles {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 14px;
   font-size: 11.5px;
   color: var(--ds-dim);
 }
@@ -391,7 +471,7 @@ html:not(.floating) {
   position: relative;
   overflow: hidden;
   background-color: var(--ds-bg);
-  background-image: radial-gradient(rgba(255, 255, 255, 0.095) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.065) 1px, transparent 1px);
   background-size: 20px 20px;
   user-select: none;
   cursor: grab;
@@ -399,6 +479,36 @@ html:not(.floating) {
 
 #design-view .ds-canvas.is-panning {
   cursor: grabbing;
+}
+
+#design-view .ds-float-toggle {
+  position: absolute;
+  top: 12px;
+  z-index: 6;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--ds-line-strong);
+  background: rgba(5, 5, 7, 0.86);
+  color: var(--ds-soft);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+#design-view .ds-float-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ds-ink);
+}
+
+#design-view .ds-float-toggle.is-left {
+  left: 12px;
+}
+
+#design-view .ds-float-toggle.is-right {
+  right: 12px;
 }
 
 #design-view .ds-stage-transform {
@@ -413,7 +523,7 @@ html:not(.floating) {
   pointer-events: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 
 #design-view .ds-artboard-head {
@@ -421,21 +531,20 @@ html:not(.floating) {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 6px 10px;
-  border-radius: 9px;
+  padding: 5px 9px;
+  border-radius: 8px;
   border: 1px solid var(--ds-line);
-  background: rgba(11, 11, 14, 0.92);
+  background: rgba(5, 5, 7, 0.9);
   cursor: grab;
 }
 
 #design-view .ds-artboard.is-selected .ds-artboard-head {
-  border-color: rgba(62, 90, 236, 0.65);
-  background: rgba(20, 24, 42, 0.94);
+  border-color: rgba(62, 90, 236, 0.55);
 }
 
 #design-view .ds-artboard-title {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11.5px;
+  font-weight: 500;
   color: var(--ds-ink);
   display: flex;
   align-items: center;
@@ -445,53 +554,53 @@ html:not(.floating) {
 #design-view .ds-dim-tag {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10.5px;
-  color: var(--ds-dim);
+  color: var(--ds-muted);
 }
 
 #design-view .ds-artboard-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 #design-view .ds-icon-btn {
-  height: 22px;
+  height: 21px;
   padding: 0 7px;
-  border-radius: 6px;
-  border: 1px solid var(--ds-line);
+  border-radius: 5px;
+  border: 0;
   background: transparent;
-  color: var(--ds-soft);
+  color: var(--ds-dim);
   font-size: 11px;
   cursor: pointer;
 }
 
 #design-view .ds-icon-btn:hover {
   background: var(--ds-hover);
+  color: var(--ds-ink);
 }
 
 #design-view .ds-frame-wrap {
   position: relative;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid var(--ds-line-strong);
-  background: #0a0a0d;
+  background: #08080a;
   overflow: hidden;
-  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.52);
 }
 
 #design-view .ds-artboard.is-selected .ds-frame-wrap {
-  box-shadow: 0 0 0 2px var(--ds-accent), 0 26px 64px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 0 0 1.5px var(--ds-accent), 0 22px 54px rgba(0, 0, 0, 0.65);
 }
 
 #design-view .ds-artboard.is-mobile .ds-frame-wrap {
   border-radius: 26px;
-  border-width: 2px;
 }
 
 #design-view .ds-frame-wrap iframe {
   display: block;
   border: 0;
   transform-origin: 0 0;
-  background: #0a0a0d;
+  background: #08080a;
 }
 
 #design-view .ds-frame-shield {
@@ -505,88 +614,104 @@ html:not(.floating) {
   position: absolute;
   left: 14px;
   bottom: 12px;
-  padding: 5px 10px;
+  padding: 4px 9px;
   border-radius: 999px;
   border: 1px solid var(--ds-line);
-  background: rgba(11, 11, 14, 0.86);
-  color: var(--ds-dim);
+  background: rgba(5, 5, 7, 0.84);
+  color: var(--ds-muted);
   font-size: 11px;
   pointer-events: none;
 }
 
-/* ── Right Inspector Drawer ── */
+/* ── Right Inspector Panel (Stratus Hairline Sections) ── */
 
 #design-view .ds-inspector {
   display: flex;
   flex-direction: column;
   min-height: 0;
   border-left: 1px solid var(--ds-line);
-  background: var(--ds-side);
+  background: var(--ds-panel);
   overflow: hidden;
 }
 
-#design-view .ds-workspace.no-inspector .ds-inspector {
-  border-left: 0;
+#design-view .ds-tabs-bar {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--ds-line);
+  padding-right: 6px;
 }
 
 #design-view .ds-tabs {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-bottom: 1px solid var(--ds-line);
-  background: var(--ds-raised);
 }
 
 #design-view .ds-tabs button {
-  height: 36px;
+  height: 35px;
   border: 0;
-  border-bottom: 2px solid transparent;
+  border-bottom: 1.5px solid transparent;
   background: transparent;
-  color: var(--ds-dim);
+  color: var(--ds-muted);
   font: inherit;
   font-size: 11.5px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
+}
+
+#design-view .ds-tabs button:hover {
+  color: var(--ds-soft);
 }
 
 #design-view .ds-tabs button.is-on {
   color: var(--ds-ink);
   border-bottom-color: var(--ds-cyan);
-  background: var(--ds-side);
 }
 
 #design-view .ds-insp-scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 14px;
+  padding: 4px 16px 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
 }
 
-#design-view .ds-section-card {
-  padding: 12px;
-  border-radius: 11px;
-  border: 1px solid var(--ds-line);
-  background: var(--ds-raised);
+#design-view .ds-section {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--ds-line);
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 8px;
+}
+
+#design-view .ds-section:last-child {
+  border-bottom: 0;
+}
+
+#design-view .ds-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 #design-view .ds-kicker {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--ds-cyan);
+  color: var(--ds-muted);
 }
 
 #design-view .ds-token-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 26px 86px;
+  grid-template-columns: minmax(0, 1fr) 18px 78px;
   align-items: center;
   gap: 8px;
+  padding: 3px 0;
   font-size: 11.5px;
 }
 
@@ -599,27 +724,48 @@ html:not(.floating) {
 }
 
 #design-view .ds-color-swatch {
-  width: 26px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   padding: 0;
   border: 1px solid var(--ds-line-strong);
-  border-radius: 6px;
+  border-radius: 50%;
   background: transparent;
   cursor: pointer;
+}
+
+#design-view .ds-token-hex {
+  height: 22px;
+  padding: 0 4px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: var(--ds-dim);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  text-align: right;
+}
+
+#design-view .ds-token-hex:focus {
+  outline: none;
+  color: var(--ds-ink);
+  border-bottom-color: var(--ds-accent);
 }
 
 #design-view .ds-md-editor {
   width: 100%;
   min-height: 210px;
-  padding: 10px;
-  border-radius: 9px;
-  border: 1px solid var(--ds-line);
-  background: var(--ds-bg);
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
   color: var(--ds-soft);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 11px;
-  line-height: 1.5;
+  line-height: 1.55;
   resize: vertical;
+}
+
+#design-view .ds-md-editor:focus {
+  outline: none;
 }
 
 #design-view .ds-score-hero {
@@ -630,8 +776,8 @@ html:not(.floating) {
 }
 
 #design-view .ds-score-num {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 30px;
+  font-weight: 600;
   letter-spacing: -0.03em;
 }
 
@@ -645,11 +791,11 @@ html:not(.floating) {
 #design-view .ds-bar-head {
   display: flex;
   justify-content: space-between;
-  color: var(--ds-soft);
+  color: var(--ds-dim);
 }
 
 #design-view .ds-bar-track {
-  height: 6px;
+  height: 2px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
@@ -658,20 +804,19 @@ html:not(.floating) {
 #design-view .ds-bar-fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--ds-accent), var(--ds-cyan));
+  background: var(--ds-cyan);
 }
 
 #design-view .ds-code-pre {
   margin: 0;
-  padding: 11px;
-  border-radius: 9px;
-  border: 1px solid var(--ds-line);
-  background: var(--ds-bg);
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
   color: var(--ds-soft);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 11px;
   line-height: 1.5;
-  max-height: 360px;
+  max-height: 400px;
   overflow: auto;
   white-space: pre;
 }
@@ -684,33 +829,36 @@ html:not(.floating) {
 
 #design-view .ds-capture-card img {
   width: 100%;
-  border-radius: 8px;
-  border: 1px solid var(--ds-line-strong);
+  border-radius: 7px;
+  border: 1px solid var(--ds-line);
   display: block;
 }
 
 #design-view .ds-empty {
   margin: auto;
   text-align: center;
-  max-width: 340px;
-  padding: 28px;
-  border-radius: 14px;
-  border: 1px solid var(--ds-line);
-  background: rgba(11, 11, 14, 0.88);
+  max-width: 320px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   #design-view .ds-btn,
-  #design-view .ds-phase {
+  #design-view .ds-ghost-icon {
     transition: none;
   }
 }
 
 @media (max-width: 1080px) {
   #design-view .ds-workspace {
-    grid-template-columns: 270px minmax(0, 1fr) 290px;
+    grid-template-columns: 260px minmax(0, 1fr) 280px;
+  }
+  #design-view .ds-workspace.no-left {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+  #design-view .ds-workspace.no-inspector {
+    grid-template-columns: 260px minmax(0, 1fr);
   }
 }

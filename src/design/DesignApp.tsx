@@ -78,11 +78,18 @@ type DesignProject = {
 };
 
 const PHASE_STEPS = [
-  { id: 'spec', label: '1 Spec' },
-  { id: 'generate', label: '2 Build' },
-  { id: 'capture', label: '3 Capture' },
-  { id: 'critique', label: '4 Critique' },
+  { id: 'spec', label: 'Spec' },
+  { id: 'generate', label: 'Build' },
+  { id: 'capture', label: 'Capture' },
+  { id: 'critique', label: 'Critique' },
 ];
+
+const SidebarIcon = ({ side }: { side: 'left' | 'right' }) => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3" y="4" width="18" height="16" rx="2.5" />
+    <path d={side === 'left' ? 'M9 4v16' : 'M15 4v16'} />
+  </svg>
+);
 
 export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) => void }) {
   const [projects, setProjects] = useState<Array<{ id: string; name: string }>>([]);
@@ -96,6 +103,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
   const [selectedScreenId, setSelectedScreenId] = useState<string>('');
   const [vpFilter, setVpFilter] = useState<'all' | 'desktop' | 'mobile'>('all');
   const [canvasMode, setCanvasMode] = useState<'select' | 'interact'>('select');
+  const [leftOpen, setLeftOpen] = useState(true);
   const [inspectorOpen, setInspectorOpen] = useState(true);
   const [inspectorTab, setInspectorTab] = useState<'tokens' | 'critique' | 'code' | 'captures'>('tokens');
   const [codeTab, setCodeTab] = useState<'html' | 'react'>('html');
@@ -118,7 +126,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
 
   const [busy, setBusy] = useState(false);
   const [activePhase, setActivePhase] = useState('');
-  const [phaseDetail, setPhaseDetail] = useState('Ready — Stitch 4-stage pipeline');
+  const [phaseDetail, setPhaseDetail] = useState('Ready');
   const [notice, setNotice] = useState('');
 
   // Editable token & DESIGN.md state synced from project
@@ -169,7 +177,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
       if (!evt) return;
       if (evt.type === 'pipeline') {
         setActivePhase(evt.phase || '');
-        const iter = evt.iteration && evt.maxIterations ? ` [${evt.iteration}/${evt.maxIterations}]` : '';
+        const iter = evt.iteration && evt.maxIterations ? ` · ${evt.iteration}/${evt.maxIterations}` : '';
         setPhaseDetail(`${evt.detail || ''}${iter}`);
       } else if (evt.type === 'project-changed' && evt.projectId) {
         void api.design('getProject', evt.projectId).then(syncProject).catch(() => {});
@@ -178,6 +186,32 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
       }
     });
   }, [api, syncProject]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!document.documentElement.classList.contains('design-open')) return;
+      if (!event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement as HTMLElement)?.tagName || '')) return;
+      if (event.key === '[') {
+        event.preventDefault();
+        setLeftOpen(v => !v);
+      } else if (event.key === ']') {
+        event.preventDefault();
+        setInspectorOpen(v => !v);
+      } else if (event.key === '\\') {
+        event.preventDefault();
+        if (leftOpen || inspectorOpen) {
+          setLeftOpen(false);
+          setInspectorOpen(false);
+        } else {
+          setLeftOpen(true);
+          setInspectorOpen(true);
+        }
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [leftOpen, inspectorOpen]);
 
   const visibleScreens = useMemo(() => {
     const list = project?.screens || [];
@@ -240,7 +274,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
     try {
       const res = await api.design('scanRepo', { projectId: project.id });
       syncProject(res.project);
-      setPhaseDetail(`Ingested ${Object.keys(res.scan?.tokens || {}).length} tokens from ${res.scan?.folder || 'repo'}`);
+      setPhaseDetail(`Ingested ${Object.keys(res.scan?.tokens || {}).length} tokens`);
     } catch (err) {
       reportError(err);
     } finally {
@@ -253,7 +287,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
     setBusy(true);
     setNotice('');
     setActivePhase('spec');
-    setPhaseDetail('Starting Phase 1 Spec Architect…');
+    setPhaseDetail('Phase 1 · Spec & DESIGN.md…');
     try {
       const res = refineMode && selectedScreen
         ? await api.design('refineScreen', {
@@ -281,7 +315,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
       if (res?.screensAdded?.[0]) setSelectedScreenId(res.screensAdded[0]);
       setPromptText('');
       setActivePhase('done');
-      setPhaseDetail(`Complete · ${res?.critique?.weightedTotal ?? '—'}/10 (${res?.critique?.passed ? 'PASS' : 'REFINED'})`);
+      setPhaseDetail(`${res?.critique?.weightedTotal ?? '—'}/10 · ${res?.critique?.passed ? 'PASS' : 'REFINED'}`);
     } catch (err) {
       reportError(err);
       setActivePhase('');
@@ -305,7 +339,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
       });
       if (res?.project) syncProject(res.project);
       setActivePhase('done');
-      setPhaseDetail(`Critique finished · ${res?.critique?.weightedTotal ?? '—'}/10`);
+      setPhaseDetail(`Critique · ${res?.critique?.weightedTotal ?? '—'}/10`);
     } catch (err) {
       reportError(err);
       setActivePhase('');
@@ -319,7 +353,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
     try {
       const next = await api.design('updateTokens', { projectId: project.id, tokens: tokenDraft });
       syncProject(next);
-      setPhaseDetail('Applied updated DESIGN.md tokens live to all artboards.');
+      setPhaseDetail('Applied tokens live.');
     } catch (err) {
       reportError(err);
     }
@@ -330,7 +364,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
     try {
       const next = await api.design('updateDesignMd', { projectId: project.id, designMd: designMdDraft });
       syncProject(next);
-      setPhaseDetail('Saved DESIGN.md contract.');
+      setPhaseDetail('Saved DESIGN.md.');
     } catch (err) {
       reportError(err);
     }
@@ -340,7 +374,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
     if (!project || !api?.design) return;
     try {
       const res = await api.design('exportToRepo', { projectId: project.id });
-      setPhaseDetail(`Exported ${res.files?.length || 0} files (incl. DESIGN.md) to ${res.root}`);
+      setPhaseDetail(`Exported ${res.files?.length || 0} file(s) to ${res.root}`);
     } catch (err) {
       reportError(err);
     }
@@ -350,7 +384,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
     if (!project || !selectedScreen || !api?.design) return;
     try {
       await api.design('publishPage', { projectId: project.id, screenId: selectedScreen.id });
-      setPhaseDetail(`Published "${selectedScreen.title}" to Baryon Pages.`);
+      setPhaseDetail(`Published "${selectedScreen.title}" to Pages.`);
     } catch (err) {
       reportError(err);
     }
@@ -358,7 +392,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
 
   // Mouse handlers for canvas pan & artboard repositioning
   const onCanvasMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    if ((e.target as HTMLElement).closest('.ds-artboard')) return;
+    if ((e.target as HTMLElement).closest('.ds-artboard, .ds-float-toggle')) return;
     panDragRef.current = { startX: e.clientX, startY: e.clientY, origX: pan.x, origY: pan.y };
   };
 
@@ -420,9 +454,20 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
     <div className="ds-root" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       <header className="ds-topbar">
         <div className="ds-bar-group">
+          <button
+            type="button"
+            className={`ds-ghost-icon ${leftOpen ? 'is-on' : ''}`}
+            aria-pressed={leftOpen}
+            aria-label="Toggle prompt panel"
+            title="Toggle prompt panel (⌘[ · Zen: ⌘\)"
+            onClick={() => setLeftOpen(v => !v)}
+          >
+            <SidebarIcon side="left" />
+          </button>
           <span className="ds-brand"><span className="ds-brand-dot" />Design</span>
+          <span className="ds-crumb-sep">/</span>
           <select
-            className="ds-select"
+            className="ds-ghost-select"
             aria-label="Design project"
             value={project?.id || ''}
             onChange={e => void handleSelectProject(e.target.value)}
@@ -433,7 +478,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
             <>
               <input
                 className="ds-input"
-                placeholder="New canvas name…"
+                placeholder="Canvas name…"
                 value={newName}
                 onChange={e => setNewName(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') void handleCreateProject(); }}
@@ -445,14 +490,15 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
             <button type="button" className="ds-btn" onClick={() => setCreatingNew(true)}>+ New</button>
           )}
           {(workFolder || project?.folder) && (
-            <>
-              <span className="ds-repo-pill" title={project?.folder || workFolder}>
-                Repo: {(project?.folder || workFolder).split('/').at(-1)}
-              </span>
-              <button type="button" className="ds-btn" disabled={busy} onClick={() => void handleScanRepo()}>
-                Scan Repo
-              </button>
-            </>
+            <button
+              type="button"
+              className="ds-btn"
+              disabled={busy}
+              title={project?.folder || workFolder}
+              onClick={() => void handleScanRepo()}
+            >
+              Scan {(project?.folder || workFolder).split('/').at(-1)}
+            </button>
           )}
         </div>
 
@@ -470,120 +516,148 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
           </div>
           <div className="ds-seg" role="group" aria-label="Canvas zoom">
             <button type="button" onClick={() => setZoom(z => Math.max(0.25, Number((z - 0.1).toFixed(2))))}>−</button>
-            <button type="button" className="is-on" onClick={fitCanvas}>{Math.round(zoom * 100)}% Fit</button>
+            <button type="button" className="is-on" onClick={fitCanvas}>{Math.round(zoom * 100)}%</button>
             <button type="button" onClick={() => setZoom(z => Math.min(1.25, Number((z + 0.1).toFixed(2))))}>+</button>
           </div>
-          <button type="button" className="ds-btn" disabled={!project?.screens?.length} onClick={() => void handleExportRepo()}>Export Repo</button>
-          <button type="button" className="ds-btn" disabled={!selectedScreen} onClick={() => void handlePublishPage()}>Publish Page</button>
-          <button type="button" className={`ds-btn ${inspectorOpen ? 'is-on' : ''}`} onClick={() => setInspectorOpen(v => !v)}>Inspector</button>
+          <button type="button" className="ds-btn" disabled={!project?.screens?.length} onClick={() => void handleExportRepo()}>Export</button>
+          <button type="button" className="ds-btn" disabled={!selectedScreen} onClick={() => void handlePublishPage()}>Publish</button>
+          <button
+            type="button"
+            className={`ds-ghost-icon ${inspectorOpen ? 'is-on' : ''}`}
+            aria-pressed={inspectorOpen}
+            aria-label="Toggle inspector panel"
+            title="Toggle inspector panel (⌘] · Zen: ⌘\)"
+            onClick={() => setInspectorOpen(v => !v)}
+          >
+            <SidebarIcon side="right" />
+          </button>
         </div>
       </header>
 
-      <div className={`ds-workspace ${inspectorOpen ? '' : 'no-inspector'}`}>
-        <aside className="ds-left" aria-label="Design prompt and pipeline">
-          <div className="ds-pipeline">
-            <div className="ds-phases">
-              {PHASE_STEPS.map((st, idx) => {
-                const cls = activeStepIdx > idx ? 'is-done' : activeStepIdx === idx ? 'is-active' : '';
-                return <div key={st.id} className={`ds-phase ${cls}`}>{st.label}</div>;
-              })}
-            </div>
-            <div className="ds-pipeline-status" title={notice || phaseDetail}>
-              {notice ? `Error: ${notice}` : phaseDetail}
-            </div>
-          </div>
-
-          <div className="ds-turns">
-            {(project?.turns || []).slice().reverse().map(turn => (
-              <article key={turn.id} className="ds-turn-card">
-                <div className="ds-turn-prompt">{turn.prompt}</div>
-                <div className="ds-turn-meta">
-                  <span>{turn.archetype || 'Custom Spec'}</span>
-                  {turn.score != null && (
-                    <span className={`ds-score-pill ${turn.passed === false ? 'is-fail' : ''}`}>
-                      {turn.score}/10 · {turn.iterations || 1}x
-                    </span>
-                  )}
-                </div>
-                {turn.summary && <p style={{ fontSize: 11.5, color: 'var(--ds-dim)' }}>{turn.summary}</p>}
-              </article>
-            ))}
-            {!project?.turns?.length && (
-              <div style={{ fontSize: 12, color: 'var(--ds-dim)', padding: 6 }}>
-                Describe an app, landing page, or dashboard below. Phase 1 commits a DESIGN.md contract before code runs.
-              </div>
-            )}
-          </div>
-
-          <div className="ds-composer">
-            <textarea
-              aria-label="UI design prompt"
-              placeholder={selectedScreen
-                ? `Describe a new UI or how to refine "${selectedScreen.title}"…`
-                : 'Describe the UI you want to craft (e.g., Swiss editorial climate dashboard)…'}
-              value={promptText}
-              onChange={e => setPromptText(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-                  e.preventDefault();
-                  void handleGenerate(false);
-                }
-              }}
-            />
-            <div className="ds-ctrl-grid">
-              <select className="ds-select" aria-label="Target viewport" value={platform} onChange={e => setPlatform(e.target.value as any)}>
-                <option value="responsive">Responsive Pair</option>
-                <option value="desktop">Desktop (1440px)</option>
-                <option value="mobile">Mobile (390px)</option>
-              </select>
-              <select className="ds-select" aria-label="Aesthetic preset" value={preset} onChange={e => setPreset(e.target.value)}>
-                {presets.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
-              </select>
-              <select className="ds-select" aria-label="Design model provider" value={provider} onChange={e => setProvider(e.target.value)}>
-                {providers.map(p => (
-                  <option key={p.id} value={p.id}>{p.label}{p.connected === false ? ' (Sign in)' : ''}</option>
-                ))}
-              </select>
-              <select className="ds-select" aria-label="Critique iterations" value={maxIterations} onChange={e => setMaxIterations(Number(e.target.value))}>
-                <option value={1}>Critique: 1 pass</option>
-                <option value={2}>Critique: Max 2</option>
-                <option value={3}>Critique: Max 3</option>
-              </select>
-            </div>
-            <div className="ds-toggles">
-              <label className="ds-check">
-                <input type="checkbox" checked={critiqueEnabled} onChange={e => setCritiqueEnabled(e.target.checked)} />
-                Vision Critique
-              </label>
-              <label className="ds-check">
-                <input type="checkbox" checked={enforceTokenLock} onChange={e => setEnforceTokenLock(e.target.checked)} />
-                Token Lock
-              </label>
-            </div>
-            <div style={{ display: 'flex', gap: 6 }}>
+      <div className={`ds-workspace ${leftOpen ? '' : 'no-left'} ${inspectorOpen ? '' : 'no-inspector'}`}>
+        {leftOpen && (
+          <aside className="ds-left" aria-label="Design prompt and pipeline">
+            <div className="ds-panel-head">
+              <span className="ds-kicker">PIPELINE</span>
               <button
                 type="button"
-                className="ds-btn is-primary"
-                style={{ flex: 1, justifyContent: 'center' }}
-                disabled={busy || !promptText.trim()}
-                onClick={() => void handleGenerate(false)}
+                className="ds-panel-close"
+                aria-label="Hide prompt panel"
+                title="Hide prompt panel (⌘[)"
+                onClick={() => setLeftOpen(false)}
               >
-                {busy ? 'Running 4-Stage Pipeline…' : 'Generate Stitch Canvas'}
+                ‹
               </button>
-              {selectedScreen && (
-                <button
-                  type="button"
-                  className="ds-btn"
-                  disabled={busy || !promptText.trim()}
-                  title="Refine the selected artboard using your prompt and DESIGN.md"
-                  onClick={() => void handleGenerate(true)}
-                >
-                  Refine Selected
-                </button>
+            </div>
+            <div className="ds-pipeline">
+              <div className="ds-phases">
+                {PHASE_STEPS.map((st, idx) => {
+                  const cls = activeStepIdx > idx ? 'is-done' : activeStepIdx === idx ? 'is-active' : '';
+                  return (
+                    <div key={st.id} className={`ds-phase ${cls}`}>
+                      <i className="ds-phase-dot" aria-hidden="true" />
+                      <span>{st.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="ds-pipeline-status" title={notice || phaseDetail}>
+                {notice ? `Error: ${notice}` : phaseDetail}
+              </div>
+            </div>
+
+            <div className="ds-turns">
+              {(project?.turns || []).slice().reverse().map(turn => (
+                <article key={turn.id} className="ds-turn-row">
+                  <div className="ds-turn-prompt">{turn.prompt}</div>
+                  <div className="ds-turn-meta">
+                    <span>{turn.archetype || 'Custom Spec'}</span>
+                    {turn.score != null && (
+                      <span className={`ds-score-pill ${turn.passed === false ? 'is-fail' : ''}`}>
+                        {turn.score}/10
+                      </span>
+                    )}
+                  </div>
+                  {turn.summary && <p className="ds-turn-sum">{turn.summary}</p>}
+                </article>
+              ))}
+              {!project?.turns?.length && (
+                <div className="ds-turns-empty">
+                  Describe an interface below. Phase 1 locks DESIGN.md tokens before rendering.
+                </div>
               )}
             </div>
-          </div>
-        </aside>
+
+            <div className="ds-composer">
+              <textarea
+                aria-label="UI design prompt"
+                placeholder={selectedScreen
+                  ? `New UI or refine "${selectedScreen.title}"…`
+                  : 'Describe the UI you want to craft…'}
+                value={promptText}
+                onChange={e => setPromptText(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                    e.preventDefault();
+                    void handleGenerate(false);
+                  }
+                }}
+              />
+              <div className="ds-ctrl-grid">
+                <select className="ds-select" aria-label="Target viewport" value={platform} onChange={e => setPlatform(e.target.value as any)}>
+                  <option value="responsive">Responsive</option>
+                  <option value="desktop">Desktop</option>
+                  <option value="mobile">Mobile</option>
+                </select>
+                <select className="ds-select" aria-label="Aesthetic preset" value={preset} onChange={e => setPreset(e.target.value)}>
+                  {presets.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                </select>
+                <select className="ds-select" aria-label="Design model provider" value={provider} onChange={e => setProvider(e.target.value)}>
+                  {providers.map(p => (
+                    <option key={p.id} value={p.id}>{p.label}{p.connected === false ? ' (Sign in)' : ''}</option>
+                  ))}
+                </select>
+                <select className="ds-select" aria-label="Critique iterations" value={maxIterations} onChange={e => setMaxIterations(Number(e.target.value))}>
+                  <option value={1}>1 pass</option>
+                  <option value={2}>Max 2x</option>
+                  <option value={3}>Max 3x</option>
+                </select>
+              </div>
+              <div className="ds-toggles">
+                <label className="ds-check">
+                  <input type="checkbox" checked={critiqueEnabled} onChange={e => setCritiqueEnabled(e.target.checked)} />
+                  Critique
+                </label>
+                <label className="ds-check">
+                  <input type="checkbox" checked={enforceTokenLock} onChange={e => setEnforceTokenLock(e.target.checked)} />
+                  Token Lock
+                </label>
+              </div>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <button
+                  type="button"
+                  className="ds-btn is-primary"
+                  style={{ flex: 1, justifyContent: 'center' }}
+                  disabled={busy || !promptText.trim()}
+                  onClick={() => void handleGenerate(false)}
+                >
+                  {busy ? 'Generating…' : 'Generate'}
+                </button>
+                {selectedScreen && (
+                  <button
+                    type="button"
+                    className="ds-btn"
+                    disabled={busy || !promptText.trim()}
+                    title="Refine selected artboard"
+                    onClick={() => void handleGenerate(true)}
+                  >
+                    Refine
+                  </button>
+                )}
+              </div>
+            </div>
+          </aside>
+        )}
 
         <div
           ref={canvasRef}
@@ -597,6 +671,26 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
             }
           }}
         >
+          {!leftOpen && (
+            <button
+              type="button"
+              className="ds-float-toggle is-left"
+              title="Show prompt panel (⌘[)"
+              onClick={() => setLeftOpen(true)}
+            >
+              › Prompt
+            </button>
+          )}
+          {!inspectorOpen && (
+            <button
+              type="button"
+              className="ds-float-toggle is-right"
+              title="Show inspector panel (⌘])"
+              onClick={() => setInspectorOpen(true)}
+            >
+              Inspector ‹
+            </button>
+          )}
           <div className="ds-stage-transform" style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})` }}>
             {visibleScreens.map(screen => {
               const isMobile = screen.viewport === 'mobile';
@@ -645,7 +739,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
                       style={{ width: frameW, height: frameH }}
                     />
                     {canvasMode === 'select' && (
-                      <div className="ds-frame-shield" title="Click to select artboard (switch to Interact mode above to click inside UI)" />
+                      <div className="ds-frame-shield" title="Click to select artboard" />
                     )}
                   </div>
                 </div>
@@ -654,43 +748,54 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
           </div>
           {!visibleScreens.length && (
             <div className="ds-empty" style={{ position: 'relative', top: '28%' }}>
-              <span className="ds-kicker">BARYON STITCH STUDIO</span>
-              <h2 style={{ fontSize: 18 }}>No artboards on this canvas yet</h2>
+              <span className="ds-kicker">DESIGN CANVAS</span>
+              <h2 style={{ fontSize: 17, fontWeight: 600 }}>No artboards yet</h2>
               <p style={{ fontSize: 12.5, color: 'var(--ds-dim)' }}>
-                Enter a UI prompt on the left to generate a DESIGN.md contract, desktop + mobile screens, and a vision critique score.
+                Write a prompt to synthesize a DESIGN.md contract and paired viewports.
               </p>
             </div>
           )}
           <div className="ds-canvas-hint">
-            Drag empty dot-grid to pan · Drag artboard headers to arrange · Switch to Interact mode to test buttons/tabs
+            Drag grid to pan · ⌘[ / ⌘] toggle panels · ⌘\ Zen canvas
           </div>
         </div>
 
         {inspectorOpen && (
           <aside className="ds-inspector" aria-label="Design Inspector">
-            <div className="ds-tabs" role="tablist">
-              <button type="button" role="tab" className={inspectorTab === 'tokens' ? 'is-on' : ''} onClick={() => setInspectorTab('tokens')}>Tokens</button>
-              <button type="button" role="tab" className={inspectorTab === 'critique' ? 'is-on' : ''} onClick={() => setInspectorTab('critique')}>Critique</button>
-              <button type="button" role="tab" className={inspectorTab === 'code' ? 'is-on' : ''} onClick={() => setInspectorTab('code')}>Code</button>
-              <button type="button" role="tab" className={inspectorTab === 'captures' ? 'is-on' : ''} onClick={() => setInspectorTab('captures')}>Captures</button>
+            <div className="ds-tabs-bar">
+              <div className="ds-tabs" role="tablist">
+                <button type="button" role="tab" className={inspectorTab === 'tokens' ? 'is-on' : ''} onClick={() => setInspectorTab('tokens')}>Tokens</button>
+                <button type="button" role="tab" className={inspectorTab === 'critique' ? 'is-on' : ''} onClick={() => setInspectorTab('critique')}>Critique</button>
+                <button type="button" role="tab" className={inspectorTab === 'code' ? 'is-on' : ''} onClick={() => setInspectorTab('code')}>Code</button>
+                <button type="button" role="tab" className={inspectorTab === 'captures' ? 'is-on' : ''} onClick={() => setInspectorTab('captures')}>Captures</button>
+              </div>
+              <button
+                type="button"
+                className="ds-panel-close"
+                aria-label="Hide inspector panel"
+                title="Hide inspector panel (⌘])"
+                onClick={() => setInspectorOpen(false)}
+              >
+                ›
+              </button>
             </div>
 
             <div className="ds-insp-scroll">
               {inspectorTab === 'tokens' && (
                 <>
-                  <section className="ds-section-card">
-                    <span className="ds-kicker">AESTHETIC THESIS</span>
-                    <strong style={{ fontSize: 13 }}>{project?.spec?.archetype || 'Precision Editorial'}</strong>
+                  <section className="ds-section">
+                    <span className="ds-kicker">THESIS</span>
+                    <strong style={{ fontSize: 13, fontWeight: 600 }}>{project?.spec?.archetype || 'Precision Editorial'}</strong>
                     <p style={{ fontSize: 12, color: 'var(--ds-dim)' }}>{project?.spec?.mood || ''}</p>
-                    <div style={{ fontSize: 11.5, color: 'var(--ds-soft)' }}>
-                      Display: <strong>{project?.spec?.typography?.display || '—'}</strong> · Body: <strong>{project?.spec?.typography?.body || '—'}</strong>
+                    <div style={{ fontSize: 11.5, color: 'var(--ds-muted)' }}>
+                      {project?.spec?.typography?.display || '—'} · {project?.spec?.typography?.body || '—'}
                     </div>
                   </section>
 
-                  <section className="ds-section-card">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="ds-kicker">LIVE TOKEN LOCK</span>
-                      <button type="button" className="ds-btn is-primary" onClick={() => void handleApplyTokens()}>Apply Live</button>
+                  <section className="ds-section">
+                    <div className="ds-section-head">
+                      <span className="ds-kicker">TOKENS</span>
+                      <button type="button" className="ds-btn is-primary" onClick={() => void handleApplyTokens()}>Apply</button>
                     </div>
                     {Object.entries(tokenDraft).map(([key, val]) => {
                       const isHex = /^#[0-9a-f]{6}$/i.test(String(val).trim());
@@ -705,8 +810,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
                             onChange={e => setTokenDraft(d => ({ ...d, [key]: e.target.value }))}
                           />
                           <input
-                            className="ds-input"
-                            style={{ height: 24, fontSize: 11 }}
+                            className="ds-token-hex"
                             value={val}
                             onChange={e => setTokenDraft(d => ({ ...d, [key]: e.target.value }))}
                           />
@@ -715,9 +819,9 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
                     })}
                   </section>
 
-                  <section className="ds-section-card">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="ds-kicker">DESIGN.MD CONTRACT</span>
+                  <section className="ds-section">
+                    <div className="ds-section-head">
+                      <span className="ds-kicker">DESIGN.MD</span>
                       <button type="button" className="ds-btn" onClick={() => void handleSaveDesignMd()}>Save</button>
                     </div>
                     <textarea className="ds-md-editor" value={designMdDraft} onChange={e => setDesignMdDraft(e.target.value)} />
@@ -727,17 +831,17 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
 
               {inspectorTab === 'critique' && (
                 <>
-                  <section className="ds-section-card">
-                    <span className="ds-kicker">ADVERSARIAL CRITIQUE</span>
+                  <section className="ds-section">
+                    <span className="ds-kicker">RUBRIC</span>
                     {activeCritique ? (
                       <>
                         <div className="ds-score-hero">
                           <div>
                             <div className="ds-score-num">{activeCritique.weightedTotal}</div>
-                            <div style={{ fontSize: 11, color: 'var(--ds-dim)' }}>Weighted Rubric (Threshold {activeCritique.threshold})</div>
+                            <div style={{ fontSize: 11, color: 'var(--ds-muted)' }}>Threshold {activeCritique.threshold}</div>
                           </div>
                           <span className={`ds-score-pill ${activeCritique.passed ? '' : 'is-fail'}`}>
-                            {activeCritique.passed ? 'PASS' : 'NEEDS REFINEMENT'}
+                            {activeCritique.passed ? 'PASS' : 'NEEDS WORK'}
                           </span>
                         </div>
                         {[
@@ -753,31 +857,31 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
                         ))}
                       </>
                     ) : (
-                      <p style={{ fontSize: 12, color: 'var(--ds-dim)' }}>Run Vision Critique on any artboard to inspect rubric scores.</p>
+                      <p style={{ fontSize: 12, color: 'var(--ds-dim)' }}>Run Vision Critique on any artboard to score craft and originality.</p>
                     )}
                     {selectedScreen && (
                       <button type="button" className="ds-btn is-primary" disabled={busy} onClick={() => void handleCritiqueScreen(selectedScreen.id)}>
-                        Run Vision Critique Now
+                        Run Critique
                       </button>
                     )}
                   </section>
 
                   {activeGate && (
-                    <section className="ds-section-card">
-                      <span className="ds-kicker">STATIC VERIFICATION GATE</span>
+                    <section className="ds-section">
+                      <span className="ds-kicker">STATIC GATE</span>
                       <div style={{ fontSize: 12, color: activeGate.passed ? 'var(--ds-emerald)' : 'var(--ds-amber)' }}>
-                        {activeGate.passed ? 'Passed Token Lock & Anti-Slop checks' : `${activeGate.errors.length} gate violation(s)`}
+                        {activeGate.passed ? 'Token Lock & contrast clean' : `${activeGate.errors.length} violation(s)`}
                       </div>
-                      <div style={{ fontSize: 11.5, color: 'var(--ds-dim)' }}>
-                        Raw hex outside :root: {activeGate.metrics?.rawHexOutsideRoot ?? 0} · Text contrast: {activeGate.metrics?.textContrast ?? '—'}:1
+                      <div style={{ fontSize: 11, color: 'var(--ds-muted)' }}>
+                        Hex leaks: {activeGate.metrics?.rawHexOutsideRoot ?? 0} · Contrast: {activeGate.metrics?.textContrast ?? '—'}:1
                       </div>
                       {activeGate.errors?.map((err, i) => <div key={i} style={{ fontSize: 11.5, color: 'var(--ds-red)' }}>• {err}</div>)}
                     </section>
                   )}
 
                   {activeCritique?.criticalIssues?.length ? (
-                    <section className="ds-section-card">
-                      <span className="ds-kicker">ACTIONABLE ISSUES</span>
+                    <section className="ds-section">
+                      <span className="ds-kicker">ISSUES</span>
                       {activeCritique.criticalIssues.map((iss, i) => (
                         <div key={i} style={{ fontSize: 11.5, color: 'var(--ds-amber)' }}>• {iss}</div>
                       ))}
@@ -787,10 +891,10 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
               )}
 
               {inspectorTab === 'code' && (
-                <section className="ds-section-card">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
+                <section className="ds-section">
+                  <div className="ds-section-head">
                     <div className="ds-seg">
-                      <button type="button" className={codeTab === 'html' ? 'is-on' : ''} onClick={() => setCodeTab('html')}>HTML / CSS</button>
+                      <button type="button" className={codeTab === 'html' ? 'is-on' : ''} onClick={() => setCodeTab('html')}>HTML</button>
                       <button type="button" className={codeTab === 'react' ? 'is-on' : ''} onClick={() => setCodeTab('react')}>React TSX</button>
                     </div>
                     <button
@@ -799,7 +903,7 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
                       onClick={() => {
                         const code = codeTab === 'react' ? (selectedScreen?.reactCode || '// No TSX snippet') : (selectedScreen?.html || '');
                         void navigator.clipboard?.writeText(code);
-                        setPhaseDetail('Copied code to clipboard.');
+                        setPhaseDetail('Copied code.');
                       }}
                     >
                       Copy
@@ -812,23 +916,23 @@ export function DesignApp({ api, onError }: { api: any; onError?: (msg: string) 
               )}
 
               {inspectorTab === 'captures' && (
-                <section className="ds-section-card">
-                  <span className="ds-kicker">PHASE 3 RENDERED CAPTURES</span>
+                <section className="ds-section">
+                  <span className="ds-kicker">VIEWPORT CAPTURES</span>
                   {selectedScreen?.captures?.length ? (
                     selectedScreen.captures.map(cap => (
                       <div key={cap.name} className="ds-capture-card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5 }}>
-                          <strong>{cap.name} ({cap.width}×{cap.height})</strong>
+                          <strong>{cap.name} · {cap.width}×{cap.height}</strong>
                           <span style={{ color: cap.overflowX ? 'var(--ds-red)' : 'var(--ds-emerald)' }}>
-                            {cap.overflowX ? 'OverflowX detected' : 'Clean layout'}
+                            {cap.overflowX ? 'Overflow' : 'Clean'}
                           </span>
                         </div>
-                        {cap.dataUrl ? <img src={cap.dataUrl} alt={`${cap.name} capture`} /> : <div style={{ fontSize: 11, color: 'var(--ds-dim)' }}>Capture skipped.</div>}
+                        {cap.dataUrl ? <img src={cap.dataUrl} alt={`${cap.name} capture`} /> : <div style={{ fontSize: 11, color: 'var(--ds-muted)' }}>Capture skipped.</div>}
                       </div>
                     ))
                   ) : (
                     <p style={{ fontSize: 12, color: 'var(--ds-dim)' }}>
-                      Click Critique on any artboard (or generate with Vision Critique enabled) to capture 1440×900 &amp; 390×844 offscreen screenshots.
+                      Run Critique on any artboard to inspect desktop &amp; mobile captures.
                     </p>
                   )}
                 </section>

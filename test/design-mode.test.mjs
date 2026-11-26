@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import test from 'node:test';
 import { designCalls } from '../desktop/design/calls.mjs';
 import { captureDesignPreview } from '../desktop/design/capture.mjs';
@@ -227,4 +227,12 @@ test('computeWeightedScore, runDesignGeneration critique refinement loop, and De
   assert.ok(existsSync(join(workDir, 'DESIGN.md')));
   const exportedHtml = await readFile(join(workDir, exp.files.find(f => f.endsWith('.html'))), 'utf8');
   assert.match(exportedHtml, /--bg-canvas/);
+
+  const repoRoot = resolve(new URL('..', import.meta.url).pathname);
+  const designTsx = await readFile(join(repoRoot, 'src/design/DesignApp.tsx'), 'utf8');
+  const designCss = await readFile(join(repoRoot, 'src/design-view.css'), 'utf8');
+  for (const token of ['leftOpen', 'inspectorOpen', 'no-left', 'no-inspector', 'ds-float-toggle']) {
+    assert.ok(designTsx.includes(token), `DesignApp.tsx must include ${token}`);
+  }
+  assert.ok(designCss.includes('.no-left') && designCss.includes('.no-inspector'), 'design-view.css must style hidden panel states');
 });
