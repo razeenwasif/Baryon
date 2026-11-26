@@ -2986,6 +2986,7 @@ app.whenReady().then(async () => {
       },
     ],
   });
+  const getGeminiApiKey = () => keys.gemini || '';
   const askEmbeddedAI = async ({ instructions, prompt, images = [], signal, surface = 'Fairy', providerOverride = null, timeoutMs = 90_000 }) => {
     let usage = null;
     const pick = () => {
@@ -3122,6 +3123,19 @@ app.whenReady().then(async () => {
     onEvent: emitDesignEvent,
   });
   for (const [name, fn] of Object.entries(designApi)) handle(`design-${name}`, fn, { refresh: false });
+  if (edition.FEATURES.studio) {
+    const studioStore = new (await import('./studio/store.mjs')).StudioStore({ root: file('studio') });
+    const { createProviderRegistry } = await import('./studio/providers/index.mjs');
+    const studioRegistry = createProviderRegistry({ getGeminiKey: getGeminiApiKey });
+    const emitStudioEvent = event => sendToWindow('fairy:studio', event);
+    const studioApi = (await import('./studio/calls.mjs')).studioCalls({
+      store: studioStore,
+      registry: studioRegistry,
+      getWorkFolder: () => sessions.work()?.path || '',
+      onEvent: emitStudioEvent,
+    });
+    for (const [name, fn] of Object.entries(studioApi)) handle(`studio-${name}`, fn, { refresh: false });
+  }
   // The Today panel: your next events and unread count, shown to you only. None of this goes to a model.
   let todayCache = null;
   handle('today-data', async force => {

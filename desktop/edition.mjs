@@ -53,6 +53,16 @@ export const PRO_FEATURE_GROUPS = Object.freeze({
     'docs/phone-notebooks-plan.md',
     'docs/nocturne-courses.md',
   ]),
+  studio: Object.freeze([
+    'desktop/studio',
+    'src/studio',
+    'src/studio-view.js',
+    'src/studio-view.css',
+    'src/diffusion-view.js',
+    'src/diffusion-view.css',
+    'src/diffusion-ridge.js',
+    'docs/diffusion-plan.md',
+  ]),
 });
 
 export const PRO_EXCLUDED_PATHS = Object.freeze(
@@ -75,7 +85,8 @@ export function resolveEdition({ env = process.env, rootDir = DEFAULT_ROOT } = {
   const hasAnalytics = existsSync(join(rootDir, 'desktop/analytics/calls.mjs'));
   const hasAcademy = existsSync(join(rootDir, 'desktop/academy/calls.mjs'));
   const hasNotebooks = existsSync(join(rootDir, 'desktop/notebook/calls.mjs'));
-  const anyProPresent = hasResearch || hasReproduce || hasAnalytics || hasAcademy || hasNotebooks;
+  const hasStudio = existsSync(join(rootDir, 'desktop/studio/calls.mjs'));
+  const anyProPresent = hasResearch || hasReproduce || hasAnalytics || hasAcademy || hasNotebooks || hasStudio;
 
   const requested = String(env?.BARYON_EDITION || '').trim().toLowerCase();
   const manifest = readPackageEdition(rootDir);
@@ -96,6 +107,7 @@ export function resolveEdition({ env = process.env, rootDir = DEFAULT_ROOT } = {
     analytics: allowPro && hasAnalytics,
     academy: allowPro && hasAcademy,
     notebooks: allowPro && hasNotebooks,
+    studio: allowPro && hasStudio,
   });
 
   const resolvedEdition = Object.values(features).some(Boolean) ? 'pro' : 'core';

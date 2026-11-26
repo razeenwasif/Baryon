@@ -24,10 +24,12 @@ const TIERS = [
     featured: true,
     monthly: 19,
     annual: 15,
-    description: 'Full Research Workbench, Paper Reproduction, AutoML Analytics & Baryon Academy.',
+    description: 'Full Research Workbench, Paper Reproduction, AutoML Analytics, Baryon Academy, and Creative Studio.',
     cta: 'Upgrade to Pro →',
     features: [
       'Everything in Open Core',
+      'Studio: Image, Video & Music Generation',
+      'Genie 4 World Creator & Game Dev Mode (Roadmap)',
       'Research Workbench & Multi-Family Debates',
       'arXiv Paper Reproduction & Verification',
       'Analytics, AutoML & Record Linkage Studio',
@@ -39,6 +41,8 @@ const TIERS = [
 const MATRIX_ROWS = [
   ['Chat, Per-Session Work & /swarm', 'Included', 'Included'],
   ['Two-Mac Face Link & iOS App', 'Included', 'Included'],
+  ['Studio (Nano Banana, Omni 1.2 Flash, Lyria 3.5)', '—', 'Included'],
+  ['Genie 4 World Creator & Game Dev Mode', '—', 'Included'],
   ['Research Workbench & Paper Repro', '—', 'Included'],
   ['Analytics, AutoML & Record Linkage', '—', 'Included'],
   ['Baryon Academy & Study Notebooks', '—', 'Included'],

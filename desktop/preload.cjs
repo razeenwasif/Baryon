@@ -21,6 +21,7 @@ const NOTEBOOK_CALLS = ['list', 'courses', 'coursesLink', 'coursesSync', 'course
 const ANALYTICS_CALLS = ['state', 'envCheck', 'envInstall', 'datasets', 'upload', 'importWorkFile', 'removeDataset', 'profile', 'preview', 'autodetect', 'runs', 'query', 'drift', 'runStart', 'runCancel', 'runGet', 'runDelete', 'runPublishReport', 'renderManim', 'analystChat', 'llmConfirm', 'cleanPlan', 'cleanApply', 'zeroShotClassify', 'zeroShotApply', 'rlDetect', 'rlRun', 'rlAlStart', 'rlAlPairs', 'rlAlLabel', 'rlAlClose', 'nexusState', 'nexusSync', 'nexusLogs', 'embed3d', 'topics'];
 const ACADEMY_CALLS = ['state', 'listCourses', 'getCourse', 'deleteCourse', 'recordAttempt', 'completeLesson', 'resetProgress', 'generateCourse', 'generateLesson', 'generatePractice', 'tutorAsk'];
 const DESIGN_CALLS = ['state', 'listProjects', 'getProject', 'createProject', 'deleteProject', 'scanRepo', 'updateDesignMd', 'updateTokens', 'generate', 'refineScreen', 'critiqueScreen', 'duplicateScreen', 'deleteScreen', 'moveScreen', 'exportToRepo', 'publishPage'];
+const STUDIO_CALLS = ['state', 'list', 'get', 'media', 'generateImage', 'generateVideo', 'generateMusic', 'delete', 'favorite', 'exportToWork'];
 contextBridge.exposeInMainWorld('fairy', {
   companionChat: text => ipcRenderer.invoke('fairy:companion-chat', text),
   // Two Macs: on a face (face-main.cjs), its link to the Fairy on the other Mac; on the full Fairy, becoming a face.
@@ -413,6 +414,8 @@ contextBridge.exposeInMainWorld('fairy', {
   onAcademy: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:academy', listener); return () => ipcRenderer.removeListener('fairy:academy', listener); },
   design: (name, ...args) => DESIGN_CALLS.includes(name) ? ipcRenderer.invoke(`fairy:design-${name}`, ...args) : Promise.reject(new Error(`No design call ${name}.`)),
   onDesign: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:design', listener); return () => ipcRenderer.removeListener('fairy:design', listener); },
+  studio: (name, ...args) => STUDIO_CALLS.includes(name) ? ipcRenderer.invoke(`fairy:studio-${name}`, ...args) : Promise.reject(new Error(`No studio call ${name}.`)),
+  onStudio: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:studio', listener); return () => ipcRenderer.removeListener('fairy:studio', listener); },
   onNotebookTutor: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:notebook-tutor', listener); return () => ipcRenderer.removeListener('fairy:notebook-tutor', listener); },
   onNotebookVoice: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:notebook-voice', listener); return () => ipcRenderer.removeListener('fairy:notebook-voice', listener); },
   onNotebookChanged: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:notebook-changed', listener); return () => ipcRenderer.removeListener('fairy:notebook-changed', listener); },

@@ -6,6 +6,8 @@ const STUB_VIEWS = {
   './research-view.js': 'virtual:baryon-core-stub-research',
   './analytics-view.js': 'virtual:baryon-core-stub-analytics',
   './academy-view.js': 'virtual:baryon-core-stub-academy',
+  './studio-view.js': 'virtual:baryon-core-stub-studio',
+  './diffusion-view.js': 'virtual:baryon-core-stub-diffusion',
 };
 
 function baryonEditionGate() {
@@ -20,6 +22,8 @@ function baryonEditionGate() {
       if (id === 'virtual:baryon-core-stub-research') return 'export function researchView() { return null; }';
       if (id === 'virtual:baryon-core-stub-analytics') return 'export function analyticsView() { return null; }';
       if (id === 'virtual:baryon-core-stub-academy') return 'export function academyView() { return null; }';
+      if (id === 'virtual:baryon-core-stub-studio') return 'export function studioView() { return null; }';
+      if (id === 'virtual:baryon-core-stub-diffusion') return 'export function diffusionView() { return null; }';
       return null;
     },
   };
@@ -36,6 +40,7 @@ export default defineConfig({
       analytics: !isCore,
       academy: !isCore,
       notebooks: !isCore,
+      studio: !isCore,
     }),
   },
   plugins: [baryonEditionGate()],

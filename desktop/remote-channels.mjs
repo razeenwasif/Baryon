@@ -124,7 +124,11 @@ export const REMOTE = Object.freeze([
   'design-state', 'design-listProjects', 'design-getProject', 'design-createProject', 'design-deleteProject',
   'design-scanRepo', 'design-updateDesignMd', 'design-updateTokens', 'design-generate', 'design-refineScreen',
   'design-critiqueScreen', 'design-duplicateScreen', 'design-deleteScreen', 'design-moveScreen',
-  'design-exportToRepo', 'design-publishPage']);
+  'design-exportToRepo', 'design-publishPage',
+  // Baryon Studio (Pro): unified Image (Nano Banana 2.1), Video (Omni 1.2 Flash), and Music (Lyria 3.5) generation.
+  'studio-state', 'studio-list', 'studio-get', 'studio-media',
+  'studio-generateImage', 'studio-generateVideo', 'studio-generateMusic',
+  'studio-delete', 'studio-favorite', 'studio-exportToWork']);
 
 export const LOCAL = Object.freeze([
   'minimize', 'close', 'around-notch', 'cursor-position', 'ride', 'sprite-hidden', 'window-position', 'startup-usable', 'ink-voice', 'attach-choose',
@@ -224,10 +228,12 @@ export const READS = Object.freeze(['btw', 'state', 'speak', 'transcribe', 'prep
   // Baryon Academy read & tutor queries don't touch chat state.
   'academy-state', 'academy-listCourses', 'academy-getCourse', 'academy-tutorAsk',
   // UI Design Mode read & scan queries don't touch chat state.
-  'design-state', 'design-listProjects', 'design-getProject', 'design-scanRepo']);
+  'design-state', 'design-listProjects', 'design-getProject', 'design-scanRepo',
+  // Baryon Studio reads & media streaming don't touch chat state.
+  'studio-state', 'studio-list', 'studio-get', 'studio-media']);
 
 // Away 4: the channels that carry a recording or a file, which may be up to 60 MB; any other call is at most 1 MB.
-export const BYTE_CHANNELS = Object.freeze(['transcribe', 'attach-bytes', 'notebook-paste', 'notebook-saveImage', 'analytics-upload']);
+export const BYTE_CHANNELS = Object.freeze(['transcribe', 'attach-bytes', 'notebook-paste', 'notebook-saveImage', 'analytics-upload', 'studio-media']);
 
 // Allowing a step from the face's Mac needs its approve key (Touch ID there), as from the companion; denying doesn't.
 // A step marked Mac-only may be allowed from the face's Mac too, each with its own Touch ID (Away 5).
@@ -284,10 +290,12 @@ export const WINDOW_EVENTS = Object.freeze([
   'academy',
   // UI Design Mode pipeline phases & project updates.
   'design',
+  // Baryon Studio media generation job progress & asset updates.
+  'studio',
 ]);
 
-// The notebook's calls change only the notebook, whose own events keep this Mac's window up to date; so do Research's, Academy's, and Design Mode's.
-export const isRead = channel => READS.includes(channel) || String(channel).startsWith('notebook-') || String(channel).startsWith('research-') || String(channel).startsWith('academy-') || String(channel).startsWith('design-');
+// The notebook's calls change only the notebook, whose own events keep this Mac's window up to date; so do Research's, Academy's, Design Mode's, and Studio's.
+export const isRead = channel => READS.includes(channel) || String(channel).startsWith('notebook-') || String(channel).startsWith('research-') || String(channel).startsWith('academy-') || String(channel).startsWith('design-') || String(channel).startsWith('studio-');
 
 const kinds = new Map([...REMOTE.map(name => [name, 'remote']), ...LOCAL.map(name => [name, 'local']), ...OTHER.map(name => [name, 'other']), ...MINI_ONLY.map(name => [name, 'mini-only'])]);
 export const kindOf = channel => kinds.get(String(channel)) ?? 'mini-only';
@@ -320,6 +328,8 @@ const LONG = new Set(['btw', 'chat', 'speak', 'eval-save', 'evals-run', 'benchma
   // Baryon Academy AI course/lesson/practice/tutor calls can exceed 20s.
   'academy-generateCourse', 'academy-generateLesson', 'academy-generatePractice', 'academy-tutorAsk',
   // UI Design Mode generation/refinement/vision critique loops can exceed 20s.
-  'design-generate', 'design-refineScreen', 'design-critiqueScreen']);
+  'design-generate', 'design-refineScreen', 'design-critiqueScreen',
+  // Baryon Studio generation calls (especially Omni 1.2 Flash video polling & Lyria music) exceed 20s.
+  'studio-generateImage', 'studio-generateVideo', 'studio-generateMusic']);
 // Research's calls may wait on its helper reading PDFs or asking the connections which seats can sit.
 export const isLong = channel => LONG.has(String(channel)) || String(channel).startsWith('notebook-') || String(channel).startsWith('research-');
