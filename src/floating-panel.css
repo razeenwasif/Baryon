@@ -1,0 +1,36 @@
+/* A black control panel, independent of the workspace theme. */
+#floating-panel{width:100%;max-width:320px;display:flex;flex-direction:column;align-items:center}
+#floating-extra-controls{display:contents}
+#floating-controls,#floating-composer,#floating-awareness{background:#000;border:1px solid #303030;color:#eee;box-shadow:0 5px 24px #0003}
+#floating-controls .floating-handle{color:#ddd;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#floating-controls button,#floating-awareness button{color:#ddd}
+#floating-controls button:hover,#floating-ideas-bar button:hover{background:#242424}
+#floating-ideas-bar button{background:#000;color:#ddd;border:1px solid #303030}
+#floating-composer:focus-within{border-color:#888;box-shadow:0 0 0 2px #ffffff14,0 5px 24px #0003}
+#floating-message{color:#f5f5f5}
+#floating-message::placeholder{color:#999}
+#floating-send{background:#eee;color:#000}
+#floating-send:hover{background:#fff}
+#floating-awareness{color:#aaa}
+#floating-awareness button[aria-pressed=true],#floating-awareness .senses-active{color:#fff}
+#floating-controls #floating-collapse{font-size:20px;border-left:1px solid #333;border-radius:0 16px 16px 0;margin-left:3px}
+#floating-ui button:focus-visible{outline-color:#fff}
+#close-floating-bubble{background:#000b;color:#eee}
+#close-floating-bubble:hover,#close-floating-bubble:focus-visible{background:#242424}
+#floating-bubble-text.rich-reply pre{background:#000c;border-color:#333}
+#floating-bubble-text.rich-reply code{background:#222}
+#floating-bubble-text.rich-reply pre code{background:transparent}
+/* Keep the small drag/mic/stop bar beneath the torso without moving the avatar. */
+#floating-ui.is-collapsed{padding-bottom:150px}
+
+/* Compact mic feedback changes no layout and remains click-through. */
+#floating-controls{position:relative}
+#floating-listening{position:relative}
+#floating-listening[data-mic-state=listening]::after{content:"";position:absolute;right:3px;bottom:3px;width:4px;height:4px;border-radius:50%;background:#a8d9bc}
+#floating-listening[data-mic-state=paused]{opacity:.65}
+#floating-listening[data-mic-state=error]{color:#efb9a0}
+#mic-feedback{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);max-width:260px;width:max-content;padding:5px 9px;border:1px solid #333;border-radius:9px;background:#000;color:#eee;font-size:11px;line-height:1.4;pointer-events:none;-webkit-app-region:no-drag;z-index:5}
+
+/* Resize the drawing surface itself, keeping pixel hit tests and effects aligned. */
+.floating.floating-tiny #avatar{top:auto;left:calc(50% - 60px);right:auto;width:120px;height:140px;transform:none}
+.floating.floating-tiny.desktop-working #avatar{left:auto;right:12px}

@@ -1,0 +1,9 @@
+.awareness-controls{margin:8px 0;display:flex;flex-direction:column;gap:4px;font-size:10px;color:#a2afc9}
+.awareness-controls>div{display:flex;gap:12px;align-items:center}
+.awareness-controls button{font-size:11px}
+.awareness-controls button[aria-pressed=true]{color:#9ce5c7}
+.awareness-controls .senses-active{color:#9ce5c7}
+#floating-awareness{width:100%;max-width:310px;pointer-events:auto;-webkit-app-region:no-drag;align-items:center;margin:0 0 6px;padding:5px 8px;border-radius:12px;background:#111827ee;color:#d4def4}
+#floating-awareness button{font-size:10px}
+#floating-awareness>span{font-size:9px;text-align:center}
+.floating #avatar{bottom:195px}

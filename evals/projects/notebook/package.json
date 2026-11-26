@@ -1,0 +1,1 @@
+{ "name": "notebook", "type": "module", "scripts": { "test": "node --test" } }

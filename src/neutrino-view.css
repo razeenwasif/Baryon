@@ -1,0 +1,632 @@
+/* Integrated full-screen Neutrino workspace: Usage-page borderless Obsidian aesthetic on #08080a. */
+
+html:not(.floating){
+  &.neutrino-open main,&.neutrino-open.home main{grid-template-rows:minmax(0,1fr)}
+  &.neutrino-open :is(.conversation,.stage){display:none}
+  &.neutrino-open #chat-header{display:none}
+}
+
+#neutrino-view{
+  --nv-bg:#030304;
+  --nv-card:#0b0b0e;
+  --nv-raised:#16161b;
+  --nv-ink:#f4f4f6;
+  --nv-soft:#d5d8e2;
+  --nv-dim:#8e8e99;
+  --nv-muted:#6e6e77;
+  --nv-line:rgba(255,255,255,.05);
+  --nv-accent:#3e5aec;
+  --nv-accent-soft:#9fb2ff;
+  --nv-emerald:#34d399;
+  --nv-sky:#38bdf8;
+  --nv-amber:#f59e0b;
+  --nv-rose:#f87171;
+  grid-column:2;
+  grid-row:1;
+  position:relative;
+  z-index:1;
+  min-width:0;
+  min-height:0;
+  margin-left:-52px;
+  padding-left:52px;
+  overflow:hidden;
+  background:var(--nv-bg);
+  color:var(--nv-ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:13.5px;
+  line-height:1.45;
+}
+#neutrino-view[hidden]{display:none}
+#neutrino-view :where(*){box-sizing:border-box}
+#neutrino-view :where(h1,h2,h3,p){margin:0}
+#neutrino-view :where(button){font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0;box-shadow:none}
+#neutrino-view :where(button:disabled){opacity:.48;cursor:default}
+#neutrino-view :where(button):focus-visible{outline:2px solid var(--nv-accent-soft);outline-offset:2px}
+#neutrino-view :where(input,select,textarea){
+  font:inherit;
+  color:var(--nv-ink);
+  background:#111114;
+  border:1px solid transparent;
+  border-radius:8px;
+}
+#neutrino-view :where(input,select,textarea):focus{
+  outline:none;
+  border-color:rgba(159,178,255,.45);
+  background:rgba(255,255,255,.05);
+}
+
+#neutrino-view .nv-body{
+  height:100%;
+  overflow-y:auto;
+  padding:22px 44px 56px 32px;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+  max-width:1180px;
+  margin:0 auto;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.16) transparent;
+}
+
+/* ── Top Breadcrumb + Segmented Mode Bar ── */
+#neutrino-view .nv-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  padding-bottom:6px;
+  -webkit-app-region:drag;
+}
+#neutrino-view .nv-breadcrumbs,
+#neutrino-view .nv-actions,
+#neutrino-view .nv-topbar :is(button, a, input, select){
+  -webkit-app-region:no-drag;
+}
+html.around-notch:not(.floating) #neutrino-view .nv-topbar{-webkit-app-region:no-drag}
+html.around-notch:not(.floating) #neutrino-view .nv-body{padding-top:calc(22px + var(--notch-band,32px))}
+
+#neutrino-view .nv-breadcrumbs{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  flex-wrap:wrap;
+  font-size:13.5px;
+  font-weight:500;
+}
+#neutrino-view .nv-crumb{color:var(--nv-ink);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#neutrino-view .nv-crumb.is-muted{color:var(--nv-muted)}
+#neutrino-view .nv-crumb.is-clickable:hover{color:var(--nv-accent-soft);text-decoration:underline;text-underline-offset:3px}
+#neutrino-view .nv-crumb-sep{color:rgba(255,255,255,.22)}
+
+#neutrino-view .nv-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+#neutrino-view .nv-seg{
+  display:inline-flex;
+  align-items:center;
+  gap:2px;
+  padding:2px;
+  border-radius:8px;
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--nv-line);
+}
+#neutrino-view .nv-seg-btn{
+  padding:4px 10px;
+  border-radius:6px;
+  font-size:12px;
+  font-weight:500;
+  color:var(--nv-muted);
+  transition:background .12s,color .12s;
+}
+#neutrino-view .nv-seg-btn:hover{color:var(--nv-ink)}
+#neutrino-view .nv-seg-btn.is-active{
+  background:var(--nv-raised);
+  color:var(--nv-ink);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);
+}
+#neutrino-view .nv-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  height:29px;
+  padding:0 11px;
+  border-radius:8px;
+  border:1px solid var(--nv-line);
+  background:rgba(255,255,255,.025);
+  font-size:12px;
+  font-weight:500;
+  color:var(--nv-dim);
+  white-space:nowrap;
+  transition:background .12s,color .12s,border-color .12s;
+}
+#neutrino-view .nv-btn:hover:not(:disabled){background:var(--nv-raised);color:var(--nv-ink);border-color:rgba(255,255,255,.14)}
+#neutrino-view .nv-btn.is-active{background:rgba(62,90,236,.18);border-color:rgba(159,178,255,.35);color:#eef1ff}
+#neutrino-view .nv-btn.is-primary{background:var(--nv-accent);border-color:rgba(159,178,255,.45);color:#fff;font-weight:550}
+#neutrino-view .nv-btn.is-primary:hover:not(:disabled){filter:brightness(1.1);background:var(--nv-accent);color:#fff}
+#neutrino-view .nv-btn.is-danger{background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.28);color:#fca5a5}
+#neutrino-view .nv-btn.is-danger:hover:not(:disabled){background:rgba(248,113,113,.22);color:#fff}
+#neutrino-view .nv-close{
+  width:29px;
+  padding:0;
+  font-size:15px;
+  line-height:1;
+}
+
+/* ── Shared Typography, Dots, Pills & Banners ── */
+#neutrino-view .nv-mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+#neutrino-view .nv-muted{color:var(--nv-muted)}
+#neutrino-view .nv-dim{color:var(--nv-dim)}
+#neutrino-view .nv-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none}
+#neutrino-view .nv-pill{
+  display:inline-flex;
+  align-items:center;
+  padding:1px 7px;
+  border-radius:5px;
+  background:rgba(255,255,255,.06);
+  color:var(--nv-dim);
+  font-size:11px;
+  white-space:nowrap;
+}
+#neutrino-view .nv-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:1px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:550;
+  background:rgba(255,255,255,.06);
+  color:var(--nv-dim);
+  white-space:nowrap;
+}
+#neutrino-view .nv-chip.is-pass{background:rgba(52,211,153,.13);color:#6ee7b7}
+#neutrino-view .nv-chip.is-fail{background:rgba(248,113,113,.14);color:#fca5a5}
+#neutrino-view .nv-chip.is-warn{background:rgba(245,158,11,.15);color:#fcd34d}
+#neutrino-view .nv-chip.is-accent{background:rgba(99,102,241,.16);color:#c7d2fe}
+
+#neutrino-view .nv-notice{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 12px;
+  border-radius:9px;
+  background:rgba(52,211,153,.09);
+  border:1px solid rgba(52,211,153,.24);
+  font-size:12.5px;
+  color:#a7f3d0;
+}
+#neutrino-view .nv-notice.is-info{
+  background:rgba(159,178,255,.08);
+  border-color:rgba(159,178,255,.24);
+  color:#dbe4ff;
+}
+
+/* ── Inline Collapsible Forms (New Repo / New PR / Dispatch / Review Note) ── */
+#neutrino-view .nv-inline-form{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  padding:12px 14px;
+  border-radius:10px;
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--nv-line);
+}
+#neutrino-view .nv-input,#neutrino-view .nv-select{
+  height:31px;
+  padding:0 10px;
+  font-size:12.5px;
+  min-width:0;
+}
+#neutrino-view .nv-input{flex:1 1 160px}
+#neutrino-view .nv-input.is-num{flex:0 0 86px}
+#neutrino-view .nv-select option{background:#121318;color:var(--nv-ink)}
+
+/* ── Hero Grid (Usage-style Left Stat/Breakdown + Right Spline Chart) ── */
+#neutrino-view .nv-hero-grid{
+  display:grid;
+  grid-template-columns:minmax(270px,330px) minmax(0,1fr);
+  gap:28px;
+  align-items:start;
+}
+#neutrino-view .nv-stat-col{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  min-width:0;
+}
+#neutrino-view .nv-hero-stat{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+#neutrino-view .nv-hero-value{
+  font-size:34px;
+  font-weight:700;
+  letter-spacing:-.03em;
+  line-height:1.1;
+  color:#fff;
+  font-variant-numeric:tabular-nums;
+}
+#neutrino-view .nv-hero-sub{
+  font-size:12px;
+  color:var(--nv-muted);
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+#neutrino-view .nv-stat-list{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+#neutrino-view .nv-stat-row{
+  width:calc(100% + 20px);
+  text-align:left;
+  padding:8px 10px;
+  margin:0 -10px;
+  border-radius:9px;
+  border:1px solid transparent;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  transition:background .12s,border-color .12s;
+}
+#neutrino-view .nv-stat-row:hover{background:rgba(255,255,255,.04)}
+#neutrino-view .nv-stat-row.is-selected{background:rgba(62,90,236,.12);border-color:rgba(159,178,255,.3)}
+#neutrino-view .nv-stat-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+#neutrino-view .nv-stat-id{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
+#neutrino-view .nv-stat-name{font-size:13px;font-weight:600;color:var(--nv-ink);white-space:nowrap}
+#neutrino-view .nv-stat-count{font-size:13.5px;font-weight:600;color:var(--nv-ink);font-variant-numeric:tabular-nums;flex:none}
+#neutrino-view .nv-stat-sub{padding-left:15px;font-size:11.5px;color:var(--nv-muted)}
+
+/* ── Spline Chart Column ── */
+#neutrino-view .nv-chart-col{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  min-width:0;
+}
+#neutrino-view .nv-chart-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+#neutrino-view .nv-chart-title{font-size:13.5px;font-weight:600;color:var(--nv-ink)}
+#neutrino-view .nv-legend{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#neutrino-view .nv-legend-item{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--nv-dim)}
+#neutrino-view .nv-chart-wrap{position:relative;width:100%}
+#neutrino-view .nv-svg{display:block;width:100%;height:auto;overflow:visible}
+#neutrino-view .nv-axis-line{stroke:rgba(255,255,255,.14);stroke-width:1}
+#neutrino-view .nv-grid-line{stroke:rgba(255,255,255,.06);stroke-width:1}
+#neutrino-view .nv-y-label,#neutrino-view .nv-x-label{
+  fill:var(--nv-muted);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:10px;
+}
+#neutrino-view .nv-y-label{text-anchor:end}
+#neutrino-view .nv-x-label{text-anchor:middle;letter-spacing:.04em}
+#neutrino-view .nv-guide{stroke:rgba(255,255,255,.22);stroke-width:1;stroke-dasharray:3 3;pointer-events:none}
+#neutrino-view .nv-hover-band{fill:transparent;cursor:crosshair}
+
+#neutrino-view .nv-tooltip{
+  position:absolute;
+  top:10px;
+  transform:translateX(-50%);
+  min-width:170px;
+  padding:9px 11px;
+  border-radius:10px;
+  background:#14161c;
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:0 14px 34px rgba(0,0,0,.55);
+  pointer-events:none;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+#neutrino-view .nv-tooltip[hidden]{display:none}
+#neutrino-view .nv-tip-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11.5px;color:var(--nv-dim)}
+#neutrino-view .nv-tip-head strong{color:var(--nv-ink);font-weight:600}
+#neutrino-view .nv-tip-total{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums;font-size:14px;font-weight:650;color:#fff;margin-bottom:2px}
+#neutrino-view .nv-tip-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--nv-soft)}
+#neutrino-view .nv-tip-lbl{flex:1}
+#neutrino-view .nv-tip-val{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums;color:var(--nv-ink)}
+
+/* ── Totals 5-Column Strip ── */
+#neutrino-view .nv-totals-sec{display:flex;flex-direction:column;gap:10px}
+#neutrino-view .nv-sec-title{font-size:13px;font-weight:600;color:var(--nv-ink)}
+#neutrino-view .nv-totals-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:16px;
+}
+#neutrino-view .nv-total-item{display:flex;flex-direction:column;gap:3px;min-width:0}
+#neutrino-view .nv-total-lbl{font-size:11.5px;color:var(--nv-muted)}
+#neutrino-view .nv-total-val{
+  font-size:18px;
+  font-weight:650;
+  letter-spacing:-.02em;
+  color:#fff;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* ── Segmented Horizontal Breakdown Bars ── */
+#neutrino-view .nv-break-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:28px;
+}
+#neutrino-view .nv-break-card{display:flex;flex-direction:column;gap:10px;min-width:0}
+#neutrino-view .nv-break-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#neutrino-view .nv-break-title{font-size:13px;font-weight:600;color:var(--nv-ink)}
+#neutrino-view .nv-stack-track{
+  display:flex;
+  align-items:stretch;
+  gap:2px;
+  width:100%;
+  height:7px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  overflow:hidden;
+}
+#neutrino-view .nv-stack-seg{height:100%;transition:width .25s ease}
+#neutrino-view .nv-stack-seg:first-child{border-radius:999px 0 0 999px}
+#neutrino-view .nv-stack-seg:last-child{border-radius:0 999px 999px 0}
+#neutrino-view .nv-stack-seg:only-child{border-radius:999px}
+#neutrino-view .nv-stack-empty{width:100%;background:rgba(255,255,255,.05)}
+#neutrino-view .nv-break-legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+#neutrino-view .nv-break-item{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--nv-muted)}
+#neutrino-view .nv-swatch{width:7px;height:7px;border-radius:2px;flex:none}
+#neutrino-view .nv-break-lbl{color:var(--nv-dim)}
+#neutrino-view .nv-break-val{color:var(--nv-ink);font-weight:550;font-size:11.5px}
+
+/* ── Hairline Sections & Full-Width Hoverable Rows ── */
+#neutrino-view .nv-sec{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding-top:16px;
+  border-top:1px solid var(--nv-line);
+}
+#neutrino-view .nv-sec-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+}
+#neutrino-view .nv-sec-controls{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+#neutrino-view .nv-search{
+  width:220px;
+  max-width:100%;
+  height:28px;
+  padding:0 10px;
+  font-size:12px;
+}
+#neutrino-view .nv-rows{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+#neutrino-view .nv-row{
+  width:calc(100% + 18px);
+  margin:0 -9px;
+  padding:9px 10px;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  text-align:left;
+  transition:background .12s ease;
+}
+#neutrino-view .nv-row.is-clickable{cursor:pointer}
+#neutrino-view .nv-row.is-clickable:hover{background:rgba(255,255,255,.045)}
+#neutrino-view .nv-row.is-selected{background:rgba(62,90,236,.12);box-shadow:inset 0 0 0 1px rgba(159,178,255,.28)}
+#neutrino-view .nv-row-main{
+  min-width:0;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+#neutrino-view .nv-row-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  font-size:13px;
+  font-weight:550;
+  color:var(--nv-ink);
+}
+#neutrino-view .nv-row-title-text{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+#neutrino-view .nv-row-sub{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  font-size:11.5px;
+  color:var(--nv-muted);
+}
+#neutrino-view .nv-row-right{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  flex:none;
+}
+
+/* ── Repo Detail / Commit Expand / Diffs / PRs ── */
+#neutrino-view .nv-detail-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+#neutrino-view .nv-detail-title-wrap{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1}
+#neutrino-view .nv-detail-h1{
+  font-size:24px;
+  font-weight:700;
+  letter-spacing:-.025em;
+  line-height:1.2;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+#neutrino-view .nv-detail-meta{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  font-size:12px;
+  color:var(--nv-dim);
+}
+#neutrino-view .nv-commit-expand{
+  margin:4px 0 8px 18px;
+  padding:10px 12px;
+  border-left:2px solid rgba(159,178,255,.3);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+#neutrino-view .nv-prose{
+  margin:0;
+  white-space:pre-wrap;
+  font:12.5px/1.55 ui-sans-serif,-apple-system,sans-serif;
+  color:var(--nv-soft);
+}
+#neutrino-view .nv-files{display:flex;flex-direction:column;gap:4px}
+#neutrino-view .nv-file-btn{
+  width:100%;
+  padding:6px 9px;
+  border-radius:7px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-align:left;
+  font:12px ui-monospace,SFMono-Regular,Menlo,monospace;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.05);
+}
+#neutrino-view .nv-file-btn:hover,#neutrino-view .nv-file-btn[aria-expanded="true"]{
+  background:rgba(255,255,255,.05);
+  border-color:rgba(255,255,255,.11);
+}
+#neutrino-view .nv-file-path{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--nv-ink)}
+#neutrino-view .nv-add{color:var(--nv-emerald)}
+#neutrino-view .nv-del{color:var(--nv-rose)}
+#neutrino-view .nv-diff-wrap{margin:4px 0 8px}
+#neutrino-view .nv-diff-wrap .work-diff{
+  margin:0;
+  max-height:520px;
+  border-radius:10px;
+  border:1px solid var(--nv-line);
+  background:#0c0d11;
+}
+
+/* ── CI Run Split (Jobs Left / Console Log Right) ── */
+#neutrino-view .nv-run-split{
+  display:grid;
+  grid-template-columns:minmax(250px,330px) minmax(0,1fr);
+  gap:22px;
+  align-items:start;
+}
+#neutrino-view .nv-jobs-col{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:0;
+}
+#neutrino-view .nv-job-steps{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:4px;
+}
+#neutrino-view .nv-log-panel{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-width:0;
+}
+#neutrino-view .nv-log-box{
+  margin:0;
+  padding:14px 16px;
+  min-height:280px;
+  max-height:62vh;
+  overflow:auto;
+  border-radius:10px;
+  background:#0c0d11;
+  border:1px solid var(--nv-line);
+  font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:#d7dce8;
+  white-space:pre-wrap;
+  word-break:break-word;
+  scrollbar-width:thin;
+}
+
+#neutrino-view .nv-empty{
+  padding:42px 20px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+#neutrino-view .nv-chart-empty{
+  padding:56px 20px;
+  border:1px solid var(--nv-line);
+  border-radius:12px;
+  background:rgba(255,255,255,.015);
+}
+#neutrino-view .nv-empty-title{font-size:14px;font-weight:550;color:var(--nv-soft)}
+#neutrino-view .nv-empty-sub{font-size:12px;color:var(--nv-muted)}
+
+@media (max-width:920px){
+  #neutrino-view .nv-hero-grid,
+  #neutrino-view .nv-break-grid,
+  #neutrino-view .nv-run-split{
+    grid-template-columns:minmax(0,1fr);
+    gap:16px;
+  }
+  #neutrino-view .nv-totals-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  #neutrino-view .nv-body{padding:20px 18px 44px}
+  #neutrino-view .nv-totals-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

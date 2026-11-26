@@ -1,0 +1,133 @@
+/* The wallpaper behind the window. Only transform and opacity animate, so the GPU moves the layers and nothing repaints. */
+#wallpaper{display:none}
+html.wallpaper:not(.floating){
+  #app{
+    --w-ground:var(--wp-bg);--w-side:rgba(4,6,16,.58);--w-tool:rgba(4,6,16,.55);--w-well:rgba(3,5,14,.7);--w-raised:rgba(255,255,255,.1);--w-line:rgba(255,255,255,.1);
+    --w-accent:var(--wp-accent);
+    background:var(--wp-bg);
+  }
+  &.home #app{background:var(--wp-bg)}
+  main{z-index:1}
+  #wallpaper{display:block;position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:var(--wp-bg);contain:strict}
+  #wallpaper>*{position:absolute;will-change:transform,opacity}
+  #wallpaper>.wp-shade{will-change:auto}
+  /* Velvet's aurora grid (its dots, and the aurora drawn through them), over the velvet and under everything else. */
+  #wallpaper>.wp-dots{inset:0;width:100%;height:100%;display:none;opacity:1;transition:opacity .75s cubic-bezier(.22,1,.36,1);will-change:opacity}
+  &[data-wallpaper="velvet"] #wallpaper>.wp-dots{display:block}
+  /* Transition dots smoothly away when leaving home screens or opening Research/Diffusion/Analytics. */
+  &:is(.wallpaper-dots-off,.wallpaper-quiet,.research-open,.diffusion-open,.analytics-open) #wallpaper>.wp-dots{opacity:0}
+  &.plugins-open #wallpaper>.wp-dots{opacity:0}
+  &.neutrino-open #wallpaper>.wp-dots{opacity:0}
+  .wp-image{inset:-7%;background:var(--wp-image) center/cover no-repeat}
+  .wp-base{animation:wp-drift 52s ease-in-out infinite alternate}
+  .wp-flow{opacity:.38;transform-origin:var(--wp-flow-at);animation:wp-flow 24s ease-in-out infinite alternate;transition:opacity .75s cubic-bezier(.22,1,.36,1)}
+  .wp-glow{left:var(--wp-glow-x);top:var(--wp-glow-y);width:64%;height:70%;translate:-50% -50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--wp-glow) 50%,transparent),transparent);opacity:.45;transition:opacity .75s cubic-bezier(.22,1,.36,1)}
+  /* A moving version covers the picture once it's ready; the picture's own motion pauses underneath. */
+  .wp-video{inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .75s cubic-bezier(.22,1,.36,1);will-change:opacity}
+  &.wallpaper-video .wp-video{opacity:1}
+  &.wallpaper-video :is(.wp-base,.wp-flow){animation-play-state:paused}
+  .wp-shade{inset:0;background:radial-gradient(95% 95% at 55% 45%,transparent 50%,var(--wp-bg))}
+  .wp-shade::after{content:"";position:absolute;inset:0;background:var(--wp-bg);opacity:.3;transition:opacity .75s cubic-bezier(.22,1,.36,1)}
+  &.home .wp-shade::after{opacity:.22}
+
+  /* While Fairy works the glow brightens; while she listens it breathes. */
+  &.wallpaper-busy .wp-glow{opacity:.85}
+  &.wallpaper-listening .wp-glow{animation:wp-breathe 3.2s ease-in-out infinite}
+
+  &[data-wallpaper-motion="gentle"] .wp-base{animation-name:wp-drift-gentle}
+  &[data-wallpaper-motion="gentle"] .wp-flow{animation-name:wp-flow-gentle;opacity:.22}
+  &[data-wallpaper-motion="still"] .wp-flow{opacity:0}
+  &[data-wallpaper-motion="still"] #wallpaper>*{animation:none}
+  &.wallpaper-paused #wallpaper>*{animation-play-state:paused}
+  &.wallpaper-quiet #wallpaper>:is(.wp-flow,.wp-glow,.wp-video,.wp-dots){opacity:0}
+
+  /* Glass over the picture. Menus and code stay nearly solid so they're easy to read; the side panel and its panes are
+     see-through, so the picture runs behind them too. */
+  #side-pane{background:transparent;border-left-color:transparent}
+  :is(.slash-menu,.palette,.model-menu,.extras-menu){background:rgba(12,14,26,.97)}
+  :is(.work-output,.work-diff,.file-text){background:rgba(2,3,10,.82)}
+  .message.user>div{background:#111114;border:0;color:#f4f4f6}
+  &:not(.home) .conversation{position:relative;isolation:isolate}
+  &:not(.home) .conversation::before{content:"";position:absolute;inset:-24px -96px 0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(1,3,10,var(--wp-veil)) 14%,rgba(1,3,10,var(--wp-veil)) 86%,transparent)}
+  #home-greeting{text-shadow:0 2px 30px rgba(0,0,0,.5)}
+  .stage footer{color:rgba(232,236,248,.82);text-shadow:0 1px 14px rgba(0,0,0,.75)}
+  #suggestions button{text-shadow:0 1px 12px rgba(0,0,0,.55)}
+}
+@keyframes wp-drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-1.6%,1%,0) scale(1.045)}}
+@keyframes wp-drift-gentle{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-.8%,.5%,0) scale(1.022)}}
+@keyframes wp-flow{from{transform:rotate(0deg)}to{transform:rotate(var(--wp-flow-deg))}}
+@keyframes wp-flow-gentle{from{transform:rotate(0deg)}to{transform:rotate(calc(var(--wp-flow-deg) / 2))}}
+@keyframes wp-breathe{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* Settings keeps a calm Obsidian floating pane over the blurred window backdrop. */
+html.wallpaper #settings{background:rgba(5,5,7,.96)}
+html.wallpaper .settings-side{background:rgba(3,3,4,.98)}
+html.wallpaper .settings-card{background:#0b0b0e}
+
+/* Open Chat and Work sessions settle smoothly into Obsidian with Fairy's blue accents while Home keeps wallpapers live. */
+html.wallpaper:not(.floating):not(.home):not(.notebook-open):not(.research-open):not(.diffusion-open):not(.runs-open):not(.goals-open):not(.plugins-open){
+  #app{
+    --w-ground:#030304;--w-side:#060608;--w-raised:#141418;--w-tool:#0d0d11;--w-well:#020203;--w-hover:rgba(255,255,255,.045);--w-line:rgba(255,255,255,.05);
+    --w-ink:#f4f4f6;--w-soft:#d5d8e2;--w-dim:#8e8e99;--w-muted:#6e6e77;--w-accent:#3e5aec;
+    background:#030304;
+  }
+  .wp-shade::after{background:#030304;opacity:1}
+  .sidebar{background:#060608;border-right:0}
+  #side-pane{background:#060608;border-left:0}
+  .conversation::before{background:none}
+  :is(.slash-menu,.palette,.model-menu,.extras-menu){background:#0b0b0f}
+  :is(.work-output,.work-diff,.file-text){background:#0b0b0e}
+}
+
+/* Settings → Appearance */
+#tab-appearance{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='3'/%3E%3Cpath d='M3 15c4-5 7-6 11-3s5 2 7 0'/%3E%3C/svg%3E")}
+.settings-card .wallpaper-choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px;margin:0;padding:14px 18px;border:0;min-width:0}
+.wallpaper-choices legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.settings-card .wallpaper-choice{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:2px;min-height:0;padding:0 0 10px;border-radius:14px;overflow:hidden;background:#0b0c12;box-shadow:0 0 0 2px #ffffff14;cursor:pointer}
+.wallpaper-choice input{position:absolute;opacity:0;pointer-events:none}
+.settings-card .wallpaper-choice:has(input:checked){box-shadow:0 0 0 2px var(--choice)}
+.wallpaper-choice:has(input:focus-visible){outline:2px solid #9fb2ff;outline-offset:2px}
+.wallpaper-thumb{height:82px;margin-bottom:6px;background:center/cover no-repeat}
+.wallpaper-thumb.plain{background:radial-gradient(60% 50% at 62% 100%,#14276e,transparent),#131416}
+.wallpaper-choice b{padding:0 10px;font-size:13px;font-weight:600}
+.wallpaper-choice small{padding:0 10px;font-size:12px;line-height:1.35;color:#a2a4ad}
+#wallpaper-dim-value{margin-left:auto;color:#a2a4ad;font-variant-numeric:tabular-nums}
+
+/* The velvet button's ripple (src/velvet-ripple.js): just above the wallpaper, under everything else in the window. */
+#app .velvet-ripple{position:absolute;inset:0;z-index:0;pointer-events:none;background:#030304 center/cover no-repeat;will-change:clip-path,mask-image,opacity}
+#app .velvet-ring{position:absolute;z-index:0;pointer-events:none;border-radius:50%;translate:-50% -50%;
+  box-shadow:0 0 0 2px rgba(170,195,255,.95),0 0 18px 4px rgba(110,145,255,.7),0 0 60px 14px rgba(70,110,255,.35),inset 0 0 34px 6px rgba(150,180,255,.35)}
+#app canvas.velvet-waves{width:100%;height:100%;background:none!important}
+
+/* Notebook's sky (src/nebula-sky.js): its own, over whatever the wallpaper is, while Notebook is open. Velvet's ground
+   and glow, the nebula drawn through Velvet's grid, and the edges shaded to the velvet; the window's surfaces go glassy
+   over it, as they do over a wallpaper. */
+#notebook-sky{display:none}
+html.notebook-open:not(.floating){
+  #app,&.home #app{
+    --w-ground:#030304;--w-side:rgba(4,6,16,.58);--w-tool:rgba(4,6,16,.55);--w-well:rgba(3,5,14,.7);--w-raised:rgba(255,255,255,.1);--w-line:rgba(255,255,255,.1);
+    background:#030304;
+  }
+  main{z-index:1}
+  #notebook-sky{display:block;position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#030304;contain:strict}
+  #notebook-sky>*{position:absolute}
+  .ns-glow{left:50%;top:88%;width:72%;height:38%;translate:-50% -50%;background:radial-gradient(closest-side,color-mix(in srgb,#1b2350 48%,transparent),transparent);opacity:.36;transition:opacity .75s cubic-bezier(.22,1,.36,1)}
+  .ns-canvas{inset:0;width:100%;height:100%;opacity:1;transition:opacity .75s cubic-bezier(.22,1,.36,1)}
+  &.notebook-sky-off :is(.ns-canvas,.ns-glow){opacity:0}
+  .ns-shade{inset:0;background:linear-gradient(180deg,#030304 0%,rgba(3,3,4,.92) 44%,rgba(3,3,4,.18) 74%,rgba(3,3,4,.06) 100%)}
+  /* A veil, as the wallpapers have, so what you read stays clear over the thick of the cloud. */
+  .ns-shade::after{content:"";position:absolute;inset:0;background:#030304;opacity:.2}
+  /* The panels are clear over the sky, never frosted (a blur would redraw with every frame of the sky) and no longer
+     dimmed (18 Nov, the user's ask: no black behind the panels): the tutor's chat, the Studio and the boxes on the
+     notebooks' home have no fill and no outlines, Notebook's darker glass goes clear with them, and only the faint
+     glassy tint of the tiles and rows (--nb-card) is left to show where each one is. */
+  #notebook-view{--nb-glass:transparent;--nb-deep:transparent}
+  :is(#notebook-view .nb-centre,#notebook-view .nb-panel,#notebook-view .nb-courses){background:transparent;border-color:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+  :is(#notebook-view .nb-hero,#notebook-view .nb-card){-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+
+/* Per-mode background animations turned off: settle to pure obsidian black (#030304). */
+html.bg-anim-off:not(.floating){
+  #app,&.home #app,&.notebook-open #app{--w-ground:#030304;background:#030304}
+  #wallpaper,#notebook-sky{opacity:0;background:#030304}
+}

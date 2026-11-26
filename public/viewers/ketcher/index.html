@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Ketcher Chemistry — Offline Standalone Editor</title>
+  <link rel="stylesheet" href="./ketcher.css" />
+</head>
+<body>
+  <div id="ketcher-app" class="kt-app">
+    <div id="kt-deck" class="kt-deck" hidden></div>
+    <div class="kt-body">
+      <aside id="kt-tools" class="kt-rail kt-tools" aria-label="Drawing tools"></aside>
+      <main class="kt-stage">
+        <div id="kt-canvas-wrap" class="kt-canvas-wrap">
+          <svg id="kt-svg" class="kt-svg" xmlns="http://www.w3.org/2000/svg" role="application" aria-label="2D molecular structure canvas"></svg>
+          <div id="kt-hud" class="kt-hud"></div>
+        </div>
+        <div class="kt-bottom">
+          <div id="kt-rings" class="kt-rings" aria-label="Ring templates"></div>
+          <div id="kt-status" class="kt-status"></div>
+        </div>
+      </main>
+      <aside id="kt-atoms" class="kt-rail kt-atoms" aria-label="Periodic atom rail"></aside>
+    </div>
+  </div>
+  <script src="./ketcher.js"></script>
+</body>
+</html>

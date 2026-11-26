@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8"><title>Mavuika avatar check</title>
+<style>body{margin:0;background:#222534;color:#eee;font:14px system-ui}#stage{position:absolute;inset:0}nav{position:absolute;z-index:2;top:16px;left:16px;display:flex;gap:8px}button{padding:9px 14px}#status{position:absolute;bottom:12px;left:16px}</style>
+<div id="stage"></div><nav><button id="relaxed">Relaxed</button><button id="crossed">Arms crossed</button><button id="wave">Wave</button><button id="float">Head to torso</button><button id="full">Full body</button><button id="talk">Test lip sync</button><button id="blink">Test blink</button></nav><div id="status">Loading local avatar…</div>
+<script type="module">
+import {Avatar} from '/src/avatar.js';
+const avatar = new Avatar(document.querySelector('#stage'));
+window.avatarPreview = avatar;
+avatar.setPose('relaxed');
+try {
+ const model = new URLSearchParams(location.search).get('model') || '/avatar-work/mavuika/mavuika-stella.vrm';
+ await avatar.load(new Uint8Array(await (await fetch(model)).arrayBuffer()));
+ document.querySelector('#status').textContent = 'VRM loaded · '+Object.keys(avatar.vrm.humanoid.humanBones).length+' humanoid bones · '+avatar.vrm.expressionManager.expressions.length+' expressions';
+}catch(error){ document.querySelector('#status').textContent = error.stack; }
+document.querySelector('#relaxed').onclick=()=>avatar.setPose('relaxed');
+document.querySelector('#crossed').onclick=()=>avatar.setPose('crossed');
+document.querySelector('#wave').onclick=()=>{avatar.wave();avatar.motion.waveUntil=avatar.motion.time+30};
+document.querySelector('#float').onclick=()=>avatar.setFloating(true);
+document.querySelector('#full').onclick=()=>avatar.setFloating(false);
+document.querySelector('#talk').onclick=()=>{avatar.mouth=.65;avatar.setActivity('speaking');setTimeout(()=>{avatar.mouth=0;avatar.setActivity('idle')},15000)};
+document.querySelector('#blink').onclick=()=>{avatar.vrm.expressionManager.setValue('blink',1);setTimeout(()=>avatar.vrm.expressionManager.setValue('blink',0),2000)};
+</script>

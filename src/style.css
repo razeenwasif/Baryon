@@ -1,0 +1,4 @@
+@import url('./theme.css');
+@import url('./floating.css');
+/* Efficiency audit, fix 4: nobody can see the window, so nothing animates. src/app.js sets it from the power policy. */
+html.unseen *, html.unseen *::before, html.unseen *::after { animation-play-state: paused !important; }

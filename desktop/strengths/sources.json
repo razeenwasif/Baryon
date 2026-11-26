@@ -1,0 +1,16 @@
+{
+  "note": "Benchmark pages Fairy reads for the strengths table's web layer (docs/auto-by-task-plan.md, stage 2). Each names the kinds it speaks to. A first list, drawn up on 19 Nov 2026 for you to look over before anything is read: add or remove sources here. Circuits, data and teaching have no source yet; they fill from your own evals. Pages are read as data, never as instructions.",
+  "sources": [
+    { "id": "swebench", "name": "SWE-bench leaderboard", "url": "https://www.swebench.com/", "kinds": ["code"], "type": "leaderboard", "about": "Fixing real GitHub issues in Python projects, checked by the projects' own tests." },
+    { "id": "aider", "name": "Aider polyglot leaderboard", "url": "https://aider.chat/docs/leaderboards/", "kinds": ["code"], "type": "leaderboard", "about": "Coding exercises in six languages, edited through a coding assistant." },
+    { "id": "livecodebench", "name": "LiveCodeBench", "url": "https://livecodebench.github.io/leaderboard.html", "kinds": ["code"], "type": "benchmark", "about": "Contest problems published after a model's training, so it can't have seen them." },
+    { "id": "matharena", "name": "MathArena", "url": "https://matharena.ai/", "kinds": ["maths"], "type": "benchmark", "about": "Fresh maths competitions (AIME, HMMT and others), marked on final answers or proofs. Didn't answer when the list was drawn up." },
+    { "id": "epoch", "name": "Epoch AI Benchmarking Hub", "url": "https://epoch.ai/benchmarks", "kinds": ["maths", "research"], "type": "leaderboard", "about": "Independent runs of FrontierMath, GPQA Diamond and others." },
+    { "id": "artificialanalysis", "name": "Artificial Analysis", "url": "https://artificialanalysis.ai/leaderboards/models", "kinds": ["code", "maths", "research"], "type": "leaderboard", "about": "Independent runs of many benchmarks, among them coding, maths and graduate-level science." },
+    { "id": "scale", "name": "Scale SEAL leaderboards", "url": "https://scale.com/leaderboard", "kinds": ["research", "code"], "type": "leaderboard", "about": "Expert-made private sets, among them Humanity's Last Exam." },
+    { "id": "vals", "name": "Vals AI benchmarks", "url": "https://www.vals.ai/benchmarks", "kinds": ["business", "maths"], "type": "leaderboard", "about": "Industry tasks (finance, law, tax) and maths, run independently." },
+    { "id": "taubench", "name": "τ-bench", "url": "https://taubench.com/", "kinds": ["business"], "type": "benchmark", "about": "An agent helping customers through tools and policies (airline, retail, telecom)." },
+    { "id": "mmmu", "name": "MMMU", "url": "https://mmmu-benchmark.github.io/", "kinds": ["vision"], "type": "benchmark", "about": "College-level questions over pictures, charts and diagrams." },
+    { "id": "eqbench-writing", "name": "EQ-Bench Creative Writing", "url": "https://eqbench.com/creative_writing.html", "kinds": ["writing"], "type": "benchmark", "about": "Short stories judged by a model against a rubric: judged, so weak evidence." }
+  ]
+}

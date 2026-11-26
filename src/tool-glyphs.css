@@ -1,0 +1,8 @@
+/* The pixel animation beside Fairy's status (src/tool-glyphs.js): frames step in turn, never fade. */
+.tool-glyph { display: inline-block; flex: none; vertical-align: -1px; margin-right: 6px; fill: currentColor; overflow: visible; }
+.tool-glyph g { opacity: 0; animation-timing-function: steps(1, end); animation-iteration-count: infinite; }
+.tool-glyph[data-n="1"] g { opacity: 1; animation: none; }
+@keyframes tool-glyph-2 { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes tool-glyph-3 { 0% { opacity: 1; } 33.333% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes tool-glyph-4 { 0% { opacity: 1; } 25% { opacity: 0; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .tool-glyph g { animation: none; } .tool-glyph g:first-child { opacity: 1; } }

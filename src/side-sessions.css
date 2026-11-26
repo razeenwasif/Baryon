@@ -1,0 +1,80 @@
+/* Side sessions: notes from linked chats in the conversation, and the strip above the message box that links a chat
+   to the one that started it, the sessions it started, and the cards it left. Uses the window's own colours. */
+html:not(.floating) {
+  .side-strip{order:2;display:flex;flex-direction:column;gap:8px;margin:0 0 10px;padding:0 4px}
+  .side-strip[hidden]{display:none}
+  .side-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0}
+  .side-label{flex:none;margin-right:2px;font-size:12px;color:var(--w-muted)}
+  .side-parent,.side-chip{display:inline-flex;align-items:center;gap:7px;min-width:0;max-width:100%;height:28px;padding:0 12px;border:0;border-radius:14px;background:var(--w-side);box-shadow:0 0 0 1px var(--w-line);font-size:12.5px;color:var(--w-dim);cursor:pointer}
+  .side-parent{max-width:min(420px,100%);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .side-parent::before{content:"↖";flex:none;color:var(--w-muted)}
+  :is(.side-parent,.side-chip):hover{background:var(--w-raised);color:var(--w-ink)}
+  :is(.side-parent,.side-chip):focus-visible{outline:2px solid #9fb2ff;outline-offset:2px}
+  .side-chip-dot{flex:none;width:7px;height:7px;border-radius:50%;background:var(--w-muted)}
+  .side-chip.working .side-chip-dot{background:#7f95ff;animation:side-pulse 1.4s ease-in-out infinite}
+  .side-chip.waiting .side-chip-dot{background:#f2c46d}
+  .side-chip.queued .side-chip-dot{background:transparent;box-shadow:inset 0 0 0 1.5px var(--w-muted)}
+  .side-chip-title{min-width:0;max-width:220px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .side-chip-state{flex:none;max-width:160px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:11.5px;color:var(--w-muted)}
+  .side-chip.waiting .side-chip-state{color:#f2c46d}
+  .side-card{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:14px;background:var(--w-raised);box-shadow:0 0 0 1px #9fb2ff44}
+  .side-card-text{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+  .side-card-kicker{font-size:11.5px;color:var(--w-muted)}
+  .side-card-text strong{font-size:14px;font-weight:500;overflow-wrap:anywhere;color:var(--w-ink)}
+  .side-card-brief summary{margin-top:2px;font-size:12px;color:var(--w-muted);cursor:pointer}
+  .side-card-brief p{max-height:180px;margin:6px 0 0;overflow:auto;font-size:13px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--w-dim)}
+  .side-card-actions{display:flex;flex:none;gap:6px}
+  .side-card-actions button{height:30px;padding:0 13px;border-radius:15px;background:#ffffff14;font-size:12.5px}
+  .side-card-actions button.primary{background:var(--w-accent);color:#fff;font-weight:500}
+  .side-note{margin:0 0 22px;padding:12px 14px;border-radius:14px;background:var(--w-side);box-shadow:0 0 0 1px var(--w-line)}
+  .side-note.stopped,.side-note.failed{box-shadow:0 0 0 1px #f2c46d55}
+  .side-note-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .side-note-title{flex:1;min-width:0;font-size:12.5px;color:var(--w-muted);overflow-wrap:anywhere}
+  .side-note-title::before{content:"↩ ";color:var(--w-muted)}
+  .side-note:is(.brief,.message) .side-note-title::before{content:"↘ "}
+  .side-note-open{flex:none;height:26px;padding:0 11px;border:0;border-radius:13px;background:#ffffff14;font-size:12px;color:var(--w-ink);cursor:pointer}
+  .side-note-open:hover{background:#ffffff22}
+  .side-note-body{max-height:320px;overflow:auto;font-size:14px;line-height:1.55;color:var(--w-soft)}
+  .side-note-body p{margin:0 0 8px;font-size:14px}
+  .side-note-body > :last-child{margin-bottom:0}
+  .session-row.linked .side-recent-item::before{content:"↳";margin-right:5px;color:var(--w-muted)}
+  .side-note:is(.peer,.sent) .side-note-title::before{content:"↘ "}
+  .side-note.sent{background:transparent;box-shadow:0 0 0 1px var(--w-line)}
+  .side-note.sent .side-note-title::before{content:"↗ "}
+  .side-note-head .side-note-open + .side-note-open{margin-left:-4px}
+  .side-compose{display:inline-flex;align-items:center;gap:6px;height:28px;margin-left:auto;padding:0 12px;border:0;border-radius:14px;background:transparent;box-shadow:0 0 0 1px var(--w-line);font-size:12.5px;color:var(--w-muted);cursor:pointer}
+  .side-compose::before{content:"✉";font-size:12px}
+  .side-compose:hover{background:var(--w-side);color:var(--w-ink)}
+  .side-compose:focus-visible{outline:2px solid #9fb2ff;outline-offset:2px}
+  /* The panel for messaging a session by hand. */
+  .session-message{width:min(520px,calc(100vw - 32px));max-height:min(640px,calc(100vh - 48px));padding:18px 20px;border:1px solid rgba(255,255,255,.11);border-radius:18px;background:#0b0c0f;color:#eceef4;box-shadow:0 28px 80px rgba(0,0,0,.72)}
+  .session-message[open]{display:flex;flex-direction:column;gap:10px}
+  .session-message::backdrop{background:rgba(4,5,8,.72);backdrop-filter:blur(6px)}
+  .session-message-head{display:flex;align-items:center;gap:10px}
+  .session-message-head h3{flex:1;margin:0;font-size:15.5px;font-weight:600;color:#f4f5f8}
+  .session-message-close{width:28px;height:28px;border:0;border-radius:8px;background:rgba(255,255,255,.06);font-size:18px;color:#c5cad8;cursor:pointer}
+  .session-message-close:hover{background:rgba(255,255,255,.12);color:#fff}
+  .session-message-search,.session-message-text{width:100%;box-sizing:border-box;padding:9px 12px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:#14151a;font:inherit;font-size:13.5px;color:#eceef4}
+  .session-message-text{resize:vertical;min-height:84px;line-height:1.45}
+  :is(.session-message-search,.session-message-text):focus{outline:2px solid #9fb2ff88;outline-offset:0}
+  .session-message-list{display:flex;flex-direction:column;gap:2px;min-height:60px;max-height:260px;overflow:auto;padding:2px}
+  .session-message-project{margin:8px 0 2px;padding:0 8px;font-size:11.5px;color:var(--w-muted)}
+  .session-message-project:first-child{margin-top:0}
+  .session-message-row{display:flex;align-items:center;gap:8px;min-height:32px;padding:0 10px;border:0;border-radius:9px;background:transparent;font-size:13px;color:var(--w-dim);text-align:left;cursor:pointer}
+  .session-message-row:hover{background:var(--w-side);color:var(--w-ink)}
+  .session-message-row[aria-selected="true"]{background:#9fb2ff22;color:var(--w-ink);box-shadow:inset 0 0 0 1px #9fb2ff66}
+  .session-message-row.working .side-chip-dot{background:#7f95ff;animation:side-pulse 1.4s ease-in-out infinite}
+  .session-message-row.waiting .side-chip-dot{background:#f2c46d}
+  .session-message-row.queued .side-chip-dot{background:transparent;box-shadow:inset 0 0 0 1.5px var(--w-muted)}
+  .session-message-name{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .session-message-state{flex:none;max-width:180px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:11.5px;color:var(--w-muted)}
+  .session-message-row.waiting .session-message-state{color:#f2c46d}
+  .session-message-empty{margin:12px 8px;font-size:13px;color:var(--w-muted)}
+  .session-message-foot{display:flex;align-items:center;gap:10px}
+  .session-message-hint{flex:1;font-size:12px;color:var(--w-muted)}
+  .session-message-foot button{height:32px;padding:0 16px;border:0;border-radius:16px;background:var(--w-accent);color:#fff;font-size:13px;font-weight:500;cursor:pointer}
+  .session-message-foot button:disabled{opacity:.45;cursor:default}
+  @media (max-width:560px){ .side-card{flex-direction:column} .side-card-actions{align-self:flex-end} }
+  @media (prefers-reduced-motion:reduce){ :is(.side-chip,.session-message-row).working .side-chip-dot{animation:none} }
+}
+@keyframes side-pulse{50%{opacity:.35}}

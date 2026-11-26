@@ -1,0 +1,75 @@
+{
+  "name": "baryon-core",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "main": "desktop/main.cjs",
+  "bin": {
+    "baryon": "./bin/baryon",
+    "baryon-mcp": "./bin/baryon-mcp",
+    "fairy": "./bin/fairy",
+    "fairy-mcp": "./bin/fairy-mcp"
+  },
+  "scripts": {
+    "build": "vite build",
+    "build:core": "BARYON_EDITION=core vite build",
+    "start": "npm run build && electron .",
+    "preview": "vite --host 127.0.0.1",
+    "test": "node --test test/*.test.mjs",
+    "build:native": "mkdir -p native/bin && swiftc -module-cache-path /tmp/fairy-swift-cache native/Desktop.swift -o native/bin/fairy-desktop && swiftc -parse-as-library -module-cache-path /tmp/fairy-swift-cache native/Transcribe.swift -o native/bin/fairy-transcribe && swiftc -O -module-cache-path /tmp/fairy-swift-cache native/QuizOCR.swift -o native/bin/fairy-quiz-ocr && swiftc -module-cache-path /tmp/fairy-swift-cache native/QuizOverlay.swift -o native/bin/fairy-quiz-overlay && swiftc -parse-as-library -module-cache-path /tmp/fairy-swift-cache native/Meeting.swift -o native/bin/fairy-meeting",
+    "build:document": "swiftc -module-cache-path /tmp/fairy-swift-cache native/Document.swift -o native/bin/fairy-document",
+    "build:notch": "node scripts/build-notch.mjs",
+    "build:simulator": "swiftc -module-cache-path /tmp/fairy-swift-cache native/Simulator.swift -o native/bin/fairy-simulator",
+    "build:screen": "swiftc -O -parse-as-library -module-cache-path /tmp/fairy-swift-cache native/ScreenCapture.swift -o native/bin/fairy-screen",
+    "package:baryon": "npm run package:fairy",
+    "package:dmg": "node scripts/build-dmg.mjs",
+    "install:baryon": "npm run install:fairy",
+    "package:fairy": "npm run build && npm run build:screen && npm run build:idle && npm run build:simulator && npm run build:notch && npm run build:document && npm run build:power && npm run build:quiz && npm run build:guide && npm run build:notes && node scripts/package-fairy.mjs",
+    "install:fairy": "npm run package:fairy && python3 scripts/install-fairy.py",
+    "build:power": "swiftc -module-cache-path /tmp/fairy-swift-cache native/Power.swift -o native/bin/fairy-power",
+    "build:quiz": "swiftc -O -module-cache-path /tmp/fairy-swift-cache native/QuizOCR.swift -o native/bin/fairy-quiz-ocr && swiftc -module-cache-path /tmp/fairy-swift-cache native/QuizOverlay.swift -o native/bin/fairy-quiz-overlay",
+    "build:vorssaint": "node scripts/build-vorssaint.mjs",
+    "build:notes": "swiftc -O -parse-as-library -module-cache-path /tmp/fairy-swift-cache native/notes-index/*.swift native/NotesSearch.swift -o native/bin/fairy-notes",
+    "ios:install": "node scripts/ios-install.mjs",
+    "postinstall": "chmod +x node_modules/node-pty/prebuilds/*/spawn-helper || true",
+    "build:guide": "swiftc -O -module-cache-path /tmp/fairy-swift-cache native/Guide.swift -o native/bin/fairy-guide",
+    "build:idle": "swiftc -O -module-cache-path /tmp/fairy-swift-cache native/Idle.swift -o native/bin/fairy-idle",
+    "build:resource-monitor": "cargo build --release --manifest-path native/resource-monitor/Cargo.toml --target-dir native/resource-monitor/target && cp native/resource-monitor/target/release/fairy-resource-monitor native/bin/fairy-resource-monitor && chmod +x native/bin/fairy-resource-monitor"
+  },
+  "dependencies": {
+    "@fontsource/doto": "5.3.0",
+    "@fontsource/martian-mono": "5.3.0",
+    "@openai/codex": "^0.172.0",
+    "@pixiv/three-vrm": "^3.4.0",
+    "@xterm/addon-fit": "0.11.0",
+    "@xterm/xterm": "6.0.0",
+    "highlight.js": "11.12.0",
+    "katex": "0.18.7",
+    "markdown-it": "15.0.2",
+    "nanoid": "^6.0.2",
+    "node-pty": "1.1.0",
+    "perfect-freehand": "^1.2.3",
+    "qrcode-generator": "2.0.4",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "speech-rule-engine": "4.1.4",
+    "three": "^0.180.0",
+    "voice-glow": "0.2.1",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.3.0",
+    "electron": "^44.3.0",
+    "vite": "^6.4.1"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "overrides": {
+    "speech-rule-engine": {
+      "@xmldom/xmldom": "0.9.12"
+    }
+  },
+  "license": "Apache-2.0",
+  "baryonEdition": "core"
+}

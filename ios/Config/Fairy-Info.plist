@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>dev.razeen.fairy.check</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>dev.razeen.fairy</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fairy</string>
+			</array>
+		</dict>
+	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>ts.net</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>So Baryon can set timers that ring, even with your iPhone locked.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To scan the pairing code on your Mac.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>So only you can allow a step on your Mac.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>So you can talk to Baryon.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>To turn what you say into words, on this iPhone.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
+</dict>
+</plist>

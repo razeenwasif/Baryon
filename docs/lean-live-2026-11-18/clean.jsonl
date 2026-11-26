@@ -1,0 +1,2 @@
+{"caption":"","data":"H004 : ∀ (n : ℕ), n + 0 = n","endPos":{"column":6,"line":6},"fileName":"Proof.lean","isSilent":false,"keepFullRange":false,"kind":"[anonymous]","pos":{"column":0,"line":6},"severity":"information"}
+{"caption":"","data":"'H004' depends on axioms: [propext]","endPos":{"column":6,"line":7},"fileName":"Proof.lean","isSilent":false,"keepFullRange":false,"kind":"[anonymous]","pos":{"column":0,"line":7},"severity":"information"}

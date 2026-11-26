@@ -1,0 +1,9 @@
+/* The quick box, in the same pixel-terminal look as Fairy's screen ink. */
+:root { --mono: 'Martian Mono', ui-monospace, Menlo, monospace; color-scheme: dark; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+.quick { position: absolute; inset: 6px; display: flex; align-items: center; gap: 8px; padding: 0 12px; background: #06081a; color: #e6e9ff; font: 400 12px/1 var(--mono);
+  box-shadow: 0 0 0 2px #62d6ff, 0 0 16px rgba(98, 214, 255, 0.45); }
+.quick-mark { color: #62d6ff; font-weight: 600; }
+.quick-input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; color: inherit; font: inherit; caret-color: #62d6ff; caret-shape: block; }
+.quick-input::placeholder { color: rgba(155, 230, 255, 0.45); }
+.quick-hint { color: rgba(155, 230, 255, 0.55); font-size: 9px; letter-spacing: 0.08em; white-space: nowrap; }

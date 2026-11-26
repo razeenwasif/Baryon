@@ -1,0 +1,68 @@
+/* A face's chats window: the other Mac's chats, in Fairy's Obsidian colours with blue accents. */
+:root{--ground:#08080a;--side:#0d0e11;--card:#14151a;--raise:#16171c;--ink:#eceef4;--dim:#9da2b0;--line:rgba(255,255,255,.075);--accent:#9fb2ff;--iris:#3e5aec;--warn:#eec583;--bad:#f29aa6}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--ground);color:var(--ink);font:14px/1.55 Inter,-apple-system,system-ui,sans-serif}
+#chats{display:grid;grid-template-columns:280px minmax(0,1fr);height:100%}
+aside{display:flex;flex-direction:column;min-height:0;background:var(--side);border-right:1px solid var(--line)}
+.side-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:max(42px,calc(38px * var(--desktop-zoom-inverse,1))) 16px 10px;-webkit-app-region:drag}
+.side-head b{font-size:16px}
+#link{font-size:12px;color:var(--dim)}
+#link.down{color:var(--warn)}
+#new{margin:0 12px 10px;height:34px;border:0;border-radius:10px;background:var(--iris);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+#asks{display:grid;gap:8px;padding:0 12px}
+#asks:empty{display:none}
+.ask{padding:10px 12px;border-radius:12px;background:var(--card);border:1px solid rgba(159,178,255,.35)}
+.ask b{display:block;font-size:13px}
+.ask p{margin:4px 0 0;font-size:12px;color:var(--dim);white-space:pre-wrap;overflow-wrap:anywhere;max-height:120px;overflow:auto}
+.ask .buttons{display:flex;gap:6px;justify-content:flex-end;margin-top:8px}
+button.small{height:28px;padding:0 12px;border:0;border-radius:8px;background:var(--raise);color:var(--ink);font:inherit;font-size:12.5px;cursor:pointer}
+button.small.yes{background:var(--iris);color:#fff}
+button:disabled{opacity:.5;cursor:default}
+#list{flex:1;overflow:auto;padding:6px 8px 16px}
+.chat{display:grid;gap:1px;width:100%;text-align:left;padding:8px 10px;border:0;border-radius:10px;background:none;color:var(--ink);font:inherit;cursor:pointer}
+.chat:hover{background:var(--raise)}
+.chat[aria-current="true"]{background:var(--raise)}
+.chat span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat small{color:var(--dim);font-size:11.5px}
+.chat small.working{color:var(--accent)}
+.chat small.waiting{color:var(--warn)}
+main{display:flex;flex-direction:column;min-width:0;min-height:0;position:relative}
+.head{display:flex;align-items:center;gap:10px;padding:38px 22px 12px;border-bottom:1px solid var(--line);-webkit-app-region:drag}
+.head h1{flex:1;margin:0;font-size:17px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.head button{-webkit-app-region:no-drag}
+#state{font-size:12px;color:var(--dim)}
+#messages{flex:1;overflow:auto;padding:18px 22px;display:flex;flex-direction:column;gap:14px}
+#messages.has-rail{padding-right:36px;scrollbar-width:none}
+#messages.has-rail::-webkit-scrollbar{display:none}
+.message-rail{position:absolute;right:6px;width:22px;z-index:4;-webkit-app-region:no-drag}
+.message-rail-ticks{height:100%;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+.message-rail-ticks::-webkit-scrollbar{display:none}
+.message-rail-ticks.has-more-top{-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px,#000);mask-image:linear-gradient(to bottom,transparent,#000 16px,#000)}
+.message-rail-ticks.has-more-bottom{-webkit-mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 16px),transparent);mask-image:linear-gradient(to bottom,#000,#000 calc(100% - 16px),transparent)}
+.message-rail-ticks.has-more-top.has-more-bottom{-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 16px),transparent);mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 16px),transparent)}
+.message-rail-tick{display:flex;justify-content:center;align-items:center;width:22px;height:var(--step,14px);flex:none;padding:0;border:0;background:none;border-radius:999px;cursor:pointer;pointer-events:auto;-webkit-app-region:no-drag}
+.message-rail-tick:hover{filter:none}
+.message-rail-tick span{display:block;width:var(--dot,7px);height:var(--dot,7px);border-radius:50%;background:rgba(255,255,255,.16);transition:transform .18s cubic-bezier(.22,1,.36,1),background-color .18s ease}
+.message-rail-tick:is(:hover,:focus-visible) span{background:rgba(255,255,255,.42);transform:scale(1.22)}
+.message-rail-tick.is-active span{background:rgba(255,255,255,.6);transform:scale(1.1)}
+.message-rail-tick:focus-visible{outline:1px solid #b5c8ff;outline-offset:1px}
+.message-rail-card{position:absolute;right:34px;width:256px;padding:12px;border-radius:14px;background:rgba(19,20,26,.96);box-shadow:0 0 0 1px rgba(255,255,255,.09),0 12px 32px rgba(0,0,0,.5);pointer-events:none}
+.message-rail-title{margin:0;font-size:12px;font-weight:500;line-height:16px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.message-rail-text{margin:4px 0 0;font-size:12px;line-height:16px;color:var(--dim);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.msg{max-width:840px}
+.msg.user{align-self:flex-end;padding:9px 18px;border-radius:22px;background:#1a1b1f;border:1px solid rgba(255,255,255,.07);box-shadow:0 1px 2px rgba(0,0,0,.25);color:#f3f4f6;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.assistant p{margin:0 0 8px}.msg.assistant p:last-child{margin:0}
+.msg.assistant pre{overflow:auto;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.4);font-size:12px}
+.msg .meta{display:block;margin-top:4px;font-size:11px;font-variant-numeric:tabular-nums;color:var(--dim)}
+.live{border-left:2px solid var(--accent);padding-left:12px;color:var(--dim)}
+.live ul{margin:0 0 6px;padding:0;list-style:none;font-size:12.5px}
+.live li.running{color:var(--accent)}
+.empty{margin:auto;color:var(--dim);text-align:center;max-width:44ch}
+.problem{color:var(--bad);font-size:13px}
+#composer{display:flex;gap:8px;padding:12px 22px 18px;border-top:1px solid var(--line)}
+#text{flex:1;resize:none;min-height:44px;max-height:180px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit}
+#composer button{align-self:flex-end;height:40px;padding:0 16px;border:0;border-radius:10px;background:var(--iris);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+#note{padding:0 22px 12px;font-size:12px;color:var(--dim)}
+#note:empty{display:none}
+#text:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}

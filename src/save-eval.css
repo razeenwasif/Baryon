@@ -1,0 +1,31 @@
+/* Save as eval: Obsidian modal matching Work Folder Picker and dialogs. */
+.save-eval{width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 48px);overflow:auto;padding:22px 24px 18px;border:1px solid rgba(255,255,255,.11);border-radius:18px;
+  background:#0b0c0f;color:#eceef4;box-shadow:0 28px 80px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.04);
+  font:14px/1.45 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.save-eval::backdrop{background:rgba(4,5,8,.72);backdrop-filter:blur(8px)}
+.save-eval form{display:flex;flex-direction:column;gap:12px}
+.save-eval h3{margin:0;font-size:17px;font-weight:600;color:#f4f5f8}
+.save-eval p{margin:0}
+.save-eval-where{color:#8e95a8;font-size:13px}
+.save-eval-problem{color:#f29aa6;font-size:13px}
+.save-eval-field{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:#9da4b8}
+.save-eval-field small{color:#72798d;font-size:12px}
+.save-eval :is(input:not([type=checkbox]),textarea,select){width:100%;box-sizing:border-box;padding:8px 11px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:#14151a;color:#eceef4;font:inherit;font-size:13.5px}
+.save-eval :is(input:not([type=checkbox]),textarea,select):focus{outline:none;border-color:rgba(159,178,255,.55)}
+.save-eval textarea{resize:vertical}
+.save-eval input[spellcheck=false]{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:12.5px}
+.save-eval-hidden{margin:0;padding:10px 12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:#14151a;display:flex;flex-direction:column;gap:6px}
+.save-eval-hidden legend{padding:0;margin-bottom:4px;font-size:12.5px;color:#9da4b8}
+.save-eval-check{display:flex;align-items:center;gap:8px;font-size:13px}
+.save-eval-check span{overflow-wrap:anywhere}
+.save-eval-hidden .save-eval-check span{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:12.5px}
+.save-eval-check small{margin-left:auto;color:#72798d;font-size:12px;white-space:nowrap}
+.save-eval-check input{accent-color:#3e5aec}
+.save-eval-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.save-eval-status{min-height:1.4em;font-size:13px;color:#9da4b8}
+.save-eval-buttons{display:flex;justify-content:flex-end;gap:8px}
+.save-eval-buttons button{padding:7px 16px;border:1px solid rgba(255,255,255,.11);border-radius:10px;font:inherit;font-weight:550;cursor:pointer;color:#d5d9e4;background:rgba(255,255,255,.05)}
+.save-eval-buttons button:hover:not(:disabled){background:rgba(255,255,255,.11);color:#fff}
+.save-eval-buttons button.primary{background:#3e5aec;border-color:rgba(159,178,255,.45);color:#fff}
+.save-eval-buttons button.primary:hover:not(:disabled){background:#4f6af2}
+.save-eval-buttons button:disabled{opacity:.42;cursor:default}

@@ -1,0 +1,46 @@
+:root{--bg:#121318;--card:#1d1f27;--line:rgb(255 255 255/.1);--text:#e8e9ee;--soft:#a2a4ad;--accent:#a9c4ff;--ask:#ffd27a;--add:#8fe0a6;--del:#ffb4bd;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow-wrap:anywhere}
+header{position:sticky;top:0;z-index:1;display:flex;align-items:center;gap:8px;min-height:52px;padding:6px 16px;padding-top:max(6px,env(safe-area-inset-top));background:var(--bg);border-bottom:1px solid var(--line)}
+h1{flex:1;min-width:0;margin:0;overflow:hidden;font-size:17px;font-weight:600;white-space:nowrap;text-overflow:ellipsis}
+#status{flex:none;font-size:13px;color:var(--soft)}
+#back{flex:none;width:44px;height:44px;margin-left:-12px;padding:0;background:none;border:0;color:var(--text);font-size:28px;line-height:1}
+main{max-width:640px;margin:0 auto;padding:16px;padding-bottom:max(24px,env(safe-area-inset-bottom))}
+h2{margin:24px 0 8px;font-size:13px;font-weight:600;color:var(--soft)}
+h2:first-child{margin-top:0}
+p{margin:0 0 8px}
+.note{color:var(--soft);font-size:14px}
+.card{margin:0 0 12px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.ask{border-color:var(--ask)}
+.ask h3{margin:0 0 2px;font-size:16px;font-weight:600}
+.ask .where{margin:0 0 10px;font-size:13px;color:var(--soft)}
+pre{max-height:50vh;margin:8px 0;padding:10px;overflow:auto;background:#0d0e12;border-radius:8px;font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap}
+pre .add{color:var(--add)}
+pre .del{color:var(--del)}
+pre .more{color:var(--soft)}
+.buttons{display:flex;gap:8px;margin-top:12px}
+.buttons button{flex:1;min-height:48px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--text);font:inherit;font-weight:600}
+.buttons .yes{background:var(--accent);border-color:var(--accent);color:#10131c}
+button:disabled{opacity:.5}
+.chat{display:flex;align-items:center;gap:10px;width:100%;min-height:56px;padding:10px 0;background:none;border:0;border-top:1px solid var(--line);color:inherit;font:inherit;text-align:left}
+.chat:first-of-type{border-top:0}
+.chat .words{flex:1;min-width:0}
+.chat strong{display:block;overflow:hidden;font-weight:500;white-space:nowrap;text-overflow:ellipsis}
+.chat small{display:block;color:var(--soft);font-size:13px}
+.state{flex:none;font-size:13px;color:var(--soft)}
+.state.working{color:var(--accent)}
+.state.waiting{color:var(--ask)}
+.tasks{margin:0;padding:0;list-style:none;font-size:14px}
+.tasks li{padding:2px 0}
+.tasks li::before{content:"○ ";color:var(--soft)}
+.tasks .in_progress::before{content:"● ";color:var(--accent)}
+.tasks .done{color:var(--soft)}
+.tasks .done::before{content:"✓ "}
+.row{display:flex;gap:8px;padding:4px 0;font-size:14px}
+.row span:first-child{flex:none;width:1.2em;color:var(--soft)}
+.row.failed span:first-child{color:var(--del)}
+.row.running span:first-child{color:var(--accent)}
+.message{margin:0 0 12px;white-space:pre-wrap}
+.message.user{padding:10px 12px;background:var(--card);border-radius:12px}
+.problem{color:var(--del)}

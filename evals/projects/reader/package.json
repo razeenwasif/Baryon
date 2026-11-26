@@ -1,0 +1,1 @@
+{ "name": "reader", "type": "module", "scripts": { "test": "node --test" } }

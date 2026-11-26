@@ -1,0 +1,7 @@
+{
+  "port": 8080,
+  "retries": 3,
+  "timeoutMs": 5000,
+  "theme": "dark",
+  "currency": "AUD"
+}

@@ -1,0 +1,40 @@
+node_modules
+dist/
+native/bin/
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+.local-data/
+assets/*.vrm
+release/
+
+# Local character assets and downloaded Blender dependencies.
+avatar-work/tools/
+avatar-work/mavuika/*
+!avatar-work/mavuika/README.md
+__pycache__/
+*.py[cod]
+*.blend1
+build/*.icns
+
+# Local companion data and credentials.
+keys.json
+history.json
+auth.json
+calendar.json
+gmail.json
+client_secret_*.json
+*.pem
+*.key
+
+local-folders.json
+# The research engine: the link to Proton's checkout that scripts/build-research.mjs makes, and cargo's builds.
+native/research/proton
+native/research/target/
+native/resource-monitor/target/
+
+# Baryon Web build & Firebase Hosting cache
+web/dist/
+.firebase/

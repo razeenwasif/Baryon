@@ -1,0 +1,78 @@
+/* Radial menu centred on Fairy's eye (see radial-menu.js). The composer, ideas and
+   awareness boxes move into it, so the box panel is hidden in floating mode. */
+#floating-ui #floating-panel,#floating-ui #floating-collapse,#floating-ui #floating-extra-controls{display:none!important}
+#floating-ui,#floating-ui.is-collapsed{padding-bottom:10px}
+/* The status line is placed under the eye by radial-menu.js and gives way to the menu's caption. */
+#floating-ui #floating-status.radial-status{position:absolute;margin:0;transform:translateX(-50%);white-space:nowrap;max-width:300px;overflow:hidden;text-overflow:ellipsis;transition:opacity .15s}
+#floating-ui #floating-status.radial-status.is-covered{opacity:0}
+.floating #avatar.sprite-hovered{opacity:1}
+
+#floating-ui #floating-controls.radial-menu{
+  --ring:#1d1f25;--ring-hover:#353a47;--ring-edge:#0f1014;--accent:#9fb2ff;--ink:#d7ddee;
+  position:absolute;display:block;margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;max-width:none;
+  pointer-events:none;z-index:4;
+}
+#floating-ui .radial-menu > *{position:absolute}
+#floating-ui .radial-menu .radial-art{inset:0;width:100%;height:100%;overflow:visible;opacity:0;transition:opacity .16s ease .2s}
+#floating-ui .radial-menu.is-open .radial-art{opacity:1;transition-delay:0s}
+#floating-ui .radial-menu .radial-backdrop{fill:var(--ring-edge)}
+#floating-ui .radial-menu .radial-message-ring{fill:var(--ring);stroke:var(--ring-edge);stroke-width:2}
+#floating-ui .radial-menu .radial-message-text{fill:#eef1f8;font-size:13px;font-family:inherit;letter-spacing:.2px}
+#floating-ui .radial-menu .radial-art.is-placeholder .radial-message-text{fill:#8f96aa}
+#floating-ui .radial-menu .radial-caret{fill:var(--accent);animation:radial-blink 1s steps(1) infinite}
+@keyframes radial-blink{50%{opacity:0}}
+
+/* Every segment shares the container's box; clip-path cuts it to its sector and limits hit testing. */
+#floating-ui .radial-menu button.radial-segment{
+  inset:0;width:100%;height:100%;min-width:0;margin:0;border:0;border-radius:0;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;background:var(--ring);color:var(--ink);font-size:13px;line-height:1;
+  pointer-events:auto;opacity:0;visibility:hidden;transform:scale(.55);transform-origin:center;
+  transition:opacity .14s ease .2s,transform .2s ease .2s,visibility 0s linear .4s,background-color .1s;
+}
+/* A hidden segment stays hidden: the rule above would otherwise show it, unclipped, over the whole ring (a face of
+   another Mac hides most of them). */
+#floating-ui .radial-menu button.radial-segment[hidden]{display:none}
+#floating-ui .radial-menu.is-open button.radial-segment:not(.radial-sub),
+#floating-ui .radial-menu.is-open button.radial-sub.is-shown{
+  opacity:1;visibility:visible;transform:none;
+  transition:opacity .16s ease calc(var(--i,0) * 16ms),transform .24s cubic-bezier(.2,.9,.3,1.15) calc(var(--i,0) * 16ms),visibility 0s,background-color .1s;
+}
+#floating-ui .radial-menu button.radial-segment:is(:hover,:focus-visible),#floating-ui .radial-menu button.radial-group[aria-expanded="true"]{background:var(--ring-hover);color:#fff;outline:none}
+#floating-ui .radial-menu button.radial-segment[aria-pressed="true"]{color:var(--accent)}
+#floating-ui .radial-menu button.radial-segment svg{width:18px;height:18px}
+#floating-ui .radial-menu #floating-mode{font-size:10px;letter-spacing:.2px}
+#floating-ui .radial-menu #floating-stop{color:#ffb4bd}
+#floating-ui .radial-menu .radial-send{color:var(--accent);font-size:17px}
+
+/* The textarea is the real input: invisible, clipped to the message ring. */
+#floating-ui .radial-menu .radial-input{
+  inset:0;width:100%;height:100%;min-height:0;max-height:none;margin:0;padding:0;border:0;resize:none;opacity:0;color:transparent;caret-color:transparent;
+  background:none;cursor:text;pointer-events:none;
+}
+#floating-ui .radial-menu.is-open .radial-input{pointer-events:auto}
+
+/* The eye's centre is the drag handle while the menu is open. */
+#floating-ui .radial-menu .radial-centre{
+  left:50%;top:50%;width:var(--centre);height:var(--centre);margin:calc(var(--centre) / -2) 0 0 calc(var(--centre) / -2);
+  padding:0;border-radius:50%;background:none;cursor:grab;pointer-events:none;max-width:none;font-size:0;
+}
+#floating-ui .radial-menu.is-open .radial-centre{pointer-events:auto}
+#floating-ui .radial-menu .radial-label{
+  left:50%;transform:translate(-50%,-100%);white-space:nowrap;font-size:11px;line-height:1.2;color:#eef1f8;pointer-events:none;z-index:5;
+  padding:3px 8px;border-radius:7px;background:rgba(15,16,20,.92);box-shadow:0 0 0 1px rgba(255,255,255,.08),0 2px 8px rgba(0,0,0,.4);
+}
+#floating-ui .radial-menu .radial-label:empty{display:none}
+
+/* Text-only buttons keep their changing labels for the hover caption; an icon shows in the ring. */
+#floating-ui .radial-menu :is(#floating-new-topic,#floating-news,#floating-pause-ideas,#floating-sing,#floating-hands-free,#floating-pause-awareness,#floating-quiz-hints){font-size:0}
+#floating-ui .radial-menu :is(#floating-new-topic,#floating-news,#floating-pause-ideas,#floating-sing,#floating-hands-free,#floating-pause-awareness,#floating-quiz-hints)::before{
+  content:"";width:17px;height:17px;background:currentColor;-webkit-mask:var(--icon) center/contain no-repeat;mask:var(--icon) center/contain no-repeat;
+}
+#floating-ui #floating-new-topic{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z'/%3E%3C/svg%3E")}
+#floating-ui #floating-news{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Crect x='4' y='4' width='16' height='16' rx='2'/%3E%3Cpath d='M8 9h8M8 13h8M8 17h5'/%3E%3C/svg%3E")}
+#floating-ui #floating-pause-ideas{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M9 6v12M15 6v12'/%3E%3C/svg%3E")}
+#floating-ui #floating-sing{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='8' cy='17' r='3'/%3E%3Cpath d='M11 17V5l8-2v11'/%3E%3Ccircle cx='16' cy='14' r='3'/%3E%3C/svg%3E")}
+#floating-ui #floating-hands-free{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 12h.01M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7M5.5 5.5a9 9 0 0 0 0 13M18.5 5.5a9 9 0 0 1 0 13'/%3E%3C/svg%3E")}
+#floating-ui #floating-pause-awareness{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z'/%3E%3Cpath d='M4 20L20 4'/%3E%3C/svg%3E")}
+#floating-ui #floating-quiz-hints{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='4' width='16' height='16' rx='3'/%3E%3Cpath d='M8 12l3 3 5-6'/%3E%3C/svg%3E")}
+@media (prefers-reduced-motion:reduce){#floating-ui .radial-menu button.radial-segment{transform:none!important;transition:opacity .1s,visibility 0s!important}}

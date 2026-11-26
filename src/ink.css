@@ -1,0 +1,203 @@
+/* Fairy's screen ink, in pixels: LED marks on the page and little terminal windows beside it. Everything snaps to a
+   4-point grid and moves in steps. */
+:root { --ink: #7f9cff; --px: 4px; --mono: 'Martian Mono', ui-monospace, Menlo, monospace; --dots: 'Doto', 'Martian Mono', monospace; color-scheme: dark; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; font: 10.5px/1.6 var(--mono); color: #e6e9ff; user-select: none; -webkit-font-smoothing: antialiased; }
+#ink-marks { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#ink-labels, #ink-cards { position: fixed; inset: 0; pointer-events: none; }
+
+/* LED pixels: each one switches on in a single step. */
+.ink-mark { --tone: var(--ink); transition: opacity 1.2s steps(6, end); }
+.ink-mark.faded, .ink-label.faded { opacity: 0; }
+.ink-px { fill: var(--tone); animation: ink-on 1ms steps(1, start) both; }
+.ink-px.ink-still { animation: none; }
+.ink-dither { opacity: 0.42; }
+@keyframes ink-on { from { opacity: 0; } }
+
+.ink-label { position: absolute; --tone: var(--ink); padding: 4px 8px; background: #070914; color: color-mix(in srgb, var(--tone) 55%, white); font: 600 10px/1.3 var(--mono); letter-spacing: 0.06em; white-space: nowrap;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--tone) 70%, transparent), 0 0 14px color-mix(in srgb, var(--tone) 40%, transparent);
+  clip-path: polygon(0 4px, 4px 4px, 4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px));
+  animation: ink-on 1ms steps(1, start) both; transition: opacity 1.2s steps(6, end); }
+
+/* A terminal window: a 2-point pixel border with stepped corners, scanlines, a title bar with three lights. */
+.ink-card { position: absolute; pointer-events: auto; box-sizing: border-box; --tone: var(--ink);
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--tone) 45%, transparent)) drop-shadow(0 16px 26px rgba(0, 0, 0, 0.55)); }
+.ink-frame, .ink-screen { clip-path: polygon(0 8px, 4px 8px, 4px 4px, 8px 4px, 8px 0, calc(100% - 8px) 0, calc(100% - 8px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 8px, 100% 8px, 100% calc(100% - 8px), calc(100% - 4px) calc(100% - 8px), calc(100% - 4px) calc(100% - 4px), calc(100% - 8px) calc(100% - 4px), calc(100% - 8px) 100%, 8px 100%, 8px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 8px), 0 calc(100% - 8px)); }
+.ink-frame { padding: 3px; --led: color-mix(in srgb, var(--tone) 85%, white);
+  /* An LED border: a row of square dots along each edge, as Roamies' bubbles have. */
+  background:
+    repeating-linear-gradient(90deg, var(--led) 0 3px, transparent 3px 5px) top / 100% 3px no-repeat,
+    repeating-linear-gradient(90deg, var(--led) 0 3px, transparent 3px 5px) bottom / 100% 3px no-repeat,
+    repeating-linear-gradient(0deg, var(--led) 0 3px, transparent 3px 5px) left / 3px 100% no-repeat,
+    repeating-linear-gradient(0deg, var(--led) 0 3px, transparent 3px 5px) right / 3px 100% no-repeat; }
+.ink-screen { position: relative; padding: 0 11px 10px; background:
+  repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 3px),
+  radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--tone) 10%, #0a0c1d), #05060f); }
+#ink-cards.over .ink-screen { background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 3px), #05060f; }
+.ink-head { display: flex; align-items: center; gap: 7px; margin: 0 -11px 8px; padding: 6px 8px 5px 10px; cursor: grab; background: color-mix(in srgb, var(--tone) 16%, #070914); border-bottom: 2px solid color-mix(in srgb, var(--tone) 45%, transparent); }
+.ink-card.dragging .ink-head { cursor: grabbing; }
+.ink-lights { display: flex; gap: 4px; flex: none; }
+.ink-lights i { width: 6px; height: 6px; background: color-mix(in srgb, var(--tone) 45%, #1a1f3d); }
+.ink-lights i:first-child { background: var(--tone); box-shadow: 0 0 6px var(--tone); }
+.ink-title { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: clip; font: 700 13px/1 var(--dots); letter-spacing: 0.04em; color: color-mix(in srgb, var(--tone) 55%, white); text-shadow: 0 0 8px color-mix(in srgb, var(--tone) 80%, transparent); }
+.ink-kind { flex: none; font: 600 9px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: color-mix(in srgb, var(--tone) 45%, #6b7199); }
+.ink-x { flex: none; border: 0; padding: 2px 0 2px 4px; background: transparent; color: color-mix(in srgb, var(--tone) 40%, #8890bb); font: 600 10px/1 var(--mono); cursor: pointer; }
+.ink-x:hover { color: #fff; text-shadow: 0 0 6px var(--tone); }
+.ink-cursor { display: inline-block; width: 6px; height: 10px; margin-top: 5px; background: var(--tone); box-shadow: 0 0 6px var(--tone); animation: ink-blink 1.06s steps(1, end) infinite; }
+@keyframes ink-blink { 50% { opacity: 0; } }
+
+/* Fairy's voice in pixels: bars on a card's last line that follow how loud she's speaking, in place of the cursor. */
+.ink-wave { display: none; align-items: flex-end; gap: 2px; height: 14px; margin-top: 4px; }
+.ink-card.speaking .ink-wave { display: flex; }
+.ink-card.speaking .ink-cursor { display: none; }
+.ink-wave i { width: 3px; height: 3px; background: var(--tone); box-shadow: 0 0 4px var(--tone); }
+/* A new card's tail: a chain of dots from the pen to the bubble growing out of it. */
+.ink-tail rect { fill: var(--tone); }
+
+/* Rows of a card switch on one after another. */
+.ink-row { animation: ink-on 1ms steps(1, start) both; }
+.ink-body { font-size: 10.5px; color: #dfe3fb; }
+.ink-body p { margin: 0 0 8px; }
+.ink-body p:last-child { margin-bottom: 0; }
+.ink-body strong { color: color-mix(in srgb, var(--tone) 45%, white); font-weight: 600; }
+.ink-body .katex { font-size: 1.15em; }
+.ink-body .katex-display { margin: 4px 0; overflow-x: auto; overflow-y: hidden; }
+.ink-body code { font: 11px var(--mono); color: color-mix(in srgb, var(--tone) 50%, white); }
+
+.ink-k-steps .ink-line { display: grid; grid-template-columns: 26px 1fr; padding: 3px 0; }
+.ink-num { color: var(--tone); font-weight: 600; text-shadow: 0 0 6px color-mix(in srgb, var(--tone) 70%, transparent); }
+
+.ink-k-timeline { position: relative; }
+.ink-k-timeline::before { content: ''; position: absolute; left: 4px; top: 10px; bottom: 10px; width: 2px; background: repeating-linear-gradient(var(--tone) 0 4px, transparent 4px 8px); box-shadow: 0 0 6px var(--tone); }
+.ink-event { position: relative; display: grid; grid-template-columns: 18px auto 1fr; gap: 0 8px; align-items: baseline; padding: 3px 0; }
+.ink-event .ink-dot { width: 10px; height: 10px; background: var(--tone); box-shadow: 0 0 8px var(--tone); align-self: center; justify-self: start; }
+.ink-event b { color: color-mix(in srgb, var(--tone) 55%, white); font-weight: 600; white-space: nowrap; }
+.ink-event b::before { content: '['; color: color-mix(in srgb, var(--tone) 50%, #555b85); }
+.ink-event b::after { content: ']'; color: color-mix(in srgb, var(--tone) 50%, #555b85); }
+
+.ink-bar { display: grid; grid-template-columns: minmax(64px, 30%) 1fr auto; gap: 8px; align-items: center; padding: 3px 0; }
+.ink-bar-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #c6cbef; }
+.ink-track { height: 10px; background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.07) 0 6px, transparent 6px 8px); }
+/* Blocks, like a progress bar on an old terminal, filled in steps. */
+.ink-fill { display: block; height: 100%; background: repeating-linear-gradient(90deg, var(--tone) 0 6px, transparent 6px 8px); filter: drop-shadow(0 0 4px var(--tone)); animation: ink-grow 0.9s steps(10, end) both; transform-origin: left; }
+.ink-bar-value { color: #f1f3ff; font-size: 10.5px; white-space: nowrap; }
+@keyframes ink-grow { from { transform: scaleX(0); } }
+
+.ink-flow-svg { display: block; max-width: 100%; height: auto; overflow: visible; shape-rendering: crispEdges; }
+.ink-flow-node { fill: rgba(127, 156, 255, 0.07); stroke-width: 2; }
+.ink-flow-text { fill: #e8ebff; font: 10.5px var(--mono); text-anchor: middle; }
+.ink-flow-link { fill: none; stroke-width: 2; stroke-dasharray: 4 4; }
+.ink-flow-label { fill: #aab3e6; font: 9.5px var(--mono); }
+
+.ink-k-table table { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+.ink-k-table th { text-align: left; font-weight: 600; color: color-mix(in srgb, var(--tone) 55%, white); padding: 3px 8px 5px 0; border-bottom: 2px dashed color-mix(in srgb, var(--tone) 50%, transparent); text-transform: uppercase; letter-spacing: 0.06em; }
+.ink-k-table td { padding: 4px 8px 4px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.08); vertical-align: top; }
+.ink-k-table tr:last-child td { border-bottom: 0; }
+
+.ink-step { padding: 2px 0 6px; border-bottom: 1px dashed rgba(255, 255, 255, 0.08); }
+.ink-step:last-child { border-bottom: 0; }
+.ink-note { margin: 0; font-size: 10.5px; color: #aeb5de; }
+.ink-note::before { content: '// '; color: color-mix(in srgb, var(--tone) 50%, #555b85); }
+
+/* Plots: a small canvas blown up with square pixels, labels in the terminal font over it. */
+.ink-plot { position: relative; }
+.ink-plot-canvas { display: block; width: 100%; height: 176px; image-rendering: pixelated; background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 16px), repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 16px); }
+.ink-plot-overlay { position: absolute; inset: 0; pointer-events: none; }
+.ink-plot-label { position: absolute; font: 600 9.5px/1.2 var(--mono); color: #b9c2ee; white-space: nowrap; text-shadow: 0 0 4px #05060f, 0 0 2px #05060f; }
+.ink-plot-label.right { transform: translateX(-100%); }
+.ink-plot-label.point { color: #fff; }
+.ink-replay { margin-left: auto; border: 0; padding: 0; background: none; color: color-mix(in srgb, var(--tone) 60%, #9aa3d6); font: 600 10px/1 var(--mono); letter-spacing: 0.06em; cursor: pointer; }
+.ink-replay:hover { color: #fff; }
+
+/* Practice quizzes: a question at a time, answered with a click or a typed number. */
+.ink-quiz-head { display: flex; justify-content: space-between; margin-bottom: 6px; font: 600 9.5px/1 var(--mono); letter-spacing: 0.1em; color: color-mix(in srgb, var(--tone) 55%, #8890bb); }
+.ink-quiz-pips { letter-spacing: 0.2em; color: var(--tone); }
+.ink-quiz-q { font-size: 12px; color: #f1f3ff; margin-bottom: 8px; }
+.ink-quiz-choices { display: grid; gap: 4px; }
+.ink-quiz-option { display: flex; gap: 8px; align-items: baseline; width: 100%; text-align: left; padding: 6px 8px; border: 0; background: rgba(255, 255, 255, 0.04); color: #e4e7fb; font: 11.5px/1.45 var(--mono); cursor: pointer; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); }
+.ink-quiz-option b { color: var(--tone); font-weight: 600; }
+.ink-quiz-option:hover:not(:disabled) { background: color-mix(in srgb, var(--tone) 18%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 60%, transparent); }
+.ink-quiz-option:disabled { cursor: default; opacity: 0.55; }
+.ink-quiz-option.right { opacity: 1; background: rgba(116, 226, 166, 0.16); box-shadow: inset 0 0 0 2px #74e2a6; }
+.ink-quiz-option.wrong { opacity: 1; background: rgba(255, 134, 174, 0.14); box-shadow: inset 0 0 0 2px #ff86ae; }
+.ink-quiz-form { display: flex; gap: 6px; align-items: center; }
+.ink-quiz-prompt { color: var(--tone); font-weight: 600; }
+.ink-quiz-input { flex: 1; min-width: 0; padding: 5px 7px; border: 0; background: rgba(255, 255, 255, 0.05); color: #fff; font: 12px var(--mono); outline: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 45%, transparent); caret-color: var(--tone); }
+.ink-quiz-input:focus { box-shadow: inset 0 0 0 2px var(--tone); }
+.ink-quiz-unit { color: #aab3e6; font-size: 11px; }
+.ink-quiz-check, .ink-quiz-next { border: 0; padding: 4px 0; background: none; color: color-mix(in srgb, var(--tone) 65%, #c8cff5); font: 600 10.5px/1 var(--mono); letter-spacing: 0.06em; cursor: pointer; }
+.ink-quiz-check:hover, .ink-quiz-next:hover:not(:disabled) { color: #fff; }
+.ink-quiz-verdict { margin: 10px 0 4px; font: 600 10.5px/1.3 var(--mono); letter-spacing: 0.08em; animation: ink-on 1ms steps(1, start) both; }
+.ink-quiz-verdict.right { color: #74e2a6; text-shadow: 0 0 8px rgba(116, 226, 166, 0.6); }
+.ink-quiz-verdict.wrong { color: #ff86ae; text-shadow: 0 0 8px rgba(255, 134, 174, 0.6); }
+.ink-quiz-working { font-size: 11.5px; color: #cfd4f4; padding-left: 10px; border-left: 2px solid color-mix(in srgb, var(--tone) 45%, transparent); margin: 4px 0 6px; }
+.ink-quiz-stage .ink-plot { margin: 6px 0; }
+.ink-quiz-stage > .ink-quiz-next { display: block; margin-top: 6px; margin-left: auto; }
+.ink-quiz-score { margin: 4px 0; font: 700 18px/1.2 var(--dots); letter-spacing: 0.05em; color: color-mix(in srgb, var(--tone) 55%, white); text-shadow: 0 0 10px color-mix(in srgb, var(--tone) 70%, transparent); }
+.ink-quiz-note { margin: 0 0 6px; font-size: 11px; color: #aab3e6; }
+.ink-quiz-actions { display: flex; gap: 16px; justify-content: flex-end; }
+
+/* The model is drawn small and blown up with square pixels. */
+.ink-canvas { display: block; width: 100%; height: 168px; image-rendering: pixelated; }
+.ink-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; font-size: 10px; color: #c6cbef; text-transform: uppercase; letter-spacing: 0.06em; }
+.ink-key::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 6px; background: var(--tone); box-shadow: 0 0 6px var(--tone); vertical-align: 1px; }
+
+.ink-clear { position: absolute; pointer-events: auto; padding: 5px 10px; border: 0; background: #070914; color: #aab5ff; font: 600 10px/1 var(--mono); letter-spacing: 0.08em; cursor: pointer; opacity: 0.6; box-shadow: 0 0 0 2px rgba(127, 156, 255, 0.45); }
+.ink-clear:hover { opacity: 1; color: #fff; }
+@media (prefers-reduced-motion: reduce) { .ink-fill, .ink-cursor, .ink-px, .ink-row, .ink-label { animation: none; } }
+
+/* Show me how: the ring around the control (pulsing while Fairy waits) and the step's caption. */
+#ink-guide { position: fixed; inset: 0; pointer-events: none; z-index: 15; }
+.ink-guide-ring.ink-pulse { animation: ink-pulse 1s steps(1, end) infinite; }
+@keyframes ink-pulse { 50% { opacity: 0.35; } }
+.ink-guide-card { position: absolute; pointer-events: auto; max-width: 300px; padding: 8px 12px 9px; background: #06081a; color: #eef0ff; font: 11.5px/1.45 var(--mono);
+  box-shadow: 0 0 0 2px color-mix(in srgb, #62d6ff 75%, #0b0e24), 0 0 18px rgba(98, 214, 255, 0.35), 0 14px 30px rgba(0, 0, 0, 0.5);
+  clip-path: polygon(0 4px, 4px 4px, 4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)); }
+.ink-guide-head { font: 700 13px/1 var(--dots); letter-spacing: 0.06em; color: #9be6ff; text-shadow: 0 0 8px rgba(98, 214, 255, 0.7); margin-bottom: 5px; }
+.ink-guide-say { font-weight: 600; }
+.ink-guide-type, .ink-guide-missing { margin-top: 4px; color: #aab3e6; font-size: 10.5px; }
+.ink-guide-actions { display: flex; gap: 14px; justify-content: flex-end; margin-top: 6px; }
+.ink-guide-actions button { border: 0; padding: 2px 0; background: none; color: #9be6ff; font: 600 10.5px/1 var(--mono); letter-spacing: 0.06em; cursor: pointer; }
+.ink-guide-actions button:hover:not(:disabled) { color: #fff; }
+.ink-guide-done { font: 700 16px/1 var(--dots); letter-spacing: 0.08em; color: #74e2a6; text-align: center; animation: ink-on 1ms steps(1, start) both; }
+
+/* Ride along: Fairy as a pixel eye beside the pointer. It pops in, bobs, and blinks, all in steps. */
+.ink-rider { position: fixed; left: 0; top: 0; z-index: 26; pointer-events: none; filter: drop-shadow(0 0 4px rgba(98, 214, 255, 0.85)) drop-shadow(0 0 10px rgba(127, 156, 255, 0.45)); }
+.ink-rider[hidden] { display: none; }
+.ink-rider.held { visibility: hidden; }
+.ink-rider svg { display: block; animation: ink-rider-bob 1.6s steps(1, end) infinite; }
+.ink-rider-ring rect { fill: #9be6ff; }
+.ink-rider-iris rect { fill: #7f9cff; }
+.ink-rider-iris .ink-rider-pupil { fill: #06081a; }
+.ink-rider-lid { display: none; }
+.ink-rider-lid rect { fill: #9be6ff; }
+.ink-rider.blink .ink-rider-iris { display: none; }
+.ink-rider.blink .ink-rider-lid { display: inline; }
+.ink-rider.arriving svg { animation: ink-rider-pop 0.42s steps(4, end) both; }
+@keyframes ink-rider-bob { 0% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+@keyframes ink-rider-pop { 0% { transform: scale(0.25); opacity: 0.4; } 60% { transform: scale(1.25); opacity: 1; } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .ink-rider svg { animation: none !important; } }
+
+/* Quicker ways to ask: the LISTENING badge by the pointer, and the area-selection veil for ⌃⌥A. */
+.ink-listen { position: fixed; z-index: 25; display: flex; align-items: center; gap: 6px; padding: 4px 9px; background: #06081a; color: #9be6ff; font: 600 10px/1 var(--mono); letter-spacing: 0.1em; pointer-events: none;
+  box-shadow: 0 0 0 2px rgba(98, 214, 255, 0.7), 0 0 14px rgba(98, 214, 255, 0.4); }
+.ink-listen[hidden] { display: none; }
+.ink-listen i { width: 6px; height: 6px; background: #ff6b6b; box-shadow: 0 0 6px #ff6b6b; animation: ink-blink 0.9s steps(1, end) infinite; }
+.ink-area { position: fixed; inset: 0; z-index: 30; cursor: crosshair; pointer-events: auto; background: rgba(4, 6, 20, 0.22); outline: none; }
+.ink-area-box { display: none; position: absolute; box-shadow: 0 0 0 2px #62d6ff, 0 0 18px rgba(98, 214, 255, 0.5); background: rgba(98, 214, 255, 0.08); }
+.ink-area-hint { position: absolute; top: 44px; left: 50%; transform: translateX(-50%); padding: 6px 12px; background: #06081a; color: #9be6ff; font: 600 10.5px/1 var(--mono); letter-spacing: 0.08em; box-shadow: 0 0 0 2px rgba(98, 214, 255, 0.6); }
+
+/* Fairy's pen: a small arrow in the style of the Mac cursor in use (Bibata Modern Ice), glowing while it draws. It grows
+   out of Fairy as she turns into it, and shrinks back into her at the end, in steps. */
+.ink-wait { opacity: 0 !important; }
+#ink-cursor { position: fixed; left: 0; top: 0; z-index: 20; pointer-events: none; will-change: transform; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45)); }
+#ink-cursor svg { display: block; }
+#ink-cursor.drawing { filter: drop-shadow(0 0 3px rgba(127, 156, 255, 1)) drop-shadow(0 0 7px rgba(127, 156, 255, 0.8)); }
+#ink-cursor.arriving svg { animation: ink-pen-in 0.4s steps(6, end) 0.22s both; transform-origin: 20% 15%; }
+#ink-cursor.leaving svg { animation: ink-pen-out 0.32s steps(4, end) forwards; transform-origin: 20% 15%; }
+@keyframes ink-pen-in { from { opacity: 0; transform: scale(0); } 60% { opacity: 1; transform: scale(1.3); } }
+.ink-burst rect { fill: #9fb2ff; transform-box: fill-box; }
+.ink-burst-out { animation: ink-burst-out 0.42s steps(6, end) both; }
+.ink-burst-in { animation: ink-burst-out 0.42s steps(6, end) reverse both; }
+@keyframes ink-burst-out { from { transform: translate(0, 0); opacity: 1; } to { transform: translate(var(--dx), var(--dy)); opacity: 0; } }
+@keyframes ink-pen-out { to { opacity: 0; transform: scale(0.2); } }
+@media (prefers-reduced-motion: reduce) { #ink-cursor { display: none; } }

@@ -1,0 +1,58 @@
+/* The companion window is transparent; only the reply, the eye and its radial menu show. */
+html,body{margin:0;height:100%;background:transparent!important;color:#e8e9ee;font:14px/1.5 Inter,-apple-system,system-ui,sans-serif;overflow:hidden}
+#companion{position:relative;height:100%}
+.reply{position:absolute;left:12px;right:12px;top:12px;max-height:240px;overflow:auto;padding:12px 32px 12px 14px;border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(12,14,26,.9);box-shadow:0 12px 40px rgba(0,0,0,.45);scrollbar-width:thin}
+.reply p{margin:0 0 8px}.reply p:last-child{margin:0}
+.reply pre{overflow:auto;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.4);font-size:12px}
+#close-reply{position:absolute;top:6px;right:8px;width:22px;height:22px;border:0;border-radius:50%;background:none;color:#a2a4ad;cursor:pointer}
+.thinking{color:#a2a4ad;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45}}
+/* The eye sits low in the window with room for the ring around it; dragging it moves the window. */
+#eye{position:absolute;left:50%;bottom:110px;width:80px;height:80px;margin-left:-40px;image-rendering:pixelated;background-repeat:no-repeat;-webkit-app-region:drag;filter:drop-shadow(0 0 14px rgba(62,90,236,.55))}
+/* Each sheet is a row of 80 px frames, stepped through like a flipbook. */
+/* The animated eye draws over the sheets, which stay for when it can't. */
+#eye{transition:transform 180ms cubic-bezier(.22,1.28,.36,1),opacity 180ms ease,filter 180ms ease}
+@keyframes vorssaint-bloom{0%{transform:scale(.38);opacity:.6;filter:drop-shadow(0 0 24px rgba(62,90,236,.95))}68%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1;filter:drop-shadow(0 0 14px rgba(62,90,236,.55))}}
+body.bloom-in #eye{animation:vorssaint-bloom 240ms cubic-bezier(.22,1.28,.36,1) both!important}
+body.dock-hover #eye{transform:scale(.84);filter:drop-shadow(0 0 22px rgba(62,90,236,.95))}
+body.docking-out #eye{transform:translateY(-96px) scale(.32);opacity:0;transition:transform 180ms cubic-bezier(.4,0,.2,1),opacity 180ms ease-in}
+#eye.animated{background:none!important;animation:none!important}
+#eye .eye-avatar{position:absolute;inset:0;pointer-events:none}
+#eye[data-mood="idle"]{background-image:var(--eye-idle);background-size:1280px 80px;animation:eye-idle 4.8s steps(16) infinite}
+#eye[data-mood="listening"]{background-image:var(--eye-listening);background-size:640px 80px;animation:eye-short 1.6s steps(8) infinite}
+#eye[data-mood="speaking"]{background-image:var(--eye-speaking);background-size:640px 80px;animation:eye-short 1s steps(8) infinite}
+@keyframes eye-idle{to{background-position:-1280px 0}}
+@keyframes eye-short{to{background-position:-640px 0}}
+#floating-ui{position:absolute;inset:0;pointer-events:none}
+#floating-ui>*{pointer-events:auto}
+#floating-ui #floating-controls.radial-menu{position:absolute}
+#floating-status{position:absolute}
+@media (prefers-reduced-motion:reduce){#eye,.thinking,body.bloom-in #eye{animation:none!important}body.dock-hover #eye,body.docking-out #eye{transform:none!important;transition:opacity 150ms ease!important}}
+/* The line icons' strokes, from meeting.css, which this page doesn't load. */
+.line-icon{width:18px;height:18px;display:block;fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+#floating-controls .icon-button{display:inline-grid;place-items:center;color:#fff}
+/* The ring carries the message, so the box it comes from shows no frame of its own. */
+#floating-ui #floating-composer{position:absolute;left:0;bottom:0;height:0;padding:0;border:0;background:none;box-shadow:none;overflow:visible}
+.approval{position:absolute;left:12px;right:12px;bottom:300px;z-index:3;display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:16px;border:1px solid rgba(159,178,255,.34);background:rgba(11,12,15,.96);box-shadow:0 16px 44px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.04)}
+.approval[hidden]{display:none}
+.approval pre{margin:0;max-height:110px;overflow:auto;padding:8px 10px;border-radius:10px;background:#08090c;border:1px solid rgba(255,255,255,.08);font:12px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.approval pre[hidden]{display:none}
+.approval-actions{display:flex;justify-content:flex-end;gap:8px}
+.approval-actions button{height:32px;padding:0 14px;border:1px solid rgba(255,255,255,.11);border-radius:10px;background:rgba(255,255,255,.05);color:#d5d9e4;font:inherit;cursor:pointer}
+.approval-actions button:hover{background:rgba(255,255,255,.11);color:#fff}
+#approval-allow{background:#3e5aec;border-color:rgba(159,178,255,.45);color:#fff}
+
+/* The Explain pen while armed. */
+#floating-explain[aria-pressed="true"]{color:#9fb2ff;filter:drop-shadow(0 0 6px rgba(127,156,255,.9))}
+
+/* Two Macs: a face's eye dims while it can't reach the Fairy on the other Mac. */
+.face-offline #eye{filter:grayscale(1) brightness(.55)}
+/* A face's pairing field, where the reply would be. */
+.face-pair{position:absolute;left:12px;right:12px;top:12px;z-index:3;padding:12px 14px;border-radius:18px;border:1px solid rgba(255,255,255,.12);background:rgba(16,18,26,.86);backdrop-filter:blur(18px)}
+.face-pair[hidden]{display:none}
+.face-pair label{display:block;margin-bottom:8px;font-weight:600}
+.face-pair-row{display:flex;gap:8px}
+.face-pair input{flex:1;min-width:0;height:32px;padding:0 10px;border:1px solid rgba(255,255,255,.16);border-radius:10px;background:rgba(0,0,0,.35);color:#e8e9ee;font:12px ui-monospace,Menlo,monospace}
+.face-pair button{height:32px;padding:0 14px;border:0;border-radius:10px;background:#3e5aec;color:#fff;font:inherit;cursor:pointer}
+.face-pair p{margin:8px 0 0;color:#a2a4ad;font-size:12px}
+.face-pair p:empty{display:none}

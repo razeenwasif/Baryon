@@ -1,0 +1,22 @@
+{
+  "name": "Baryon Web",
+  "short_name": "Baryon",
+  "description": "Stratus-grade multi-model AI workspace with branching timelines, /fanout compare, live HTML artifacts, and Baryon Mac pairing.",
+  "start_url": "/chat",
+  "display": "standalone",
+  "background_color": "#050507",
+  "theme_color": "#050507",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

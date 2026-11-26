@@ -1,0 +1,5 @@
+[
+  { "id": 1, "title": "Groceries", "tags": ["home"], "body": "Milk, eggs and \"good\" bread" },
+  { "id": 2, "title": "Reading <list>", "tags": ["books", "later"], "body": "Dune\nThe Left Hand of Darkness" },
+  { "id": 3, "title": "Idea", "tags": [], "body": "Fairy's notes & exports" }
+]

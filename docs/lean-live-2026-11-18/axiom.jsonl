@@ -1,0 +1,2 @@
+{"caption":"","data":"H004 : 5 = 0","endPos":{"column":6,"line":8},"fileName":"Proof.lean","isSilent":false,"keepFullRange":false,"kind":"[anonymous]","pos":{"column":0,"line":8},"severity":"information"}
+{"caption":"","data":"'H004' depends on axioms: [cheat]","endPos":{"column":6,"line":9},"fileName":"Proof.lean","isSilent":false,"keepFullRange":false,"kind":"[anonymous]","pos":{"column":0,"line":9},"severity":"information"}
