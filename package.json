@@ -52,7 +52,7 @@
     "perfect-freehand": "^1.2.3",
     "qrcode-generator": "2.0.4",
     "react": "19.1.1",
-    "react-dom": "19.1.1",
+    "react-dom": "19.3.1",
     "speech-rule-engine": "4.1.4",
     "three": "^0.180.0",
     "voice-glow": "0.2.1",
