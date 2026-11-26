@@ -24,6 +24,7 @@ test('resolveEdition gates Pro features cleanly under BARYON_EDITION=core vs pro
   assert.equal(pro.features.academy, true);
   assert.equal(pro.features.notebooks, true);
   assert.equal(pro.features.studio, true);
+  assert.equal(pro.features.worlds, true);
 
   const core = resolveEdition({ env: { BARYON_EDITION: 'core' }, rootDir: REPO_ROOT });
   assert.equal(core.edition, 'core');
@@ -36,6 +37,7 @@ test('resolveEdition gates Pro features cleanly under BARYON_EDITION=core vs pro
     academy: false,
     notebooks: false,
     studio: false,
+    worlds: false,
   });
 });
 
@@ -54,9 +56,11 @@ test('exportCore excludes Pro modules, writes Apache-2.0 metadata, and Core desk
     'desktop/academy',
     'desktop/notebook',
     'desktop/studio',
+    'desktop/worlds',
     'src/analytics',
     'src/academy',
     'src/studio',
+    'src/worlds',
     'native/research',
     'native/analytics',
     'native/notebook-engines',

@@ -63,6 +63,12 @@ export const PRO_FEATURE_GROUPS = Object.freeze({
     'src/diffusion-ridge.js',
     'docs/diffusion-plan.md',
   ]),
+  worlds: Object.freeze([
+    'desktop/worlds',
+    'src/worlds',
+    'src/worlds-view.js',
+    'src/worlds-view.css',
+  ]),
 });
 
 export const PRO_EXCLUDED_PATHS = Object.freeze(
@@ -86,7 +92,8 @@ export function resolveEdition({ env = process.env, rootDir = DEFAULT_ROOT } = {
   const hasAcademy = existsSync(join(rootDir, 'desktop/academy/calls.mjs'));
   const hasNotebooks = existsSync(join(rootDir, 'desktop/notebook/calls.mjs'));
   const hasStudio = existsSync(join(rootDir, 'desktop/studio/calls.mjs'));
-  const anyProPresent = hasResearch || hasReproduce || hasAnalytics || hasAcademy || hasNotebooks || hasStudio;
+  const hasWorlds = existsSync(join(rootDir, 'desktop/worlds/calls.mjs'));
+  const anyProPresent = hasResearch || hasReproduce || hasAnalytics || hasAcademy || hasNotebooks || hasStudio || hasWorlds;
 
   const requested = String(env?.BARYON_EDITION || '').trim().toLowerCase();
   const manifest = readPackageEdition(rootDir);
@@ -108,6 +115,7 @@ export function resolveEdition({ env = process.env, rootDir = DEFAULT_ROOT } = {
     academy: allowPro && hasAcademy,
     notebooks: allowPro && hasNotebooks,
     studio: allowPro && hasStudio,
+    worlds: allowPro && hasWorlds,
   });
 
   const resolvedEdition = Object.values(features).some(Boolean) ? 'pro' : 'core';

@@ -144,7 +144,7 @@ function requestBackgroundSync(){if(backgroundQueued||rendererDisposed)return;ba
 let quizInfo = { enabled: false, status: 'Off' }, lastQuizBlocked;
 const BUILD_FEATURES = typeof __BARYON_FEATURES__ !== 'undefined'
   ? __BARYON_FEATURES__
-  : { research: true, reproduce: true, analytics: true, academy: true, notebooks: true, studio: true };
+  : { research: true, reproduce: true, analytics: true, academy: true, notebooks: true, studio: true, worlds: true };
 const featureOn = name => Boolean(BUILD_FEATURES[name]) && (state.features ? state.features[name] !== false : true);
 
 $('#app').innerHTML = `
@@ -156,7 +156,7 @@ $('#app').innerHTML = `
       <div class="sidebar-top"><button id="sidebar-search" class="side-icon" aria-label="Search chats" aria-expanded="false" title="Search chats"></button><button id="sidebar-toggle" class="side-icon" aria-label="Collapse sidebar" title="Collapse sidebar"></button></div>
       <div class="sidebar-brand"><canvas class="fairy-mini" width="80" height="80" aria-hidden="true"></canvas><span>Baryon</span></div>
       <input type="search" id="sidebar-search-input" placeholder="Search chats" aria-label="Search chats" hidden>
-      <div class="side-group side-tools" role="group" aria-label="Places"><button id="sidebar-study" class="side-item" aria-pressed="false" title="Notebooks: your courses' sources, notes and exam dates">Notebooks</button><button id="sidebar-academy" class="side-item" aria-pressed="false" title="Academy: Brilliant-style interactive STEM courses &amp; AI university course builder (⌘⇧E)">Academy</button><button id="sidebar-research" class="side-item" aria-pressed="false" title="Research: investigations your three model families work on together, round by round">Research</button><button id="sidebar-runs" class="side-item" aria-pressed="false" title="Experiments: what Fairy ran for you, here and on atlas and forge, with their parameters, metrics and files">Experiments</button><button id="sidebar-goals" class="side-item" aria-pressed="false" title="Goals: what Fairy is working towards for you, step by step, until its check says done">Goals</button><button id="sidebar-boards" class="side-item" aria-pressed="false" title="Boards: infinite Miro-style visual boards and project plans">Boards</button><button id="sidebar-design" class="side-item" aria-pressed="false" title="Design: Stitch-style agentic UI studio with DESIGN.md token locking &amp; vision critique (⌘⇧D)">Design</button><button id="sidebar-analytics" class="side-item" aria-pressed="false" title="Analytics: data profiling, AutoML training &amp; record linkage (⌘⇧A)">Analytics</button><button id="sidebar-diffusion" class="side-item" aria-pressed="false" title="Studio: Image, Video &amp; Music generation with Nano Banana, Omni 1.2 Flash &amp; Lyria 3.5 (⌘⇧G)">Studio</button><button id="sidebar-new-note" class="side-item" title="New note">New note</button></div>
+      <div class="side-group side-tools" role="group" aria-label="Places"><button id="sidebar-study" class="side-item" aria-pressed="false" title="Notebooks: your courses' sources, notes and exam dates">Notebooks</button><button id="sidebar-academy" class="side-item" aria-pressed="false" title="Academy: Brilliant-style interactive STEM courses &amp; AI university course builder (⌘⇧E)">Academy</button><button id="sidebar-research" class="side-item" aria-pressed="false" title="Research: investigations your three model families work on together, round by round">Research</button><button id="sidebar-runs" class="side-item" aria-pressed="false" title="Experiments: what Fairy ran for you, here and on atlas and forge, with their parameters, metrics and files">Experiments</button><button id="sidebar-goals" class="side-item" aria-pressed="false" title="Goals: what Fairy is working towards for you, step by step, until its check says done">Goals</button><button id="sidebar-boards" class="side-item" aria-pressed="false" title="Boards: infinite Miro-style visual boards and project plans">Boards</button><button id="sidebar-design" class="side-item" aria-pressed="false" title="Design: Stitch-style agentic UI studio with DESIGN.md token locking &amp; vision critique (⌘⇧D)">Design</button><button id="sidebar-analytics" class="side-item" aria-pressed="false" title="Analytics: data profiling, AutoML training &amp; record linkage (⌘⇧A)">Analytics</button><button id="sidebar-diffusion" class="side-item" aria-pressed="false" title="Studio: Image, Video &amp; Music generation with Nano Banana, Omni 1.2 Flash &amp; Lyria 3.5 (⌘⇧G)">Studio</button><button id="sidebar-worlds" class="side-item" aria-pressed="false" title="Worlds: Real-time interactive world simulation powered by Genie 4 (⌘⇧L)">Worlds</button><button id="sidebar-new-note" class="side-item" title="New note">New note</button></div>
       <div id="notebook-list"></div>
       <div class="side-chats-head"><span class="side-modes" role="group" aria-label="Show"><button id="side-mode-chat" class="side-mode" aria-pressed="true" title="Chats">Chats</button><button id="side-mode-work" class="side-mode" aria-pressed="false" title="Work: sections, folders and work sessions">Work</button></span><h2 class="side-label side-recent-label">Chats</h2><span class="side-chats-tools"><button id="select-chats" class="side-icon" aria-label="Select chats" aria-pressed="false" title="Select chats"></button><button id="threads-menu" class="side-icon" aria-label="Open threads" aria-haspopup="dialog" aria-expanded="false" title="Open threads: group &amp; jump to waiting, active, and open threads"></button><button id="new-section" class="side-icon" aria-label="New section" title="New section, to group folders (Research, Development…)"></button><button id="new-folder" class="side-icon" aria-label="New folder" title="New folder"></button></span></div>
       <div id="recent-list" class="side-recent"></div>
@@ -234,6 +234,7 @@ $('#app').innerHTML = `
     <section id="academy-view" aria-label="Academy" hidden></section>
     <section id="research-view" aria-label="Research" hidden></section>
     <section id="diffusion-view" aria-label="Studio" hidden></section>
+    <section id="worlds-view" aria-label="Worlds" hidden></section>
     <section id="runs-view" aria-label="Experiments" hidden></section>
     <section id="goals-view" aria-label="Goals" hidden></section>
     <section id="boards-view" aria-label="Boards" hidden></section>
@@ -2428,6 +2429,7 @@ document.addEventListener('keydown', event => {
   if (event.metaKey && !event.ctrlKey && !event.altKey && event.shiftKey && event.key.toLowerCase() === 'e' && !floating && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) { event.preventDefault(); hideOtherBoards(); hidePlugins(); hideUsage(); void openAcademy().then(view => view?.toggle()); }
   if (event.metaKey && !event.ctrlKey && !event.altKey && event.shiftKey && event.key.toLowerCase() === 'd' && !floating && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) { event.preventDefault(); hideOtherBoards(); hidePlugins(); hideUsage(); void openDesign().then(view => view?.toggle()); }
   if (event.metaKey && !event.ctrlKey && !event.altKey && event.shiftKey && event.key.toLowerCase() === 'g' && !floating && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) { if (featureOn('studio') && api?.studio) { event.preventDefault(); hideOtherBoards(); hidePlugins(); hideUsage(); void openDiffusion().then(view => view?.toggle()); } }
+  if (event.metaKey && !event.ctrlKey && !event.altKey && event.shiftKey && event.key.toLowerCase() === 'l' && !floating && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) { if (featureOn('worlds') && api?.worlds) { event.preventDefault(); hideOtherBoards(); hidePlugins(); hideUsage(); void openWorlds().then(view => view?.toggle()); } }
 });
 $('#sidebar-search').onclick = () => { if (document.documentElement.classList.contains('sidebar-collapsed')) setSidebarCollapsed(false); setSidebarSearch($('#sidebar-search-input').hidden); };
 let chatSearchTimer;
@@ -3115,9 +3117,13 @@ const hideResearch = () => { void researchBoard?.then(view => view?.hide()); };
 // Diffusion: where images and videos will be made; a placeholder for now, loaded the first time it's opened, in the
 // same place. One of the notebooks, Research and Diffusion is open at a time.
 let diffusionBoard = null;
-const openDiffusion = () => !featureOn('studio') ? Promise.resolve(null) : (diffusionBoard ??= import('./studio-view.js').then(({ studioView }) => studioView({ api, root: $('#diffusion-view'), onError: error, onOpenSettings: pane => settingsAt(pane), sidebarButton: $('#sidebar-diffusion'), onShow: () => requestBackgroundSync(), onHide: () => requestBackgroundSync() }))
+const openDiffusion = () => !featureOn('studio') ? Promise.resolve(null) : (diffusionBoard ??= import('./studio-view.js').then(({ studioView }) => studioView({ api, root: $('#diffusion-view'), onError: error, onOpenSettings: pane => settingsAt(pane), onLaunchWorld: seed => { hideOtherBoards(); hidePlugins(); hideUsage(); void openWorlds().then(view => view?.openWithSeed?.(seed)); }, sidebarButton: $('#sidebar-diffusion'), onShow: () => requestBackgroundSync(), onHide: () => requestBackgroundSync() }))
   .catch(e => { diffusionBoard = null; error(`Studio couldn’t open: ${e.message}`); return null; }));
 const hideDiffusion = () => { void diffusionBoard?.then(view => view?.hide()); };
+let worldsBoard = null;
+const openWorlds = () => !featureOn('worlds') ? Promise.resolve(null) : (worldsBoard ??= import('./worlds-view.js').then(({ worldsView }) => worldsView({ api, root: $('#worlds-view'), sidebarButton: $('#sidebar-worlds'), onError: error, onOpenSettings: pane => settingsAt(pane), onShow: () => requestBackgroundSync(), onHide: () => requestBackgroundSync() }))
+  .catch(e => { worldsBoard = null; error(`Worlds couldn’t open: ${e.message}`); return null; }));
+const hideWorlds = () => { void worldsBoard?.then(view => view?.hide()); };
 // Runs (docs/tracker-plan.md, stage 3): the experiments Fairy ran, by project, in the same place, loaded the first time.
 let runsBoard = null;
 const openRuns = () => runsBoard ??= import('./runs-view.js').then(({ runsView }) => runsView({ api, root: $('#runs-view'), sidebarButton: $('#sidebar-runs'),
@@ -3231,6 +3237,9 @@ $('#sidebar-academy').onclick = () => { if (api?.academy) { hideNotebooks(); hid
 $('#sidebar-diffusion').hidden = !featureOn('studio');
 $('#sidebar-diffusion').disabled = !api?.studio;
 $('#sidebar-diffusion').onclick = () => { if (api?.studio) { hideOtherBoards(); hidePlugins(); hideUsage(); void openDiffusion().then(view => view?.toggle()); } };
+$('#sidebar-worlds').hidden = !featureOn('worlds');
+$('#sidebar-worlds').disabled = !api?.worlds;
+$('#sidebar-worlds').onclick = () => { if (api?.worlds) { hideOtherBoards(); hidePlugins(); hideUsage(); void openWorlds().then(view => view?.toggle()); } };
 $('#sidebar-runs').disabled = !api?.runsProjects;
 $('#sidebar-runs').onclick = () => { if (api?.runsProjects) { hideNotebooks(); hideAcademy(); hideDesign(); hideResearch(); hideDiffusion(); hideGoals(); void openRuns().then(view => view?.toggle()); } };
 $('#sidebar-goals').disabled = !api?.goalsList;
@@ -3242,7 +3251,7 @@ $('#sidebar-design').onclick = () => { if (api?.design) { hideOtherBoards(); hid
 $('#sidebar-analytics').hidden = !featureOn('analytics');
 $('#sidebar-analytics').disabled = !api?.analytics;
 $('#sidebar-analytics').onclick = () => { if (api?.analytics) { hideNotebooks(); hideAcademy(); hideDesign(); hideResearch(); hideDiffusion(); hideBoards(); hidePlugins(); hideUsage(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); void openAnalytics().then(view => view?.toggle()); } };
-const hideOtherBoards = () => { hideNotebooks(); hideAcademy(); hideResearch(); hideDiffusion(); hideBoards(); hideDesign(); hidePricing(); hideAnalytics(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); };
+const hideOtherBoards = () => { hideNotebooks(); hideAcademy(); hideResearch(); hideDiffusion(); hideWorlds(); hideBoards(); hideDesign(); hidePricing(); hideAnalytics(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); };
 $('#sidebar-usage').disabled = !api?.tokenUsage;
 $('#sidebar-usage').onclick = () => { if (api?.tokenUsage) { hideOtherBoards(); hidePlugins(); void openUsage().then(view => view?.toggle()); } };
 $('#sidebar-plugins').onclick = () => { hideOtherBoards(); hideUsage(); void openPlugins().then(view => view?.toggle()); };
@@ -3258,6 +3267,7 @@ const jumpToWorkspace = target => {
   else if (target === 'academy' && api?.academy) void openAcademy().then(v => v?.show?.() ?? v?.toggle?.());
   else if (target === 'design' && api?.design) void openDesign().then(v => v?.show?.() ?? v?.toggle?.());
   else if (target === 'studio' && api?.studio) void openDiffusion().then(v => v?.show?.() ?? v?.toggle?.());
+  else if (target === 'worlds' && api?.worlds) void openWorlds().then(v => v?.show?.() ?? v?.toggle?.());
   else if (target === 'research' && api?.research) void openResearch().then(v => v?.show?.() ?? v?.toggle?.());
   else if (target === 'runs' && api?.runsProjects) void openRuns().then(v => v?.show?.() ?? v?.toggle?.());
   else if (target === 'goals' && api?.goalsList) void openGoals().then(v => v?.show?.() ?? v?.toggle?.());

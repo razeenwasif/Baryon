@@ -22,6 +22,7 @@ const ANALYTICS_CALLS = ['state', 'envCheck', 'envInstall', 'datasets', 'upload'
 const ACADEMY_CALLS = ['state', 'listCourses', 'getCourse', 'deleteCourse', 'recordAttempt', 'completeLesson', 'resetProgress', 'generateCourse', 'generateLesson', 'generatePractice', 'tutorAsk'];
 const DESIGN_CALLS = ['state', 'listProjects', 'getProject', 'createProject', 'deleteProject', 'scanRepo', 'updateDesignMd', 'updateTokens', 'generate', 'refineScreen', 'critiqueScreen', 'duplicateScreen', 'deleteScreen', 'moveScreen', 'exportToRepo', 'publishPage'];
 const STUDIO_CALLS = ['state', 'list', 'get', 'media', 'generateImage', 'generateVideo', 'generateMusic', 'delete', 'favorite', 'exportToWork'];
+const WORLDS_CALLS = ['state', 'list', 'get', 'startSession', 'endSession', 'delete', 'saveSnapshotToStudio'];
 contextBridge.exposeInMainWorld('fairy', {
   companionChat: text => ipcRenderer.invoke('fairy:companion-chat', text),
   // Two Macs: on a face (face-main.cjs), its link to the Fairy on the other Mac; on the full Fairy, becoming a face.
@@ -416,6 +417,8 @@ contextBridge.exposeInMainWorld('fairy', {
   onDesign: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:design', listener); return () => ipcRenderer.removeListener('fairy:design', listener); },
   studio: (name, ...args) => STUDIO_CALLS.includes(name) ? ipcRenderer.invoke(`fairy:studio-${name}`, ...args) : Promise.reject(new Error(`No studio call ${name}.`)),
   onStudio: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:studio', listener); return () => ipcRenderer.removeListener('fairy:studio', listener); },
+  worlds: (name, ...args) => WORLDS_CALLS.includes(name) ? ipcRenderer.invoke(`fairy:worlds-${name}`, ...args) : Promise.reject(new Error(`No worlds call ${name}.`)),
+  onWorlds: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:worlds', listener); return () => ipcRenderer.removeListener('fairy:worlds', listener); },
   onNotebookTutor: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:notebook-tutor', listener); return () => ipcRenderer.removeListener('fairy:notebook-tutor', listener); },
   onNotebookVoice: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:notebook-voice', listener); return () => ipcRenderer.removeListener('fairy:notebook-voice', listener); },
   onNotebookChanged: callback => { const listener = (_event, value) => callback(value); ipcRenderer.on('fairy:notebook-changed', listener); return () => ipcRenderer.removeListener('fairy:notebook-changed', listener); },

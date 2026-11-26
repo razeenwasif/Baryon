@@ -3123,8 +3123,9 @@ app.whenReady().then(async () => {
     onEvent: emitDesignEvent,
   });
   for (const [name, fn] of Object.entries(designApi)) handle(`design-${name}`, fn, { refresh: false });
+  let studioStore = null;
   if (edition.FEATURES.studio) {
-    const studioStore = new (await import('./studio/store.mjs')).StudioStore({ root: file('studio') });
+    studioStore = new (await import('./studio/store.mjs')).StudioStore({ root: file('studio') });
     const { createProviderRegistry } = await import('./studio/providers/index.mjs');
     const studioRegistry = createProviderRegistry({ getGeminiKey: getGeminiApiKey });
     const emitStudioEvent = event => sendToWindow('fairy:studio', event);
@@ -3135,6 +3136,17 @@ app.whenReady().then(async () => {
       onEvent: emitStudioEvent,
     });
     for (const [name, fn] of Object.entries(studioApi)) handle(`studio-${name}`, fn, { refresh: false });
+  }
+  if (edition.FEATURES.worlds) {
+    const worldsStore = new (await import('./worlds/store.mjs')).WorldsStore({ root: file('worlds') });
+    const emitWorldsEvent = event => sendToWindow('fairy:worlds', event);
+    const worldsApi = (await import('./worlds/calls.mjs')).worldsCalls({
+      store: worldsStore,
+      studioStore,
+      getGeminiKey: getGeminiApiKey,
+      onEvent: emitWorldsEvent,
+    });
+    for (const [name, fn] of Object.entries(worldsApi)) handle(`worlds-${name}`, fn, { refresh: false });
   }
   // The Today panel: your next events and unread count, shown to you only. None of this goes to a model.
   let todayCache = null;

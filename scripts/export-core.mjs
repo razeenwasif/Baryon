@@ -25,8 +25,8 @@ const PRIVATE_EXCLUDED_PATHS = Object.freeze([
   '.gemini',
 ]);
 
-const PRO_TEST_NAME_RE = /^test\/.*(?:research|repro|notebook|analytics|academy|phone-notebooks|study-helper|studio).*\.test\.mjs$/;
-const PRO_IMPORT_RE = /(?:from\s+['"]|import\s*\(\s*['"])(?:\.\.?\/)+(?:desktop\/|src\/)?(?:research|reproduce|analytics|academy|notebook|phone-notebooks|studio)/;
+const PRO_TEST_NAME_RE = /^test\/.*(?:research|repro|notebook|analytics|academy|phone-notebooks|study-helper|studio|worlds).*\.test\.mjs$/;
+const PRO_IMPORT_RE = /(?:from\s+['"]|import\s*\(\s*['"])(?:\.\.?\/)+(?:desktop\/|src\/)?(?:research|reproduce|analytics|academy|notebook|phone-notebooks|studio|worlds)/;
 
 function matchesPrefix(relPath, prefix) {
   const clean = prefix.replace(/\/+$/, '');
@@ -159,7 +159,7 @@ export async function exportCore({
         stdio: 'inherit',
       });
       const distAssets = await readdir(join(outDir, 'dist', 'assets'));
-      for (const forbidden of ['research-view', 'analytics-view', 'academy-view', 'notebook-view', 'studio-view', 'diffusion-view']) {
+      for (const forbidden of ['research-view', 'analytics-view', 'academy-view', 'notebook-view', 'studio-view', 'diffusion-view', 'worlds-view']) {
         if (distAssets.some(f => f.startsWith(forbidden))) {
           throw new Error(`Forbidden Pro Vite asset emitted in Core export: ${forbidden}`);
         }
