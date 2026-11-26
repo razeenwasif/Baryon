@@ -119,7 +119,12 @@ export const REMOTE = Object.freeze([
   // Baryon Academy: curated STEM courses, progress tracking, ~/Courses discovery, and AI course/lesson/tutor calls.
   'academy-state', 'academy-listCourses', 'academy-getCourse', 'academy-deleteCourse',
   'academy-recordAttempt', 'academy-completeLesson', 'academy-resetProgress',
-  'academy-generateCourse', 'academy-generateLesson', 'academy-generatePractice', 'academy-tutorAsk']);
+  'academy-generateCourse', 'academy-generateLesson', 'academy-generatePractice', 'academy-tutorAsk',
+  // Baryon UI Design Mode: Stitch-style infinite canvas, DESIGN.md locking, Chromium capture & vision critique.
+  'design-state', 'design-listProjects', 'design-getProject', 'design-createProject', 'design-deleteProject',
+  'design-scanRepo', 'design-updateDesignMd', 'design-updateTokens', 'design-generate', 'design-refineScreen',
+  'design-critiqueScreen', 'design-duplicateScreen', 'design-deleteScreen', 'design-moveScreen',
+  'design-exportToRepo', 'design-publishPage']);
 
 export const LOCAL = Object.freeze([
   'minimize', 'close', 'around-notch', 'cursor-position', 'ride', 'sprite-hidden', 'window-position', 'startup-usable', 'ink-voice', 'attach-choose',
@@ -217,7 +222,9 @@ export const READS = Object.freeze(['btw', 'state', 'speak', 'transcribe', 'prep
   'analytics-nexusState', 'analytics-nexusLogs',
   'analytics-embed3d', 'analytics-topics',
   // Baryon Academy read & tutor queries don't touch chat state.
-  'academy-state', 'academy-listCourses', 'academy-getCourse', 'academy-tutorAsk']);
+  'academy-state', 'academy-listCourses', 'academy-getCourse', 'academy-tutorAsk',
+  // UI Design Mode read & scan queries don't touch chat state.
+  'design-state', 'design-listProjects', 'design-getProject', 'design-scanRepo']);
 
 // Away 4: the channels that carry a recording or a file, which may be up to 60 MB; any other call is at most 1 MB.
 export const BYTE_CHANNELS = Object.freeze(['transcribe', 'attach-bytes', 'notebook-paste', 'notebook-saveImage', 'analytics-upload']);
@@ -275,10 +282,12 @@ export const WINDOW_EVENTS = Object.freeze([
   'boards-changed',
   // Baryon Academy course/progress updates and AI course build progress events.
   'academy',
+  // UI Design Mode pipeline phases & project updates.
+  'design',
 ]);
 
-// The notebook's calls change only the notebook, whose own events keep this Mac's window up to date; so do Research's and Academy's.
-export const isRead = channel => READS.includes(channel) || String(channel).startsWith('notebook-') || String(channel).startsWith('research-') || String(channel).startsWith('academy-');
+// The notebook's calls change only the notebook, whose own events keep this Mac's window up to date; so do Research's, Academy's, and Design Mode's.
+export const isRead = channel => READS.includes(channel) || String(channel).startsWith('notebook-') || String(channel).startsWith('research-') || String(channel).startsWith('academy-') || String(channel).startsWith('design-');
 
 const kinds = new Map([...REMOTE.map(name => [name, 'remote']), ...LOCAL.map(name => [name, 'local']), ...OTHER.map(name => [name, 'other']), ...MINI_ONLY.map(name => [name, 'mini-only'])]);
 export const kindOf = channel => kinds.get(String(channel)) ?? 'mini-only';
@@ -309,6 +318,8 @@ const LONG = new Set(['btw', 'chat', 'speak', 'eval-save', 'evals-run', 'benchma
   'analytics-rlDetect', 'analytics-rlRun', 'analytics-rlAlClose',
   'analytics-nexusSync', 'analytics-embed3d', 'analytics-topics', 'boards-ask',
   // Baryon Academy AI course/lesson/practice/tutor calls can exceed 20s.
-  'academy-generateCourse', 'academy-generateLesson', 'academy-generatePractice', 'academy-tutorAsk']);
+  'academy-generateCourse', 'academy-generateLesson', 'academy-generatePractice', 'academy-tutorAsk',
+  // UI Design Mode generation/refinement/vision critique loops can exceed 20s.
+  'design-generate', 'design-refineScreen', 'design-critiqueScreen']);
 // Research's calls may wait on its helper reading PDFs or asking the connections which seats can sit.
 export const isLong = channel => LONG.has(String(channel)) || String(channel).startsWith('notebook-') || String(channel).startsWith('research-');

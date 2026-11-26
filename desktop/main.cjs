@@ -2958,7 +2958,35 @@ app.whenReady().then(async () => {
   researchScheduler.start();
   app.on('will-quit', () => researchScheduler.stop());
   }
-  const askEmbeddedAI = async ({ instructions, prompt, signal, surface = 'Fairy', providerOverride = null, timeoutMs = 90_000 }) => {
+  const getStudioProviders = () => ({
+    active: settings.backend || 'auto',
+    providers: [
+      {
+        id: 'auto',
+        label: 'Auto (Active)',
+        connected: Boolean(claudeStatus?.connected || antigravityStatus?.connected || subscription?.connected),
+      },
+      {
+        id: 'claude',
+        label: 'Claude',
+        connected: Boolean(claudeStatus?.connected),
+        model: settings.claudeModel || '',
+      },
+      {
+        id: 'antigravity',
+        label: 'Gemini',
+        connected: Boolean(antigravityStatus?.connected),
+        model: settings.antigravityModel || '',
+      },
+      {
+        id: 'codex',
+        label: 'ChatGPT / Codex',
+        connected: Boolean(subscription?.connected),
+        model: settings.codexModel || '',
+      },
+    ],
+  });
+  const askEmbeddedAI = async ({ instructions, prompt, images = [], signal, surface = 'Fairy', providerOverride = null, timeoutMs = 90_000 }) => {
     let usage = null;
     const pick = () => {
       if (providerOverride === 'claude') {
@@ -2984,11 +3012,29 @@ app.whenReady().then(async () => {
     const chosen = pick();
     if (!chosen) throw new Error(`Connect Claude, Gemini, or Codex in Settings to use ${surface}.`);
     const resolvedTimeout = Math.max(15_000, Math.min(180_000, Number(timeoutMs) || 90_000));
+    let resolvedPrompt = prompt;
+    const validImages = Array.isArray(images) ? images.filter(img => /^data:image\/(png|jpeg);base64,/i.test(img?.url || '')) : [];
+    if (validImages.length && chosen.name === 'antigravity' && typeof antigravity?.readPicture === 'function') {
+      const notes = [];
+      for (const img of validImages.slice(0, 2)) {
+        try {
+          const reading = await antigravity.readPicture(img.url, settings, signal);
+          notes.push(`[Rendered ${img.label || 'viewport'} inspection]\n${reading}`);
+        } catch {}
+      }
+      if (notes.length) resolvedPrompt = `${notes.join('\n\n')}\n\n${resolvedPrompt}`;
+    } else if (validImages.length && chosen.name === 'claude') {
+      resolvedPrompt = `[Captured ${validImages.length} rendered viewport screenshot(s): ${validImages.map(i => i.label || 'viewport').join(', ')}]\n\n${resolvedPrompt}`;
+    }
+    const input = [{ type: 'text', text: resolvedPrompt, text_elements: [] }];
+    if (validImages.length && chosen.name === 'codex') {
+      for (const img of validImages.slice(0, 2)) input.push({ type: 'image', url: img.url, detail: 'original' });
+    }
     const turnOpts = {
       settings: chosen.name === 'claude' ? { ...settings, claudeModel: chosen.model } : settings,
       instructions,
-      prompt: chosen.name === 'antigravity' ? `${instructions}\n\n${prompt}` : prompt,
-      input: [{ type: 'text', text: prompt, text_elements: [] }],
+      prompt: chosen.name === 'antigravity' ? `${instructions}\n\n${resolvedPrompt}` : resolvedPrompt,
+      input,
       tools: [],
       signal,
       timeout: resolvedTimeout,
@@ -3051,43 +3097,31 @@ app.whenReady().then(async () => {
   academyStore = new (await import('./academy/store.mjs')).AcademyStore({ root: file('academy') });
   const askAcademyAI = opts => askEmbeddedAI({ ...opts, surface: 'Baryon Academy AI' });
   const emitAcademyEvent = event => sendToWindow('fairy:academy', event);
-  const getAcademyProviders = () => ({
-    active: settings.backend || 'auto',
-    providers: [
-      {
-        id: 'auto',
-        label: 'Auto (Active)',
-        connected: Boolean(claudeStatus?.connected || antigravityStatus?.connected || subscription?.connected),
-      },
-      {
-        id: 'claude',
-        label: 'Claude',
-        connected: Boolean(claudeStatus?.connected),
-        model: settings.claudeModel || '',
-      },
-      {
-        id: 'antigravity',
-        label: 'Gemini',
-        connected: Boolean(antigravityStatus?.connected),
-        model: settings.antigravityModel || '',
-      },
-      {
-        id: 'codex',
-        label: 'ChatGPT / Codex',
-        connected: Boolean(subscription?.connected),
-        model: settings.codexModel || '',
-      },
-    ],
-  });
   academyApi = (await import('./academy/calls.mjs')).academyCalls({
     store: academyStore,
     askAI: askAcademyAI,
-    getProviders: getAcademyProviders,
+    getProviders: getStudioProviders,
     ledgerPath: file('token-ledger.jsonl'),
     onEvent: emitAcademyEvent,
   });
   for (const [name, fn] of Object.entries(academyApi)) handle(`academy-${name}`, fn, { refresh: false });
   }
+  // Baryon UI Design Mode: Stitch-style infinite canvas, DESIGN.md token locking, offscreen Chromium capture & vision critique.
+  const designStore = new (await import('./design/store.mjs')).DesignStore({ root: file('design') });
+  const { captureDesignPreview } = await import('./design/capture.mjs');
+  const askDesignAI = opts => askEmbeddedAI({ ...opts, surface: 'Baryon Design Mode' });
+  const captureDesign = opts => captureDesignPreview({ ...opts, BrowserWindowCtor: BrowserWindow });
+  const emitDesignEvent = event => sendToWindow('fairy:design', event);
+  const designApi = (await import('./design/calls.mjs')).designCalls({
+    store: designStore,
+    askAI: askDesignAI,
+    getProviders: getStudioProviders,
+    capturePreview: captureDesign,
+    getWorkFolder: () => sessions.work()?.path || '',
+    publishArtifact: ({ title, description, html }) => artifacts.publish({ kind: 'page', title, description, html }),
+    onEvent: emitDesignEvent,
+  });
+  for (const [name, fn] of Object.entries(designApi)) handle(`design-${name}`, fn, { refresh: false });
   // The Today panel: your next events and unread count, shown to you only. None of this goes to a model.
   let todayCache = null;
   handle('today-data', async force => {

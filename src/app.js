@@ -156,7 +156,7 @@ $('#app').innerHTML = `
       <div class="sidebar-top"><button id="sidebar-search" class="side-icon" aria-label="Search chats" aria-expanded="false" title="Search chats"></button><button id="sidebar-toggle" class="side-icon" aria-label="Collapse sidebar" title="Collapse sidebar"></button></div>
       <div class="sidebar-brand"><canvas class="fairy-mini" width="80" height="80" aria-hidden="true"></canvas><span>Baryon</span></div>
       <input type="search" id="sidebar-search-input" placeholder="Search chats" aria-label="Search chats" hidden>
-      <div class="side-group side-tools" role="group" aria-label="Places"><button id="sidebar-study" class="side-item" aria-pressed="false" title="Notebooks: your courses' sources, notes and exam dates">Notebooks</button><button id="sidebar-academy" class="side-item" aria-pressed="false" title="Academy: Brilliant-style interactive STEM courses &amp; AI university course builder (⌘⇧E)">Academy</button><button id="sidebar-research" class="side-item" aria-pressed="false" title="Research: investigations your three model families work on together, round by round">Research</button><button id="sidebar-runs" class="side-item" aria-pressed="false" title="Experiments: what Fairy ran for you, here and on atlas and forge, with their parameters, metrics and files">Experiments</button><button id="sidebar-goals" class="side-item" aria-pressed="false" title="Goals: what Fairy is working towards for you, step by step, until its check says done">Goals</button><button id="sidebar-boards" class="side-item" aria-pressed="false" title="Boards: infinite Miro-style visual boards and project plans">Boards</button><button id="sidebar-analytics" class="side-item" aria-pressed="false" title="Analytics: data profiling, AutoML training &amp; record linkage (⌘⇧A)">Analytics</button><button id="sidebar-diffusion" class="side-item" aria-pressed="false" title="Diffusion: images and videos made for you (coming soon)">Diffusion</button><button id="sidebar-new-note" class="side-item" title="New note">New note</button></div>
+      <div class="side-group side-tools" role="group" aria-label="Places"><button id="sidebar-study" class="side-item" aria-pressed="false" title="Notebooks: your courses' sources, notes and exam dates">Notebooks</button><button id="sidebar-academy" class="side-item" aria-pressed="false" title="Academy: Brilliant-style interactive STEM courses &amp; AI university course builder (⌘⇧E)">Academy</button><button id="sidebar-research" class="side-item" aria-pressed="false" title="Research: investigations your three model families work on together, round by round">Research</button><button id="sidebar-runs" class="side-item" aria-pressed="false" title="Experiments: what Fairy ran for you, here and on atlas and forge, with their parameters, metrics and files">Experiments</button><button id="sidebar-goals" class="side-item" aria-pressed="false" title="Goals: what Fairy is working towards for you, step by step, until its check says done">Goals</button><button id="sidebar-boards" class="side-item" aria-pressed="false" title="Boards: infinite Miro-style visual boards and project plans">Boards</button><button id="sidebar-design" class="side-item" aria-pressed="false" title="Design: Stitch-style agentic UI studio with DESIGN.md token locking &amp; vision critique (⌘⇧D)">Design</button><button id="sidebar-analytics" class="side-item" aria-pressed="false" title="Analytics: data profiling, AutoML training &amp; record linkage (⌘⇧A)">Analytics</button><button id="sidebar-diffusion" class="side-item" aria-pressed="false" title="Diffusion: images and videos made for you (coming soon)">Diffusion</button><button id="sidebar-new-note" class="side-item" title="New note">New note</button></div>
       <div id="notebook-list"></div>
       <div class="side-chats-head"><span class="side-modes" role="group" aria-label="Show"><button id="side-mode-chat" class="side-mode" aria-pressed="true" title="Chats">Chats</button><button id="side-mode-work" class="side-mode" aria-pressed="false" title="Work: sections, folders and work sessions">Work</button></span><h2 class="side-label side-recent-label">Chats</h2><span class="side-chats-tools"><button id="select-chats" class="side-icon" aria-label="Select chats" aria-pressed="false" title="Select chats"></button><button id="threads-menu" class="side-icon" aria-label="Open threads" aria-haspopup="dialog" aria-expanded="false" title="Open threads: group &amp; jump to waiting, active, and open threads"></button><button id="new-section" class="side-icon" aria-label="New section" title="New section, to group folders (Research, Development…)"></button><button id="new-folder" class="side-icon" aria-label="New folder" title="New folder"></button></span></div>
       <div id="recent-list" class="side-recent"></div>
@@ -237,6 +237,7 @@ $('#app').innerHTML = `
     <section id="runs-view" aria-label="Experiments" hidden></section>
     <section id="goals-view" aria-label="Goals" hidden></section>
     <section id="boards-view" aria-label="Boards" hidden></section>
+    <section id="design-view" aria-label="Design" hidden></section>
     <section id="analytics-view" aria-label="Analytics" hidden></section>
     <section id="plugins-view" aria-label="Plugins" hidden></section>
     <section id="usage-view" aria-label="Usage" hidden></section>
@@ -1124,7 +1125,7 @@ function attachBoardCard(item, board) {
   openBoardBtn.className = 'board-plan-btn is-primary';
   openBoardBtn.textContent = 'Open Board';
   openBoardBtn.onclick = () => {
-    hideNotebooks(); hideResearch(); hideDiffusion(); hidePlugins(); hideUsage(); hideAnalytics(); hideNeutrino();
+    hideNotebooks(); hideResearch(); hideDiffusion(); hidePlugins(); hideUsage(); hideAnalytics(); hideDesign(); hideNeutrino();
     void runsBoard?.then(view => view?.hide());
     void goalsBoard?.then(view => view?.hide());
     void openBoards().then(view => view?.open(board.id));
@@ -1149,6 +1150,8 @@ let pluginsBoard = null;
 function hidePlugins() { void pluginsBoard?.then(view => view?.hide()); }
 let boardsBoard = null;
 function hideBoards() { void boardsBoard?.then(view => view?.hide()); }
+let designBoard = null;
+function hideDesign() { void designBoard?.then(view => view?.hide()); }
 let usageBoard = null;
 function hideUsage() { void usageBoard?.then(view => view?.hide()); }
 let pricingBoard = null;
@@ -1169,6 +1172,7 @@ function showSession(next) {
   closeBtw();
   hidePlugins();
   hideBoards();
+  hideDesign();
   hideUsage();
   hidePricing();
   hideAnalytics();
@@ -2422,6 +2426,7 @@ document.addEventListener('keydown', event => {
   if (event.metaKey && !event.ctrlKey && !event.altKey && event.shiftKey && event.key.toLowerCase() === 'u' && !floating && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) { event.preventDefault(); hideOtherBoards(); hidePlugins(); void openUsage().then(view => view?.toggle()); }
   if (event.metaKey && !event.ctrlKey && !event.altKey && event.shiftKey && event.key.toLowerCase() === 'a' && !floating && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) { event.preventDefault(); hideOtherBoards(); hidePlugins(); hideUsage(); void openAnalytics().then(view => view?.toggle()); }
   if (event.metaKey && !event.ctrlKey && !event.altKey && event.shiftKey && event.key.toLowerCase() === 'e' && !floating && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) { event.preventDefault(); hideOtherBoards(); hidePlugins(); hideUsage(); void openAcademy().then(view => view?.toggle()); }
+  if (event.metaKey && !event.ctrlKey && !event.altKey && event.shiftKey && event.key.toLowerCase() === 'd' && !floating && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) { event.preventDefault(); hideOtherBoards(); hidePlugins(); hideUsage(); void openDesign().then(view => view?.toggle()); }
 });
 $('#sidebar-search').onclick = () => { if (document.documentElement.classList.contains('sidebar-collapsed')) setSidebarCollapsed(false); setSidebarSearch($('#sidebar-search-input').hidden); };
 let chatSearchTimer;
@@ -3188,6 +3193,14 @@ const openAnalytics = () => !featureOn('analytics') ? Promise.resolve(null) : (a
   onShow: () => requestBackgroundSync(),
   onHide: () => requestBackgroundSync(),
 })).catch(e => { analyticsBoard = null; error(`Analytics couldn’t open: ${e.message}`); return null; }));
+const openDesign = () => (designBoard ??= import('./design-view.js').then(({ designView }) => designView({
+  api,
+  root: $('#design-view'),
+  sidebarButton: $('#sidebar-design'),
+  onError: error,
+  onShow: () => requestBackgroundSync(),
+  onHide: () => requestBackgroundSync(),
+})).catch(e => { designBoard = null; error(`Design Mode couldn’t open: ${e.message}`); return null; }));
 const openAcademy = () => !featureOn('academy') ? Promise.resolve(null) : (academyBoard ??= import('./academy-view.js').then(({ academyView }) => academyView({
   api,
   root: $('#academy-view'),
@@ -3196,7 +3209,7 @@ const openAcademy = () => !featureOn('academy') ? Promise.resolve(null) : (acade
   onShow: () => requestBackgroundSync(),
   onHide: () => requestBackgroundSync(),
 })).catch(e => { academyBoard = null; error(`Academy couldn’t open: ${e.message}`); return null; }));
-function hideGoals() { void goalsBoard?.then(view => view?.hide()); hidePlugins(); hideBoards(); hideUsage(); hidePricing(); hideAnalytics(); hideAcademy(); hideNeutrino(); }
+function hideGoals() { void goalsBoard?.then(view => view?.hide()); hidePlugins(); hideBoards(); hideDesign(); hideUsage(); hidePricing(); hideAnalytics(); hideAcademy(); hideNeutrino(); }
 const openRunCitation = id => { const folder = state.sessions?.work?.path; if (!folder || !api?.runsList) return; hideNotebooks(); hideResearch(); hideDiffusion(); hideGoals(); void openRuns().then(view => view?.open(folder, id)); };
 // A new investigation's form, filled in from a notebook's report or by a chat (stage 8.10): nothing is made until you press Create.
 const draftInvestigation = seed => { if (!api?.research) return; hideNotebooks(); hideDiffusion(); hideRuns(); hideNeutrino(); void openResearch().then(view => view?.draft(seed)); };
@@ -3208,23 +3221,25 @@ api?.onAnalyticsOpen?.(payload => {
 });
 $('#sidebar-research').hidden = !featureOn('research');
 $('#sidebar-research').disabled = !api?.research;
-$('#sidebar-research').onclick = () => { if (api?.research) { hideNotebooks(); hideAcademy(); hideDiffusion(); hideRuns(); hideAnalytics(); hideNeutrino(); void openResearch().then(view => view?.toggle()); } };
+$('#sidebar-research').onclick = () => { if (api?.research) { hideNotebooks(); hideAcademy(); hideDesign(); hideDiffusion(); hideRuns(); hideAnalytics(); hideNeutrino(); void openResearch().then(view => view?.toggle()); } };
 $('#sidebar-study').hidden = !featureOn('notebooks');
-$('#sidebar-study').onclick = () => { if (api) { hideResearch(); hideAcademy(); hideDiffusion(); hideRuns(); hideAnalytics(); hideNeutrino(); void openNotebooks().then(view => view?.toggle()); } };
+$('#sidebar-study').onclick = () => { if (api) { hideResearch(); hideAcademy(); hideDesign(); hideDiffusion(); hideRuns(); hideAnalytics(); hideNeutrino(); void openNotebooks().then(view => view?.toggle()); } };
 $('#sidebar-academy').hidden = !featureOn('academy');
 $('#sidebar-academy').disabled = !api?.academy;
-$('#sidebar-academy').onclick = () => { if (api?.academy) { hideNotebooks(); hideResearch(); hideDiffusion(); hideBoards(); hidePlugins(); hideUsage(); hideAnalytics(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); void openAcademy().then(view => view?.toggle()); } };
-$('#sidebar-diffusion').onclick = () => { hideNotebooks(); hideAcademy(); hideResearch(); hideRuns(); hideAnalytics(); hideNeutrino(); void openDiffusion().then(view => view?.toggle()); };
+$('#sidebar-academy').onclick = () => { if (api?.academy) { hideNotebooks(); hideResearch(); hideDesign(); hideDiffusion(); hideBoards(); hidePlugins(); hideUsage(); hideAnalytics(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); void openAcademy().then(view => view?.toggle()); } };
+$('#sidebar-diffusion').onclick = () => { hideNotebooks(); hideAcademy(); hideDesign(); hideResearch(); hideRuns(); hideAnalytics(); hideNeutrino(); void openDiffusion().then(view => view?.toggle()); };
 $('#sidebar-runs').disabled = !api?.runsProjects;
-$('#sidebar-runs').onclick = () => { if (api?.runsProjects) { hideNotebooks(); hideAcademy(); hideResearch(); hideDiffusion(); hideGoals(); void openRuns().then(view => view?.toggle()); } };
+$('#sidebar-runs').onclick = () => { if (api?.runsProjects) { hideNotebooks(); hideAcademy(); hideDesign(); hideResearch(); hideDiffusion(); hideGoals(); void openRuns().then(view => view?.toggle()); } };
 $('#sidebar-goals').disabled = !api?.goalsList;
-$('#sidebar-goals').onclick = () => { if (api?.goalsList) { hideNotebooks(); hideAcademy(); hideResearch(); hideDiffusion(); hidePlugins(); hideBoards(); hideUsage(); hideAnalytics(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void openGoals().then(view => view?.toggle()); } };
+$('#sidebar-goals').onclick = () => { if (api?.goalsList) { hideNotebooks(); hideAcademy(); hideDesign(); hideResearch(); hideDiffusion(); hidePlugins(); hideBoards(); hideUsage(); hideAnalytics(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void openGoals().then(view => view?.toggle()); } };
 $('#sidebar-boards').disabled = !api?.boardsList;
-$('#sidebar-boards').onclick = () => { if (api?.boardsList) { hideNotebooks(); hideAcademy(); hideResearch(); hideDiffusion(); hidePlugins(); hideUsage(); hideAnalytics(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); void openBoards().then(view => view?.toggle()); } };
+$('#sidebar-boards').onclick = () => { if (api?.boardsList) { hideNotebooks(); hideAcademy(); hideDesign(); hideResearch(); hideDiffusion(); hidePlugins(); hideUsage(); hideAnalytics(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); void openBoards().then(view => view?.toggle()); } };
+$('#sidebar-design').disabled = !api?.design;
+$('#sidebar-design').onclick = () => { if (api?.design) { hideOtherBoards(); hidePlugins(); hideUsage(); void openDesign().then(view => view?.toggle()); } };
 $('#sidebar-analytics').hidden = !featureOn('analytics');
 $('#sidebar-analytics').disabled = !api?.analytics;
-$('#sidebar-analytics').onclick = () => { if (api?.analytics) { hideNotebooks(); hideAcademy(); hideResearch(); hideDiffusion(); hideBoards(); hidePlugins(); hideUsage(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); void openAnalytics().then(view => view?.toggle()); } };
-const hideOtherBoards = () => { hideNotebooks(); hideAcademy(); hideResearch(); hideDiffusion(); hideBoards(); hidePricing(); hideAnalytics(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); };
+$('#sidebar-analytics').onclick = () => { if (api?.analytics) { hideNotebooks(); hideAcademy(); hideDesign(); hideResearch(); hideDiffusion(); hideBoards(); hidePlugins(); hideUsage(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); void openAnalytics().then(view => view?.toggle()); } };
+const hideOtherBoards = () => { hideNotebooks(); hideAcademy(); hideResearch(); hideDiffusion(); hideBoards(); hideDesign(); hidePricing(); hideAnalytics(); hideNeutrino(); void runsBoard?.then(view => view?.hide()); void goalsBoard?.then(view => view?.hide()); };
 $('#sidebar-usage').disabled = !api?.tokenUsage;
 $('#sidebar-usage').onclick = () => { if (api?.tokenUsage) { hideOtherBoards(); hidePlugins(); void openUsage().then(view => view?.toggle()); } };
 $('#sidebar-plugins').onclick = () => { hideOtherBoards(); hideUsage(); void openPlugins().then(view => view?.toggle()); };
@@ -3238,6 +3253,7 @@ const jumpToWorkspace = target => {
   hideUsage();
   if (target === 'notebooks' && api) void openNotebooks().then(v => v?.show?.() ?? v?.toggle?.());
   else if (target === 'academy' && api?.academy) void openAcademy().then(v => v?.show?.() ?? v?.toggle?.());
+  else if (target === 'design' && api?.design) void openDesign().then(v => v?.show?.() ?? v?.toggle?.());
   else if (target === 'research' && api?.research) void openResearch().then(v => v?.show?.() ?? v?.toggle?.());
   else if (target === 'runs' && api?.runsProjects) void openRuns().then(v => v?.show?.() ?? v?.toggle?.());
   else if (target === 'goals' && api?.goalsList) void openGoals().then(v => v?.show?.() ?? v?.toggle?.());
@@ -3273,8 +3289,8 @@ const openSetupWizard = async stepId => {
 for (const id of ['#open-setup-wizard', '#open-setup-wizard-app']) $(id)?.addEventListener('click', () => { $('#settings').close(); void openSetupWizard(); });
 $('#connection')?.addEventListener('click', () => { if (!conversationReady()) void openSetupWizard('providers'); else openSettings('accounts'); });
 $('#connection').style.cursor = 'pointer';
-for (const id of ['#recent-list', '#notebook-list']) $(id).addEventListener('click', event => { if (event.target.closest('[data-session]')) { hideNotebooks(); hideAcademy(); hideResearch(); hideDiffusion(); hideRuns(); hidePricing(); hideAnalytics(); hideNeutrino(); } }, true);
-for (const id of ['#sidebar-new-chat', '#sidebar-new-work', '#sidebar-new-scratch']) $(id).addEventListener('click', () => { hideNotebooks(); hideAcademy(); hideResearch(); hideDiffusion(); hideRuns(); hidePricing(); hideAnalytics(); hideNeutrino(); }, true);
+for (const id of ['#recent-list', '#notebook-list']) $(id).addEventListener('click', event => { if (event.target.closest('[data-session]')) { hideNotebooks(); hideAcademy(); hideDesign(); hideResearch(); hideDiffusion(); hideRuns(); hidePricing(); hideAnalytics(); hideNeutrino(); } }, true);
+for (const id of ['#sidebar-new-chat', '#sidebar-new-work', '#sidebar-new-scratch']) $(id).addEventListener('click', () => { hideNotebooks(); hideAcademy(); hideDesign(); hideResearch(); hideDiffusion(); hideRuns(); hidePricing(); hideAnalytics(); hideNeutrino(); }, true);
 modelMenu = setupModelMenu({ api, button: $('#provider-label'), providerButton: $('#provider-button'), effortButton: $('#effort-label'), parent: $('.dock'), state: () => state, onChange: next => { state = next; updateState(); }, onError: error, openSettings: settingsAt });
 // Auto's pick for the request just sent, beside “Auto” in the model button.
 // Auto's pick for the request just sent: beside "Auto" in the model button, and under the reply once it starts.
