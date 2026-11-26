@@ -54,7 +54,7 @@
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "speech-rule-engine": "4.1.4",
-    "three": "^0.180.0",
+    "three": "^0.187.0",
     "voice-glow": "0.2.1",
     "zustand": "^5.1.0"
   },
