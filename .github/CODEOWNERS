@@ -1,0 +1,8 @@
+# Default owner for everything in the repository
+* @razeenwasif
+
+# Security-critical automation and desktop runtime paths
+/.github/ @razeenwasif
+/SECURITY.md @razeenwasif
+/desktop/ @razeenwasif
+/scripts/ @razeenwasif

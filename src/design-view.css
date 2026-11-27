@@ -1,0 +1,864 @@
+/* Baryon UI Design Mode: Minimal Stratus Obsidian + Hairline Canvas Studio */
+
+html:not(.floating) {
+  &.design-open main,
+  &.design-open.home main {
+    grid-template-rows: minmax(0, 1fr);
+  }
+  &.design-open :is(.conversation, .stage) {
+    display: none;
+  }
+  &.design-open #chat-header {
+    display: none;
+  }
+  &.design-open .sidebar {
+    border-right-color: transparent;
+  }
+  &.pane-open #design-view {
+    padding-right: 0;
+  }
+  &.around-notch #design-view .ds-topbar {
+    padding-top: calc(10px + var(--notch-band, 32px));
+  }
+}
+
+#design-view {
+  --ds-bg: #030304;
+  --ds-panel: #050507;
+  --ds-raised: #0c0c10;
+  --ds-hover: rgba(255, 255, 255, 0.048);
+  --ds-ink: #f4f4f6;
+  --ds-soft: #d5d8e2;
+  --ds-dim: #8e8e99;
+  --ds-muted: #5c5c66;
+  --ds-accent: #3e5aec;
+  --ds-cyan: #18b8cc;
+  --ds-emerald: #74e2a6;
+  --ds-amber: #fbbf24;
+  --ds-red: #f87171;
+  --ds-line: rgba(255, 255, 255, 0.055);
+  --ds-line-strong: rgba(255, 255, 255, 0.11);
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  isolation: isolate;
+  z-index: 1;
+  min-width: 0;
+  min-height: 0;
+  margin-left: -52px;
+  padding-left: 52px;
+  padding-right: 54px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--ds-bg);
+  color: var(--ds-ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+
+#design-view[hidden] {
+  display: none;
+}
+
+#design-view :where(*) {
+  box-sizing: border-box;
+}
+
+#design-view :where(h1, h2, h3, p) {
+  margin: 0;
+}
+
+/* ── Minimal Top Chrome Bar ── */
+
+#design-view .ds-topbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--ds-line);
+  background: var(--ds-bg);
+  -webkit-app-region: drag;
+  z-index: 5;
+}
+
+#design-view .ds-topbar :where(button, select, input) {
+  -webkit-app-region: no-drag;
+}
+
+#design-view .ds-bar-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+#design-view .ds-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--ds-ink);
+}
+
+#design-view .ds-brand-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ds-cyan);
+}
+
+#design-view .ds-crumb-sep {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 13px;
+}
+
+#design-view .ds-ghost-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--ds-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+#design-view .ds-ghost-icon:hover {
+  background: var(--ds-hover);
+  color: var(--ds-ink);
+}
+
+#design-view .ds-ghost-icon.is-on {
+  color: var(--ds-ink);
+}
+
+#design-view .ds-ghost-select,
+#design-view .ds-select,
+#design-view .ds-input {
+  height: 27px;
+  padding: 0 8px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ds-ink);
+  font: inherit;
+  font-size: 12px;
+}
+
+#design-view .ds-ghost-select:hover,
+#design-view .ds-select:hover {
+  background: var(--ds-hover);
+}
+
+#design-view .ds-select {
+  color: var(--ds-soft);
+  border-color: var(--ds-line);
+  background: var(--ds-bg);
+}
+
+#design-view .ds-input {
+  border-color: var(--ds-line-strong);
+  background: var(--ds-bg);
+}
+
+#design-view .ds-btn {
+  height: 27px;
+  padding: 0 10px;
+  border-radius: 7px;
+  border: 0;
+  background: transparent;
+  color: var(--ds-dim);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: background 140ms cubic-bezier(0.16, 1, 0.3, 1), color 140ms ease, transform 120ms ease;
+}
+
+#design-view .ds-btn:hover:not(:disabled) {
+  background: var(--ds-hover);
+  color: var(--ds-ink);
+}
+
+#design-view .ds-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+#design-view .ds-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+#design-view .ds-btn.is-primary {
+  background: var(--ds-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+#design-view .ds-btn.is-primary:hover:not(:disabled) {
+  background: #4e69f5;
+}
+
+#design-view .ds-seg {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 8px;
+  border: 1px solid var(--ds-line);
+  background: transparent;
+}
+
+#design-view .ds-seg button {
+  height: 22px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ds-muted);
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+#design-view .ds-seg button:hover {
+  color: var(--ds-soft);
+}
+
+#design-view .ds-seg button.is-on {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ds-ink);
+}
+
+/* ── 3-Pane Workspace with Collapsible Side Panels ── */
+
+#design-view .ds-workspace {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr) 320px;
+}
+
+#design-view .ds-workspace.no-left {
+  grid-template-columns: minmax(0, 1fr) 320px;
+}
+
+#design-view .ds-workspace.no-inspector {
+  grid-template-columns: 300px minmax(0, 1fr);
+}
+
+#design-view .ds-workspace.no-left.no-inspector {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+#design-view .ds-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 4px;
+}
+
+#design-view .ds-panel-close {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ds-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#design-view .ds-panel-close:hover {
+  background: var(--ds-hover);
+  color: var(--ds-ink);
+}
+
+/* ── Left Prompt & Pipeline Panel (Stratus Minimal) ── */
+
+#design-view .ds-left {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--ds-line);
+  background: var(--ds-panel);
+}
+
+#design-view .ds-pipeline {
+  padding: 8px 14px 12px;
+  border-bottom: 1px solid var(--ds-line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#design-view .ds-phases {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+#design-view .ds-phase {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ds-muted);
+}
+
+#design-view .ds-phase-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.45;
+}
+
+#design-view .ds-phase.is-done {
+  color: var(--ds-emerald);
+}
+
+#design-view .ds-phase.is-done .ds-phase-dot,
+#design-view .ds-phase.is-active .ds-phase-dot {
+  opacity: 1;
+}
+
+#design-view .ds-phase.is-active {
+  color: var(--ds-cyan);
+}
+
+#design-view .ds-pipeline-status {
+  font-size: 11.5px;
+  color: var(--ds-muted);
+  min-height: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#design-view .ds-turns {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px 14px;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+
+#design-view .ds-turn-row {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ds-line);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#design-view .ds-turn-row:last-child {
+  border-bottom: 0;
+}
+
+#design-view .ds-turn-prompt {
+  font-size: 12.5px;
+  color: var(--ds-ink);
+  font-weight: 500;
+}
+
+#design-view .ds-turn-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ds-muted);
+}
+
+#design-view .ds-turn-sum {
+  font-size: 11.5px;
+  color: var(--ds-dim);
+}
+
+#design-view .ds-turns-empty {
+  padding: 18px 0;
+  font-size: 12px;
+  color: var(--ds-muted);
+}
+
+#design-view .ds-score-pill {
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  background: rgba(116, 226, 166, 0.12);
+  color: var(--ds-emerald);
+}
+
+#design-view .ds-score-pill.is-fail {
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--ds-amber);
+}
+
+#design-view .ds-composer {
+  padding: 12px 14px 14px;
+  border-top: 1px solid var(--ds-line);
+  background: var(--ds-panel);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#design-view .ds-composer textarea {
+  width: 100%;
+  min-height: 68px;
+  max-height: 150px;
+  resize: vertical;
+  padding: 6px 2px;
+  border: 0;
+  border-bottom: 1px solid var(--ds-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ds-ink);
+  font: inherit;
+  font-size: 12.5px;
+}
+
+#design-view .ds-composer textarea:focus {
+  outline: none;
+  border-bottom-color: var(--ds-accent);
+}
+
+#design-view .ds-ctrl-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+#design-view .ds-toggles {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 11.5px;
+  color: var(--ds-dim);
+}
+
+#design-view .ds-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+/* ── Center Infinite Stitch Canvas ── */
+
+#design-view .ds-canvas {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--ds-bg);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.065) 1px, transparent 1px);
+  background-size: 20px 20px;
+  user-select: none;
+  cursor: grab;
+}
+
+#design-view .ds-canvas.is-panning {
+  cursor: grabbing;
+}
+
+#design-view .ds-float-toggle {
+  position: absolute;
+  top: 12px;
+  z-index: 6;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--ds-line-strong);
+  background: rgba(5, 5, 7, 0.86);
+  color: var(--ds-soft);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+#design-view .ds-float-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ds-ink);
+}
+
+#design-view .ds-float-toggle.is-left {
+  left: 12px;
+}
+
+#design-view .ds-float-toggle.is-right {
+  right: 12px;
+}
+
+#design-view .ds-stage-transform {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+#design-view .ds-artboard {
+  position: absolute;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+#design-view .ds-artboard-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--ds-line);
+  background: rgba(5, 5, 7, 0.9);
+  cursor: grab;
+}
+
+#design-view .ds-artboard.is-selected .ds-artboard-head {
+  border-color: rgba(62, 90, 236, 0.55);
+}
+
+#design-view .ds-artboard-title {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ds-ink);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+#design-view .ds-dim-tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  color: var(--ds-muted);
+}
+
+#design-view .ds-artboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+#design-view .ds-icon-btn {
+  height: 21px;
+  padding: 0 7px;
+  border-radius: 5px;
+  border: 0;
+  background: transparent;
+  color: var(--ds-dim);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+#design-view .ds-icon-btn:hover {
+  background: var(--ds-hover);
+  color: var(--ds-ink);
+}
+
+#design-view .ds-frame-wrap {
+  position: relative;
+  border-radius: 12px;
+  border: 1px solid var(--ds-line-strong);
+  background: #08080a;
+  overflow: hidden;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.52);
+}
+
+#design-view .ds-artboard.is-selected .ds-frame-wrap {
+  box-shadow: 0 0 0 1.5px var(--ds-accent), 0 22px 54px rgba(0, 0, 0, 0.65);
+}
+
+#design-view .ds-artboard.is-mobile .ds-frame-wrap {
+  border-radius: 26px;
+}
+
+#design-view .ds-frame-wrap iframe {
+  display: block;
+  border: 0;
+  transform-origin: 0 0;
+  background: #08080a;
+}
+
+#design-view .ds-frame-shield {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+#design-view .ds-canvas-hint {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--ds-line);
+  background: rgba(5, 5, 7, 0.84);
+  color: var(--ds-muted);
+  font-size: 11px;
+  pointer-events: none;
+}
+
+/* ── Right Inspector Panel (Stratus Hairline Sections) ── */
+
+#design-view .ds-inspector {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-left: 1px solid var(--ds-line);
+  background: var(--ds-panel);
+  overflow: hidden;
+}
+
+#design-view .ds-tabs-bar {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--ds-line);
+  padding-right: 6px;
+}
+
+#design-view .ds-tabs {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+#design-view .ds-tabs button {
+  height: 35px;
+  border: 0;
+  border-bottom: 1.5px solid transparent;
+  background: transparent;
+  color: var(--ds-muted);
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+#design-view .ds-tabs button:hover {
+  color: var(--ds-soft);
+}
+
+#design-view .ds-tabs button.is-on {
+  color: var(--ds-ink);
+  border-bottom-color: var(--ds-cyan);
+}
+
+#design-view .ds-insp-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+
+#design-view .ds-section {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--ds-line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#design-view .ds-section:last-child {
+  border-bottom: 0;
+}
+
+#design-view .ds-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+#design-view .ds-kicker {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+}
+
+#design-view .ds-token-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 18px 78px;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 11.5px;
+}
+
+#design-view .ds-token-row code {
+  color: var(--ds-soft);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#design-view .ds-color-swatch {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--ds-line-strong);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+#design-view .ds-token-hex {
+  height: 22px;
+  padding: 0 4px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: var(--ds-dim);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  text-align: right;
+}
+
+#design-view .ds-token-hex:focus {
+  outline: none;
+  color: var(--ds-ink);
+  border-bottom-color: var(--ds-accent);
+}
+
+#design-view .ds-md-editor {
+  width: 100%;
+  min-height: 210px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ds-soft);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+#design-view .ds-md-editor:focus {
+  outline: none;
+}
+
+#design-view .ds-score-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#design-view .ds-score-num {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+#design-view .ds-bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11.5px;
+}
+
+#design-view .ds-bar-head {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ds-dim);
+}
+
+#design-view .ds-bar-track {
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+#design-view .ds-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ds-cyan);
+}
+
+#design-view .ds-code-pre {
+  margin: 0;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ds-soft);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  max-height: 400px;
+  overflow: auto;
+  white-space: pre;
+}
+
+#design-view .ds-capture-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#design-view .ds-capture-card img {
+  width: 100%;
+  border-radius: 7px;
+  border: 1px solid var(--ds-line);
+  display: block;
+}
+
+#design-view .ds-empty {
+  margin: auto;
+  text-align: center;
+  max-width: 320px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #design-view .ds-btn,
+  #design-view .ds-ghost-icon {
+    transition: none;
+  }
+}
+
+@media (max-width: 1080px) {
+  #design-view .ds-workspace {
+    grid-template-columns: 260px minmax(0, 1fr) 280px;
+  }
+  #design-view .ds-workspace.no-left {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+  #design-view .ds-workspace.no-inspector {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+}

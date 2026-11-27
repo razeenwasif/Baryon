@@ -1,0 +1,20 @@
+{
+  "product": "Baryon",
+  "version": "0.1.0",
+  "releasedAt": "2026-11-26T09:39:20.242Z",
+  "releaseNotesUrl": "https://github.com/razeenwasif/baryon-releases/releases/tag/v0.1.0",
+  "macos": {
+    "arm64": {
+      "filename": "Baryon-0.1.0-arm64.dmg",
+      "url": "https://github.com/razeenwasif/baryon-releases/releases/download/v0.1.0/Baryon-0.1.0-arm64.dmg",
+      "absoluteUrl": "https://github.com/razeenwasif/baryon-releases/releases/download/v0.1.0/Baryon-0.1.0-arm64.dmg",
+      "sha256Url": "https://github.com/razeenwasif/baryon-releases/releases/download/v0.1.0/Baryon-0.1.0-arm64.dmg.sha256",
+      "sha256": "4bee0d5b13cbe1404d62d7210ca2f471e14a66c2ce5495c199d47ff918f753e2",
+      "bytes": 329946894,
+      "sizeLabel": "330 MB",
+      "minMacOS": "13.0",
+      "arch": "Apple Silicon (arm64)",
+      "signing": "Developer ID Signed · Hardened Runtime"
+    }
+  }
+}

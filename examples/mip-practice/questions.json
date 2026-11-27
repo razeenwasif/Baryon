@@ -1,0 +1,75 @@
+[
+  {
+    "body": "<p>Use the 3-SAT formulation below. Select the option with the <strong>minimum</strong> set of constraints that correctly models the problem.</p>",
+    "images": [
+      0
+    ],
+    "choices": [
+      "2 and 4",
+      "1, 2, 3 and 4",
+      "1 and 3",
+      "2, 3 and 4",
+      "1"
+    ]
+  },
+  {
+    "body": "<p>Explain your answer to question 1 by either:</p><ul><li>explaining why the unselected constraints are NOT needed, or</li><li>explaining why all constraints (1, 2, 3 and 4) are needed.</li></ul>"
+  },
+  {
+    "body": "<p>Using the 3-SAT problem from Question 1 as an example, explain why computing the convex hull of an ILP can be computationally expensive.</p>",
+    "limit": 100
+  },
+  {
+    "body": "<p>After the first MIP lecture, two students argue about the constraints needed to model <span class=\"math\">y = max(x₁, x₂, …, xₙ)</span>. Here is the relevant slide and Student A’s claim.</p>",
+    "images": [
+      1,
+      2
+    ],
+    "choices": [
+      "No",
+      "Yes"
+    ]
+  },
+  {
+    "body": "<p>Explain your answer to question 4 for Student A’s claim. Use <code>under(xj)</code> to represent the lower bound and <code>over(xj)</code> to represent the upper bound of xj.</p>"
+  },
+  {
+    "body": "<p>(Continuation of question 4.) Student B claims that we can remove the <strong>− under(xj)</strong> term from the big-M coefficient, replacing <span class=\"math\">maxᵢ(over(xi)) − under(xj)</span> with <span class=\"math\">maxᵢ(over(xi))</span>. Is this correct?</p>",
+    "choices": [
+      "No",
+      "Yes"
+    ]
+  },
+  {
+    "body": "<p>Explain your answer to question 6 for Student B’s claim. Use <code>under(xj)</code> to represent the lower bound and <code>over(xj)</code> to represent the upper bound of xj.</p>"
+  },
+  {
+    "body": "<p>What is the main role of the feasibility pump in the Branch and Bound algorithm?</p>",
+    "choices": [
+      "It helps in dividing the problem into smaller feasible subproblems",
+      "It relaxes the integer constraints of the problem preserving the original feasible solutions",
+      "It is used to find feasible solutions that may not necessarily be optimal",
+      "It is used to calculate the optimal solution for each feasible subproblem",
+      "It is used to ensure that no feasible solution violates the problem’s original constraints"
+    ]
+  },
+  {
+    "body": "<p>Explain your answer to question 8.</p>",
+    "limit": 100
+  },
+  {
+    "body": "<p>When using Branch and Bound to solve a minimization ILP, why is the optimality gap for the original ILP defined using the smallest lower bound over all open nodes?</p>",
+    "limit": 100
+  },
+  {
+    "body": "<p>If we have the convex hull of the ILP feasible points, can Gomory cuts still be used to speed up finding the optimal solution of the ILP?</p>",
+    "choices": [
+      "No",
+      "Yes"
+    ]
+  },
+  {
+    "body": "<p>Explain your answer to question 11.</p>",
+    "limit": 50
+  }
+]

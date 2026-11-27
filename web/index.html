@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050507" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Baryon" />
+  <meta name="description" content="Download Baryon for macOS — a local-first desktop AI workspace with multi-provider agents, cited Study Notebooks, Research Workbench, local AutoML Analytics, native macOS integrations, and iPhone/Web Studio companions." />
+  <meta property="og:title" content="Baryon · Local-First AI Workspace for macOS" />
+  <meta property="og:description" content="Download Baryon for macOS (Apple Silicon) or launch Baryon Web Studio with multi-model /fanout, Time-Travel branching, and live HTML artifacts." />
+  <meta property="og:image" content="/media/baryon-home.webp?v=2" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/favicon.ico?v=2" sizes="16x16 32x32" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <title>Baryon · Local-First AI Workspace for macOS</title>
+</head>
+<body>
+  <header class="bl-nav-wrap">
+    <nav class="bl-nav" aria-label="Primary navigation">
+      <a class="bl-brand" href="/">
+        <img src="/icon.png" alt="Baryon icon" width="28" height="28" />
+        <span class="bl-brand-name">Baryon</span>
+        <span class="bl-brand-ver" data-release="version-pill">v0.1.0</span>
+      </a>
+      <div class="bl-nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#capabilities">Features</a>
+        <a href="#download">Install</a>
+        <a href="/chat">Web Studio</a>
+      </div>
+      <div class="bl-nav-actions">
+        <a class="bl-nav-cta" href="https://github.com/razeenwasif/baryon-releases/releases/download/v0.1.0/Baryon-0.1.0-arm64.dmg" download="Baryon-0.1.0-arm64.dmg" data-release="download-link">
+          <span>Download</span>
+          <span class="bl-nav-meta" data-release="size">330 MB</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="bl-hero" id="overview">
+      <canvas id="baryon-aurora" class="bl-aurora-canvas" aria-hidden="true"></canvas>
+      <div class="bl-hero-inner">
+        <div class="bl-eyebrow">
+          <span class="bl-dot" aria-hidden="true"></span>
+          <span data-release="eyebrow">MACOS &middot; APPLE SILICON &middot; v0.1.0</span>
+        </div>
+        <h1 class="bl-title">Your local-first AI workspace for macOS.</h1>
+        <p class="bl-subtitle">
+          Built around <strong>Fairy</strong>, your desktop companion persona &mdash; orchestrate Claude, Gemini, and Codex work sessions, study cited notebooks, run local AutoML, and pair seamlessly with iPhone and Web Studio.
+        </p>
+
+        <div class="bl-cta-row">
+          <a class="bl-btn-primary" href="https://github.com/razeenwasif/baryon-releases/releases/download/v0.1.0/Baryon-0.1.0-arm64.dmg" download="Baryon-0.1.0-arm64.dmg" data-release="download-link">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 2.25v7.5m0 0l-3-3m3 3l3-3M2.75 12.75h10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Download for macOS</span>
+          </a>
+          <a class="bl-btn-secondary" href="/chat">
+            <span>Open Web Studio</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+
+        <dl class="bl-meta-strip">
+          <div class="bl-meta-item">
+            <dt>Release</dt>
+            <dd data-release="version">v0.1.0</dd>
+          </div>
+          <div class="bl-meta-item">
+            <dt>Installer</dt>
+            <dd data-release="size">330 MB DMG</dd>
+          </div>
+          <div class="bl-meta-item">
+            <dt>Platform</dt>
+            <dd data-release="arch">Apple Silicon &middot; macOS 13+</dd>
+          </div>
+          <div class="bl-meta-item">
+            <dt>Signature</dt>
+            <dd>Developer ID &middot; Hardened Runtime</dd>
+          </div>
+        </dl>
+
+        <div class="bl-showcase" aria-label="Baryon macOS application preview">
+          <div class="bl-showcase-bar">
+            <div class="bl-tabs" role="tablist" aria-label="Baryon workspace views">
+              <button type="button" class="bl-tab is-active" role="tab" aria-selected="true" data-shot="home">Home</button>
+              <button type="button" class="bl-tab" role="tab" aria-selected="false" data-shot="work">Work &amp; Git</button>
+              <button type="button" class="bl-tab" role="tab" aria-selected="false" data-shot="research">Research</button>
+              <button type="button" class="bl-tab" role="tab" aria-selected="false" data-shot="analytics">Analytics</button>
+              <button type="button" class="bl-tab" role="tab" aria-selected="false" data-shot="notebooks">Study</button>
+              <button type="button" class="bl-tab" role="tab" aria-selected="false" data-shot="plugins">Plugins &amp; MCP</button>
+              <button type="button" class="bl-tab" role="tab" aria-selected="false" data-shot="usage">Usage</button>
+            </div>
+            <div class="bl-showcase-controls">
+              <button type="button" class="bl-ctrl-btn" id="bl-shot-prev" aria-label="Previous screenshot">&lsaquo;</button>
+              <button type="button" class="bl-ctrl-btn" id="bl-shot-next" aria-label="Next screenshot">&rsaquo;</button>
+              <button type="button" class="bl-ctrl-btn" id="bl-shot-expand" aria-label="Inspect full size">&#x2922;</button>
+            </div>
+          </div>
+          <figure class="bl-showcase-frame">
+            <button type="button" class="bl-shot-trigger" id="bl-shot-trigger" aria-label="Open full-size screenshot preview">
+              <img id="bl-shot-img" src="/media/baryon-home.webp?v=2" alt="Baryon Home with the Fairy companion eye, Orchestrator routing, live Calendar and unread Gmail Today pills, and per-provider quota meters" width="1600" height="1000" loading="eager" />
+            </button>
+            <figcaption id="bl-shot-caption">
+              Baryon Home with the Fairy companion eye, Orchestrator routing, live Calendar &amp; unread Gmail Today pills, and per-provider quota meters.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="bl-section" id="capabilities">
+      <div class="bl-section-head">
+        <span class="bl-kicker">Architecture &amp; Surfaces</span>
+        <h2>One workspace from local models to native macOS tooling.</h2>
+        <p>Every subsystem runs directly on your Mac with hardware-accelerated rendering, sandboxed execution, and zero telemetry lock-in. Click any preview to inspect full-size.</p>
+      </div>
+
+      <div class="bl-bento">
+        <article class="bl-card bl-card-wide">
+          <div class="bl-card-top">
+            <span class="bl-badge">01 &middot; Orchestration</span>
+            <span class="bl-mono-tag">Work &middot; Git &amp; Neutrino</span>
+          </div>
+          <h3>Work Sessions, /swarm &amp; Native Git</h3>
+          <p>
+            Run Claude, Gemini, and Codex work sessions across local repositories with deterministic verification verdicts, branch graphs, commit activity heatmaps, pull request tracking, and isolated git worktrees.
+          </p>
+          <button type="button" class="bl-card-shot" data-lightbox="work" aria-label="Inspect Work Sessions and Git screenshot">
+            <img src="/media/baryon-work.webp?v=2" alt="Baryon work session beside native Git branches and commit history" width="1600" height="1000" loading="lazy" />
+          </button>
+        </article>
+
+        <article class="bl-card">
+          <div class="bl-card-top">
+            <span class="bl-badge">02 &middot; Discovery</span>
+            <span class="bl-mono-tag">Workbench</span>
+          </div>
+          <h3>Research Workbench &amp; Lab Notebooks</h3>
+          <p>
+            Pair multi-round autonomous literature synthesis and citations with a live sandboxed Python/SciPy lab notebook — zero unapproved network access.
+          </p>
+          <button type="button" class="bl-card-shot" data-lightbox="research" aria-label="Inspect Research Workbench screenshot">
+            <img src="/media/baryon-research.webp?v=2" alt="Baryon Research Workbench pairing hypotheses and citations with a Python lab kernel" width="1600" height="1000" loading="lazy" />
+          </button>
+        </article>
+
+        <article class="bl-card">
+          <div class="bl-card-top">
+            <span class="bl-badge">03 &middot; Data &amp; ML</span>
+            <span class="bl-mono-tag">Stages 1&ndash;8</span>
+          </div>
+          <h3>Local AutoML &amp; Column Telemetry</h3>
+          <p>
+            Profile datasets, guard against target leakage automatically, train LightGBM/XGBoost/CatBoost locally on CPU/MPS, and inspect 3D embeddings &amp; Resolve entity linkage.
+          </p>
+          <button type="button" class="bl-card-shot" data-lightbox="analytics" aria-label="Inspect Analytics and AutoML screenshot">
+            <img src="/media/baryon-analytics.webp?v=2" alt="Baryon Analytics dataset profiler and AutoML run inspector" width="1600" height="1000" loading="lazy" />
+          </button>
+        </article>
+
+        <article class="bl-card bl-card-wide">
+          <div class="bl-card-top">
+            <span class="bl-badge">04 &middot; Learning</span>
+            <span class="bl-mono-tag">FSRS-6 &middot; 12 Studio Tools</span>
+          </div>
+          <h3>Study Notebooks, Live Math &amp; Practice Sandboxes</h3>
+          <p>
+            Keep 50+ course sources ticked beside a cited AI tutor that renders interactive math animations, FSRS-6 flashcard decks, two-host Audio Overviews, and sandboxed Coding, Circuit &amp; Logic practice engines.
+          </p>
+          <button type="button" class="bl-card-shot" data-lightbox="notebooks" aria-label="Inspect Study Notebooks and Studio screenshot">
+            <img src="/media/baryon-notebooks.webp?v=2" alt="Baryon Study Notebooks showing convex function graph animation and 12 Studio learning tools" width="1600" height="1000" loading="lazy" />
+          </button>
+        </article>
+
+        <article class="bl-card">
+          <div class="bl-card-top">
+            <span class="bl-badge">05 &middot; Ecosystem</span>
+            <span class="bl-mono-tag">Workspace &amp; MCP</span>
+          </div>
+          <h3>Google Workspace, Subscriptions &amp; CLI</h3>
+          <p>
+            Connect Drive, Docs, Sheets, Slides, Calendar &amp; Gmail alongside Claude, Gemini, Codex, Spotify, <code class="bl-inline-code">baryon</code> CLI, and iPhone/Web Studio companions (<a href="/chat">/chat</a>).
+          </p>
+          <button type="button" class="bl-card-shot" data-lightbox="plugins" aria-label="Inspect Plugins and Google Workspace screenshot">
+            <img src="/media/baryon-plugins.webp?v=2" alt="Baryon Plugins gallery showing Google Workspace, AI subscriptions, Local Files, and MCP connectors" width="1600" height="1000" loading="lazy" />
+          </button>
+        </article>
+
+        <article class="bl-card">
+          <div class="bl-card-top">
+            <span class="bl-badge">06 &middot; Visibility</span>
+            <span class="bl-mono-tag">Keychain + Cost</span>
+          </div>
+          <h3>Usage Telemetry &amp; Keychain Security</h3>
+          <p>
+            Track daily cost curves, cache savings, and top sessions across every provider while keeping API credentials sealed in macOS Keychain.
+          </p>
+          <button type="button" class="bl-card-shot" data-lightbox="usage" aria-label="Inspect Usage Telemetry screenshot">
+            <img src="/media/baryon-usage.webp?v=2" alt="Baryon Usage telemetry showing daily cost curves, token totals, cache savings, and top sessions" width="1600" height="1000" loading="lazy" />
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <section class="bl-section" id="download">
+      <div class="bl-section-head">
+        <span class="bl-kicker">Direct Installer</span>
+        <h2>Download Baryon for macOS.</h2>
+        <p>Preserves existing <code class="bl-inline-code">dev.razeen.lyra</code> Keychain secrets, chats, notebooks, and CLI aliases automatically.</p>
+      </div>
+
+      <div class="bl-install-grid">
+        <div class="bl-download-card">
+          <div class="bl-dl-head">
+            <div>
+              <span class="bl-badge is-live">Direct Download</span>
+              <h3 data-release="filename">Baryon-0.1.0-arm64.dmg</h3>
+              <p class="bl-dl-sub">Signed Apple Silicon disk image &middot; Drag &amp; drop into Applications</p>
+            </div>
+            <img src="/icon.png" alt="Baryon app icon" width="52" height="52" class="bl-dl-icon" />
+          </div>
+
+          <dl class="bl-specs">
+            <div><dt>Version</dt><dd data-release="version">0.1.0</dd></div>
+            <div><dt>Size</dt><dd data-release="size">330 MB</dd></div>
+            <div><dt>Requirement</dt><dd data-release="req">macOS 13.0+ (arm64)</dd></div>
+            <div><dt>Signing</dt><dd>Developer ID &middot; Hardened Runtime</dd></div>
+          </dl>
+
+          <div class="bl-dl-actions">
+            <a class="bl-btn-primary bl-btn-full" href="https://github.com/razeenwasif/baryon-releases/releases/download/v0.1.0/Baryon-0.1.0-arm64.dmg" download="Baryon-0.1.0-arm64.dmg" data-release="download-link">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 2.25v7.5m0 0l-3-3m3 3l3-3M2.75 12.75h10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>Download Baryon-0.1.0-arm64.dmg</span>
+            </a>
+            <a class="bl-btn-secondary" href="https://github.com/razeenwasif/baryon-releases/releases/download/v0.1.0/Baryon-0.1.0-arm64.dmg.sha256" data-release="sha-link">Download .sha256</a>
+          </div>
+
+          <div class="bl-checksum-box">
+            <div class="bl-checksum-head">
+              <span>SHA-256 Checksum</span>
+              <button type="button" class="bl-copy-btn" data-copy-target="sha256">Copy hash</button>
+            </div>
+            <code id="bl-sha256-val" data-release="sha256">4bee0d5b13cbe1404d62d7210ca2f471e14a66c2ce5495c199d47ff918f753e2</code>
+          </div>
+
+          <div class="bl-cmd-box">
+            <div class="bl-checksum-head">
+              <span>Verify locally in Terminal</span>
+              <button type="button" class="bl-copy-btn" data-copy-text="shasum -a 256 ~/Downloads/Baryon-0.1.0-arm64.dmg">Copy command</button>
+            </div>
+            <code>shasum -a 256 ~/Downloads/Baryon-0.1.0-arm64.dmg</code>
+          </div>
+        </div>
+
+        <div class="bl-steps-card">
+          <h3>First-Launch Install Guide</h3>
+          <ol class="bl-steps">
+            <li>
+              <span class="bl-step-num">1</span>
+              <div>
+                <strong>Mount &amp; copy to Applications</strong>
+                <p>Open <code class="bl-inline-code">Baryon-0.1.0-arm64.dmg</code> and drag <strong>Baryon</strong> onto the <strong>Applications</strong> folder shortcut.</p>
+              </div>
+            </li>
+            <li>
+              <span class="bl-step-num">2</span>
+              <div>
+                <strong>First-launch Gatekeeper note (unnotarized Developer ID)</strong>
+                <p>If macOS shows an unnotarized Developer ID prompt on first open, right-click <strong>Baryon.app</strong> &rarr; <strong>Open</strong>, or clear quarantine cleanly in Terminal:</p>
+                <div class="bl-mini-cmd">
+                  <code>xattr -dr com.apple.quarantine /Applications/Baryon.app</code>
+                  <button type="button" class="bl-copy-btn" data-copy-text="xattr -dr com.apple.quarantine /Applications/Baryon.app">Copy</button>
+                </div>
+              </div>
+            </li>
+            <li>
+              <span class="bl-step-num">3</span>
+              <div>
+                <strong>Complete 9-step onboarding</strong>
+                <p>Launch Baryon to connect Claude, Gemini, or ChatGPT/Codex, sign in to the Google Account Hub, and enable <code class="bl-inline-code">baryon</code> / <code class="bl-inline-code">baryon-mcp</code> CLI tools.</p>
+              </div>
+            </li>
+          </ol>
+
+          <div class="bl-companion-row">
+            <a class="bl-companion-card" href="/chat">
+              <div>
+                <strong>Baryon Web Studio</strong>
+                <span>Run /fanout Arena, DAG branching, and HTML/SVG artifacts in any browser.</span>
+              </div>
+              <span>/chat &rarr;</span>
+            </a>
+            <div class="bl-companion-card is-static">
+              <div>
+                <strong>Terminal CLI &amp; MCP Server</strong>
+                <span>Bundled inside the app &middot; symlinks to <code class="bl-inline-code">~/.local/bin/baryon</code> and <code class="bl-inline-code">baryon-mcp</code>.</span>
+              </div>
+              <span class="bl-mono-tag">CLI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bl-footer">
+    <div class="bl-footer-inner">
+      <div class="bl-footer-brand">
+        <img src="/icon.png" alt="Baryon" width="20" height="20" />
+        <span>Baryon &middot; Fairy Companion Workspace</span>
+      </div>
+      <div class="bl-footer-links">
+        <a href="https://github.com/razeenwasif/baryon-releases/releases/download/v0.1.0/Baryon-0.1.0-arm64.dmg" download="Baryon-0.1.0-arm64.dmg">macOS DMG</a>
+        <a href="/releases.json">releases.json</a>
+        <a href="/chat">Web Studio</a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog id="bl-lightbox" class="bl-lightbox" aria-labelledby="bl-lb-title">
+    <div class="bl-lb-shell">
+      <div class="bl-lb-head">
+        <div>
+          <span class="bl-mono-tag" id="bl-lb-tag">1 / 7</span>
+          <strong id="bl-lb-title">Home</strong>
+        </div>
+        <div class="bl-lb-actions">
+          <button type="button" class="bl-ctrl-btn" id="bl-lb-prev" aria-label="Previous image">&lsaquo;</button>
+          <button type="button" class="bl-ctrl-btn" id="bl-lb-next" aria-label="Next image">&rsaquo;</button>
+          <button type="button" class="bl-ctrl-btn" id="bl-lb-close" aria-label="Close preview">&times;</button>
+        </div>
+      </div>
+      <img id="bl-lb-img" src="/media/baryon-home.webp?v=2" alt="" width="1600" height="1000" />
+      <p id="bl-lb-caption" class="bl-lb-caption"></p>
+    </div>
+  </dialog>
+
+  <script type="module" src="/src/landing.js"></script>
+</body>
+</html>

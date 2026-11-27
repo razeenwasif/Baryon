@@ -1,0 +1,2 @@
+{"caption":"","data":"H004 : Nat.Prime 1000003","endPos":{"column":6,"line":6},"fileName":"Proof.lean","isSilent":false,"keepFullRange":false,"kind":"[anonymous]","pos":{"column":0,"line":6},"severity":"information"}
+{"caption":"","data":"'H004' depends on axioms: [propext, Classical.choice, Quot.sound, H004._native.native_decide.ax_1_1]","endPos":{"column":6,"line":7},"fileName":"Proof.lean","isSilent":false,"keepFullRange":false,"kind":"[anonymous]","pos":{"column":0,"line":7},"severity":"information"}

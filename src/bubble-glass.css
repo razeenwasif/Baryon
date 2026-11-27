@@ -1,0 +1,17 @@
+/* Spotlight-style glass speech bubble: dark at the top fading to a lighter, translucent
+   grey, blurred and saturated behind. The window is transparent, so the backdrop blur
+   reaches Fairy's own pixels; the gradient stays opaque enough to read over any app. */
+#floating-ui #floating-bubble{
+  background:linear-gradient(180deg,rgba(18,18,22,.9) 0%,rgba(40,41,48,.82) 38%,rgba(96,98,108,.7) 100%);
+  -webkit-backdrop-filter:blur(26px) saturate(1.7);backdrop-filter:blur(26px) saturate(1.7);
+  border:1px solid rgba(255,255,255,.14);border-radius:22px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.06),0 18px 48px rgba(0,0,0,.42),0 2px 8px rgba(0,0,0,.25);
+  color:#f6f7fb;text-shadow:none;overflow:hidden;
+}
+#floating-ui #floating-bubble-text,#floating-ui #floating-bubble-text.rich-reply{color:#f6f7fb;padding:14px 40px 14px 16px;scrollbar-color:rgba(255,255,255,.35) transparent}
+#floating-ui #floating-bubble-text.rich-reply .katex{filter:none}
+#floating-ui #floating-bubble-text.rich-reply pre{background:rgba(0,0,0,.35);border-color:rgba(255,255,255,.12)}
+#floating-ui #floating-bubble a{color:#d6e2ff}
+#floating-ui #close-floating-bubble{top:9px;right:9px;background:rgba(255,255,255,.12);color:#f2f3f7;box-shadow:none;opacity:.75}
+#floating-ui #close-floating-bubble:is(:hover,:focus-visible){opacity:1;background:rgba(255,255,255,.24)}
+@media (prefers-reduced-transparency:reduce){#floating-ui #floating-bubble{background:#26272d;-webkit-backdrop-filter:none;backdrop-filter:none}}

@@ -1,0 +1,77 @@
+/* Relay (relay.js): its icon on the action rail, and the bits its card, notification and panel add to Sweep's (sweep.css).
+   Sky blue for what's sent and what's moving, amber for the mini's floor and for waiting, coral for a failed sync. */
+:root{--rl-sky:#7dd3fc;--rl-sky-soft:rgba(125,211,252,.12)}
+
+/* The icon: its own drawing, so the arrows can turn. */
+#relay-button{position:relative}
+#relay-button[hidden]{display:none}
+#relay-button::before{display:none}
+#relay-button .relay-icon{position:relative;width:36px;height:36px;display:grid;place-items:center;font-size:0}
+#relay-button .relay-ring{position:absolute;inset:0;opacity:0;transition:opacity .2s}
+#relay-button .relay-track{fill:none;stroke:rgba(125,211,252,.16);stroke-width:1.6}
+#relay-button .relay-arc{fill:none;stroke:var(--rl-sky);stroke-width:1.6;stroke-linecap:round;stroke-dasharray:40 61;transform-origin:18px 18px}
+#relay-button .relay-arrows{transform-box:view-box;transform-origin:12px 12px}
+#relay-button .relay-badge{position:absolute;display:none}
+#relay-button .relay-pop{position:absolute;left:50%;top:-2px;margin-left:10px;padding:2px 7px;border-radius:999px;background:var(--rl-sky-soft);color:var(--rl-sky);font:500 11px/1.3 "JetBrains Mono",ui-monospace,monospace;white-space:nowrap;opacity:0;pointer-events:none}
+#relay-button .relay-pop.on{animation:relay-pop 2.6s ease-out 1}
+#relay-button[data-state="syncing"]{color:var(--rl-sky)!important;background:rgba(125,211,252,.10)!important}
+#relay-button[data-state="syncing"] .relay-ring{opacity:1}
+#relay-button[data-state="syncing"] .relay-arc{animation:sweep-spin 2.4s linear infinite}
+#relay-button[data-state="syncing"] .relay-arrows{animation:sweep-spin 1.6s linear infinite}
+#relay-button[data-state="done"]{color:var(--rl-sky)!important}
+#relay-button[data-state="done"] .relay-badge{display:block;right:1px;bottom:1px;width:12px;height:12px;border-radius:50%;background:var(--sw-mint) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230b0c10' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/8px no-repeat}
+#relay-button[data-state="waiting"]{color:var(--sw-amber)!important}
+#relay-button[data-state="waiting"] .relay-badge{display:block;right:5px;top:5px;width:7px;height:7px;border-radius:50%;background:var(--sw-amber);box-shadow:0 0 0 2px #0b0c10}
+#relay-button[data-state="failed"]{color:var(--sw-coral)!important}
+#relay-button[data-state="failed"] .relay-badge{display:block;right:2px;bottom:2px;width:12px;height:12px;border-radius:50%;background:var(--sw-coral) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 6v8' stroke='%230b0c10' stroke-width='3.4' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='18.5' r='1.9' fill='%230b0c10'/%3E%3C/svg%3E") center/9px no-repeat}
+#relay-button[data-state="off"]{opacity:.55}
+@keyframes relay-pop{0%{opacity:0;transform:translateY(4px)}12%,70%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-6px)}}
+
+/* Sweep's card and panel, in sky blue. */
+.relay .sweep-primary{background:var(--rl-sky)!important;color:#06222e!important}
+.relay .sweep-pane-icon{background:var(--rl-sky-soft);color:var(--rl-sky)}
+.relay .sweep-chip.sky{background:var(--rl-sky-soft);color:var(--rl-sky)}
+.relay .relay-dot{background:var(--rl-sky)}
+.relay .relay-flow{background:linear-gradient(90deg,#7dd3fc,#b6e6fd 40%,#7dd3fc);background-size:200% 100%}
+.relay-sky{color:var(--rl-sky)}
+.relay-coral{color:var(--sw-coral)}
+.relay-floor{color:var(--sw-amber);opacity:.85}
+.relay-pad{padding:10px 16px 4px;margin:0}
+.relay-mark{width:16px;height:16px;border-radius:50%;color:#0b0c10;display:grid;place-items:center;font-size:10px;font-weight:700;flex:none}
+.relay-mark.amber{background:var(--sw-amber)}
+.relay-mark.coral{background:var(--sw-coral)}
+.relay-route{display:grid;grid-template-columns:auto minmax(24px,1fr) auto;align-items:center;gap:10px;min-width:0}
+.relay-route.compact{font-size:12px}
+.relay-end{display:flex;flex-direction:column;min-width:0}
+.relay-end.right{text-align:right}
+.relay-end-name{font-weight:500;white-space:nowrap}
+.relay-route.compact .relay-end{flex-direction:row;gap:6px;align-items:baseline}
+.relay-line{height:2px;background:repeating-linear-gradient(90deg,rgba(125,211,252,.45) 0 6px,transparent 6px 11px);background-size:11px 2px}
+.relay-line.moving{animation:relay-dash .7s linear infinite}
+.relay-line.broken{background:repeating-linear-gradient(90deg,rgba(238,197,131,.35) 0 3px,transparent 3px 11px)}
+@keyframes relay-dash{to{background-position:11px 0}}
+.relay-space{display:flex;flex-direction:column;gap:6px}
+.relay-space .sweep-row{gap:6px}
+.relay-top{margin:0 16px 14px;padding:14px;border-radius:14px;background:rgba(255,255,255,.035);display:flex;flex-direction:column;gap:12px}
+.relay-repos{list-style:none;margin:0;padding:4px 10px 6px;display:flex;flex-direction:column;gap:6px}
+.relay-repos li{border-radius:12px;background:rgba(255,255,255,.035)}
+.relay-repo{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 12px}
+.relay-repo input{accent-color:var(--rl-sky);width:15px;height:15px;margin:0}
+.relay-repo-words{display:flex;flex-direction:column;gap:2px;text-align:left;min-width:0}
+.relay-repo-name{display:flex;align-items:baseline;gap:8px;min-width:0}
+.relay-repo-name > span:first-child{font-weight:500;white-space:nowrap}
+.relay-paths{font-size:10.5px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.relay-repos li.off .relay-repo-name > span:first-child{color:var(--sw-faint)}
+.relay-repo-words > .sweep-small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.relay-files{padding:0 12px 12px 38px;display:flex;flex-direction:column;gap:3px}
+.relay-files .sweep-mono{font-size:11px;color:#9aa3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.relay-routes{list-style:none;margin:0 16px;padding:0;display:flex;flex-direction:column;gap:4px}
+.relay-routes li{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:9px;color:var(--sw-dim)}
+.relay-routes li .sweep-mono{color:var(--sw-ink)}
+.relay-routes li.on{background:rgba(125,211,252,.07)}
+.relay-routes li.on > .sweep-small{color:var(--rl-sky)}
+
+#pane-rail button[data-pane="relay"]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 11a8 8 0 0 0-14.3-4.9L4 8'/%3E%3Cpath d='M4 3.5V8h4.5'/%3E%3Cpath d='M4 13a8 8 0 0 0 14.3 4.9L20 16'/%3E%3Cpath d='M20 20.5V16h-4.5'/%3E%3C/svg%3E")}
+@media (prefers-reduced-motion:reduce){
+  #relay-button .relay-arc,#relay-button .relay-arrows,#relay-button .relay-pop.on,.relay-line.moving{animation:none!important}
+}

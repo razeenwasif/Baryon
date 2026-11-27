@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "title": "Why a damped pendulum drifts",
+  "discipline": "physics",
+  "created": 1794877965,
+  "seats": [
+    {
+      "seat": "claude",
+      "role": "investigator",
+      "enabled": true
+    },
+    {
+      "seat": "codex",
+      "role": "engineer",
+      "enabled": true
+    },
+    {
+      "seat": "antigravity",
+      "role": "sandbox",
+      "enabled": true
+    }
+  ],
+  "budget": {
+    "calls": 20,
+    "per_engine": 2
+  },
+  "lab": {
+    "auto_run_sandboxed": false,
+    "timeout_s": 600
+  },
+  "literature": {
+    "enabled": false,
+    "sources": [
+      "arxiv",
+      "semanticScholar",
+      "openAlex"
+    ],
+    "queries": 3,
+    "per_query": 8,
+    "papers": 6,
+    "pdf_mb": 40,
+    "wait_s": 120,
+    "check": true
+  },
+  "lean": {
+    "enabled": true,
+    "calls": 3,
+    "timeout_s": 300
+  }
+}

@@ -1,0 +1,85 @@
+[
+  {
+    "body": "<p>Benders decomposition: let x be in [0, 4] and define the continuous recourse problem Q(x) = min 2y subject to y &ge; 3 &minus; x and y &ge; 0. The master variable theta estimates Q(x).</p><p>At x = 1, the optimal dual multiplier for y &ge; 3 &minus; x is 2. Which Benders optimality cut follows?</p>",
+    "choices": [
+      "theta >= 3 - x",
+      "theta >= 6 - 2x",
+      "theta <= 6 - 2x",
+      "x >= 3"
+    ]
+  },
+  {
+    "body": "<p>Explain why the cut in question 13 is a valid lower bound on Q(x) for every x in [0, 4], including x greater than 3.</p>",
+    "limit": 80
+  },
+  {
+    "body": "<p>Modify the recourse problem in question 13 by adding y &le; 1. At the master candidate x = 1, the subproblem is infeasible.</p><p>Is x &ge; 2 a valid Benders feasibility cut that excludes all and only the infeasible x values in [0, 4] for this modified subproblem?</p>",
+    "choices": [
+      "Yes",
+      "No"
+    ]
+  },
+  {
+    "body": "<p>True or false: the single optimality cut selected in question 13, without any other bound on theta, exactly represents Q(x) throughout [0, 4].</p>",
+    "choices": [
+      "True",
+      "False"
+    ]
+  },
+  {
+    "body": "<p>Column generation for the minimization LP min c^T lambda subject to A lambda = b and lambda &ge; 0: the current restricted-master dual vector is pi = (2, 1).</p><p>A missing column has a = (1, 3) and cost c = 4. What is its reduced cost c &minus; pi^T a?</p>",
+    "choices": [
+      "1",
+      "-1",
+      "4",
+      "9"
+    ]
+  },
+  {
+    "body": "<p>Explain what the reduced cost in question 17 tells us about this column and the current restricted-master dual solution. Does adding it guarantee an immediate strict decrease in the primal objective, even with degeneracy?</p>",
+    "limit": 80
+  },
+  {
+    "body": "<p>Consider a feasible restricted master solved to optimality for a minimization LP with nonnegative variables and equality constraints. Exact pricing proves that every omitted column has nonnegative reduced cost at the current dual solution.</p><p>True or false: this proves optimality of the full LP relaxation and also automatically proves optimality of the corresponding integer program.</p>",
+    "choices": [
+      "True",
+      "False"
+    ]
+  },
+  {
+    "body": "<p>In column generation for a continuous minimization master, exact pricing finds no negative reduced-cost column and the feasible restricted master has objective value 12. Its current solution is fractional.</p><p>Which conclusion is guaranteed about the corresponding minimization integer program, if its feasible set is nonempty?</p>",
+    "choices": [
+      "Its optimal value is exactly 12",
+      "Its optimal value is at most 12",
+      "Its optimal value is at least 12",
+      "It has no finite optimum"
+    ]
+  },
+  {
+    "body": "<p>Convex optimization: minimize f(x, y) = x^2 + y^2 over real x and y subject to x + y &ge; 2. Which point is the unique global minimizer?</p>",
+    "choices": [
+      "(0, 0)",
+      "(1, 1)",
+      "(2, 0)",
+      "The problem is unbounded below"
+    ]
+  },
+  {
+    "body": "<p>Use the KKT conditions to justify the answer to question 21. Write the constraint as 2 &minus; x &minus; y &le; 0, give its nonnegative multiplier, and explain why these conditions certify a global minimum.</p>",
+    "limit": 80
+  },
+  {
+    "body": "<p>True or false: for a convex objective minimized over a convex feasible set, every local minimizer is also a global minimizer.</p>",
+    "choices": [
+      "True",
+      "False"
+    ]
+  },
+  {
+    "body": "<p>The graph below defines a smooth function on the displayed interval. Is the illustrated function convex on that interval?</p><svg id=\"convex-graph\" viewBox=\"0 0 560 240\" width=\"560\" height=\"240\" role=\"img\" aria-label=\"Function graph\" style=\"max-width:100%;display:block\"><path d=\"M40 210 H530 M280 220 V15\" stroke=\"#333\" stroke-width=\"2\" fill=\"none\"/><path id=\"function-curve\" d=\"M65 35 Q280 375 495 35\" stroke=\"#173c7b\" stroke-width=\"5\" fill=\"none\"/></svg>",
+    "choices": [
+      "No",
+      "Yes"
+    ]
+  }
+]

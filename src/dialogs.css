@@ -1,0 +1,57 @@
+/* Choose Avatar, Music and file preview, matched to Fairy's Obsidian dialogs. */
+:is(#avatar-dialog,#music,dialog.file-preview){
+  --d-accent:var(--wp-accent,#3e5aec);
+  box-sizing:border-box;max-height:88vh;padding:22px 24px;border:1px solid rgba(255,255,255,.11);border-radius:18px;
+  background:#0b0c0f;color:#eceef4;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;
+  box-shadow:0 28px 80px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.04);scrollbar-width:thin;scrollbar-color:#ffffff26 transparent;
+  &::backdrop{background:rgba(4,5,8,.72);backdrop-filter:blur(8px)}
+  .dialog-header{align-items:center;gap:16px;margin-bottom:4px}
+  .eyebrow{display:block;margin:0 0 2px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#8e95a8}
+  h2{margin:0;font-family:inherit;font-size:20px;font-weight:600;letter-spacing:-.01em;color:#f4f5f8}
+  .field-note{margin:6px 0 14px;font-size:13px;line-height:1.5;color:#9da4b8}
+  a{color:#9fb2ff;text-underline-offset:3px}
+  code{padding:1px 6px;border-radius:6px;background:rgba(255,255,255,.08);font-size:12.5px}
+  label{gap:6px;margin:14px 0;font-size:13px;color:#b9bbc4}
+  :is(input,select,textarea){box-sizing:border-box;height:38px;padding:0 12px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:#14151a;color:#eceef4;font:inherit;font-size:13.5px}
+  :is(input,select,textarea):focus-visible{outline:none;border-color:rgba(159,178,255,.55);box-shadow:0 0 0 2px rgba(159,178,255,.22)}
+  button{min-height:36px;padding:0 14px;border:1px solid rgba(255,255,255,.11);border-radius:10px;background:rgba(255,255,255,.05);color:#d5d9e4;font:inherit;font-size:13.5px;font-weight:500;box-shadow:none;cursor:pointer}
+  button:hover:not(:disabled){background:rgba(255,255,255,.11);color:#fff}
+  button:disabled{opacity:.42;cursor:default}
+  button:focus-visible{outline:2px solid #9fb2ff;outline-offset:2px}
+  button.primary{background:var(--d-accent);border-color:rgba(159,178,255,.45);color:#fff}
+  button.primary:hover:not(:disabled){background:#4f6af2;color:#fff}
+  pre{margin:0;padding:14px 16px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:#090a0d;color:#eceef4;font:12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}
+}
+/* The close button in a dialog's corner. */
+:is(#avatar-dialog,#music) .dialog-header button.quiet{flex:none;display:grid;place-items:center;width:30px;min-height:30px;height:30px;padding:0;border:0;border-radius:8px;background:rgba(255,255,255,.06);font-size:14px;color:#c5cad8}
+:is(#avatar-dialog,#music) .dialog-header button.quiet:hover:not(:disabled){background:rgba(255,255,255,.12);color:#fff}
+
+/* Choose Avatar */
+#avatar-dialog{width:min(640px,92vw)}
+#avatar-dialog .avatar-list{gap:10px;margin:14px 0 2px}
+#avatar-dialog .avatar-card{gap:16px;padding:14px 16px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#14151a}
+#avatar-dialog .avatar-card:hover{background:#191b22;border-color:rgba(255,255,255,.15)}
+#avatar-dialog .avatar-card:focus-visible{outline:2px solid #9fb2ff;outline-offset:2px}
+#avatar-dialog .avatar-card.active{border-color:rgba(159,178,255,.48);background:rgba(62,90,236,.15)}
+#avatar-dialog .avatar-card-title{font-size:15px;font-weight:600;color:#f4f5f8}
+#avatar-dialog .avatar-card-title .badge{padding:2px 8px;border-radius:8px;background:rgba(255,255,255,.08);color:#b8bfd0;font-size:11px;font-weight:500;letter-spacing:0;text-transform:none}
+#avatar-dialog .avatar-card-desc{font-size:13px;line-height:1.45;color:#8e95a8}
+#avatar-dialog .avatar-card-status{padding:6px 12px;border:1px solid rgba(255,255,255,.09);border-radius:9px;background:rgba(255,255,255,.06);color:#d5d9e4;font-size:12.5px;font-weight:500}
+#avatar-dialog .avatar-card.active .avatar-card-status{border-color:rgba(159,178,255,.45);background:var(--d-accent);color:#fff}
+
+/* Music */
+#music{width:min(680px,92vw)}
+#music h3{margin:18px 0 6px;font-size:15px;font-weight:600;color:#f4f5f8}
+#music .music-now{margin:14px 0;padding:16px 18px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#14151a}
+#music .music-now>p:not(.field-note){margin:0;font-size:15px;font-weight:600;color:#eef0f7}
+#music .music-actions{gap:8px;margin:12px 0}
+#music .music-row{border-bottom-color:rgba(255,255,255,.08)}
+#music .music-row small{color:#8e95a8}
+
+.review-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+
+/* Previewing a local file from Settings. */
+dialog.file-preview{width:min(760px,92vw)}
+dialog.file-preview h3{margin:0 0 2px;font-size:17px;color:#f4f5f8}
+dialog.file-preview img{border-radius:12px}
+dialog.file-preview .field-grid{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}

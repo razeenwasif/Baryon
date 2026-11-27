@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+import { defaultDataDir } from '../desktop/fairy-cli.mjs';
+import { startFairyMcpServer } from '../desktop/fairy-mcp.mjs';
+
+const args = process.argv.slice(2);
+const idx = args.indexOf('--data-dir');
+const dataDir = idx >= 0 && args[idx + 1] ? args[idx + 1] : defaultDataDir();
+const server = startFairyMcpServer({ dataDir });
+await server.closed;

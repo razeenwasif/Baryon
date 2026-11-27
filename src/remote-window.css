@@ -1,0 +1,9 @@
+/* Fairy away from the mini, Away 3: what only the Mac Fairy lives on can do, shown but not pressable here. */
+.remote-window [aria-disabled="true"] { opacity: 0.4; cursor: not-allowed; }
+
+/* Away 5: the link to the other Mac is down (the window stays readable), or an answer is slow. */
+#remote-link { position: fixed; z-index: 60; top: calc(var(--notch-band, 0px) + 12px); left: 50%; transform: translateX(-50%); max-width: min(560px, calc(100vw - 32px));
+  padding: 7px 14px; border-radius: 999px; font-size: 13px; line-height: 1.35; color: #eceef6; background: rgba(20, 22, 30, 0.92);
+  box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.7); pointer-events: none; text-align: center; }
+.remote-down #messages { opacity: 0.6; transition: opacity 0.2s ease; }
+.remote-down #send, .remote-down #record { opacity: 0.4; cursor: not-allowed; }

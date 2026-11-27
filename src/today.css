@@ -1,0 +1,54 @@
+/* The Today panel beside the chat. */
+#pane-rail button[data-pane="today"]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4'/%3E%3C/svg%3E")}
+.today{display:flex;flex-direction:column;gap:14px;padding:4px 4px 16px;color:var(--w-ink,#e8e9ee)}
+.today-head{display:flex;align-items:baseline;gap:10px;padding:0 4px}
+.today-head h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em}
+.today-date{flex:1;min-width:0;font-size:13px;color:var(--w-muted,#a2a4ad);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.today-refresh{flex:none;align-self:center;width:30px;height:30px;min-width:0;padding:0;border-radius:50%;background:none;color:var(--w-muted,#a2a4ad)}
+.today-refresh::before{content:"";display:block;width:16px;height:16px;margin:auto;background:currentColor;-webkit-mask:var(--icon) center/contain no-repeat;mask:var(--icon) center/contain no-repeat;--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5'/%3E%3C/svg%3E")}
+.today-refresh:hover{background:var(--w-hover,#ffffff12);color:var(--w-ink,#e8e9ee)}
+.today-block{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+.today-block h3{margin:0;font-size:12px;font-weight:500;color:var(--w-muted,#a2a4ad)}
+.today-note{margin:0;font-size:13px;line-height:1.5;color:var(--w-dim,#b9bbc4)}
+.today-note b{font-weight:600;color:var(--w-ink,#e8e9ee)}
+.today-link{display:inline;min-width:0;height:auto;padding:0;background:none;color:#9fb2ff;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.today-next{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;min-width:0;height:auto;padding:12px 14px;border-radius:12px;text-align:left;background:color-mix(in srgb,var(--w-accent,#3e5aec) 18%,transparent);border:1px solid color-mix(in srgb,var(--w-accent,#3e5aec) 40%,transparent)}
+.today-next b{font-size:15px;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.today-next .today-when{font-size:12px;color:#c6d2ff}
+.today-next:not(:disabled):hover{background:color-mix(in srgb,var(--w-accent,#3e5aec) 26%,transparent)}
+.today-list{display:flex;flex-direction:column;gap:2px;margin:0;padding:0;list-style:none}
+.today-list button{display:flex;align-items:center;gap:10px;width:100%;min-width:0;height:auto;min-height:36px;padding:6px 8px;border-radius:10px;background:none;text-align:left;font-size:13px;font-weight:400}
+.today-list button:not(:disabled):hover{background:var(--w-hover,#ffffff12)}
+.today-list button:disabled{cursor:default;opacity:1}
+.today-list .today-when{flex:0 0 8.4em;color:var(--w-muted,#a2a4ad);font-variant-numeric:tabular-nums}
+.today-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.today-status{flex:none;font-size:12px;color:var(--w-muted,#a2a4ad)}
+.today-dot{flex:none;width:8px;height:8px;border-radius:50%;background:#6f8cff}
+.today-list .working .today-dot{animation:today-pulse 1.6s ease-in-out infinite}
+.today-list .waiting .today-dot{background:#f0b27a}
+.today-list .waiting .today-status{color:#f3c9a0}
+.today-count{margin:0;font-size:13px;color:var(--w-dim,#b9bbc4)}
+.today-count b{font-size:26px;font-weight:600;color:var(--w-ink,#e8e9ee);margin-right:4px;font-variant-numeric:tabular-nums}
+.today-ask{align-self:flex-start;min-width:0;height:34px;padding:0 14px;border-radius:17px;background:var(--w-raised,#2b2c31);font-size:13px;font-weight:500}
+.today-ask:hover{background:var(--w-hover,#ffffff1f)}
+.today-brief-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.today-brief-warn{margin:0;font-size:12.5px;color:#fca5a5}
+@keyframes today-pulse{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.today-list .working .today-dot,.home-today-chip.is-working .home-today-dot{animation:none}}
+
+/* Home at-a-glance Today strip (src/app.js + src/today.js). */
+.home-today{order:4;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;max-width:680px;margin:0 auto 48px}
+.home-today[hidden]{display:none}
+html:not(.home) .home-today{display:none!important}
+.home-today-chip{display:inline-flex;align-items:center;gap:7px;max-width:260px;height:30px;padding:0 11px;border:1px solid rgba(255,255,255,.085);border-radius:999px;background:#14151a;color:var(--w-soft,#d5d8e2);font-size:12px;line-height:1;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.home-today-chip:hover{background:#191b22;border-color:rgba(159,178,255,.32);color:#fff}
+.home-today-chip--open{border-color:transparent;background:rgba(255,255,255,.04);color:var(--w-muted,#787d8c)}
+.home-today-dot{flex:none;width:6px;height:6px;border-radius:50%;background:#9fb2ff}
+.home-today-chip.is-waiting .home-today-dot{background:#f0b27a}
+.home-today-chip.is-working .home-today-dot{background:#6f8cff;animation:today-pulse 1.6s ease-in-out infinite}
+.home-today-chip.is-clear .home-today-dot{background:#34d399}
+.home-today-chip.is-email .home-today-dot{background:#9fb2ff}
+.home-today-chip.is-routine .home-today-dot{background:#a2a4ad}
+.home-today-badge{flex:none;font-weight:600;color:var(--w-ink,#eceef4);font-variant-numeric:tabular-nums}
+.home-today-chip.is-waiting .home-today-badge{color:#f3c9a0}
+.home-today-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--w-dim,#9da2b0)}

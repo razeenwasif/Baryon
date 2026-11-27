@@ -1,0 +1,16 @@
+#music { width: min(680px, 92vw); max-height: 88vh; overflow: auto; padding: 22px 24px; }
+#music h2 { margin: 4px 0 8px; }
+#music a { color: #9fb2ff; text-decoration: underline; text-underline-offset: 3px; }
+#music code { overflow-wrap: anywhere; font-size: 12px; }
+.music-actions { display: flex; gap: 10px; margin: 14px 0; flex-wrap: wrap; }
+.music-now { margin: 14px 0; padding: 16px 18px; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; background: #14151a; }
+#music-now-track { margin-top: 8px; font-size: 17px; color: #f4f5f8; }
+.music-row { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+.music-row > div { min-width: 0; overflow-wrap: anywhere; }
+.music-row small { display: block; margin-top: 4px; color: #8e95a8; }
+.music-row button { flex-shrink: 0; }
+#music-status, #music-list-status { overflow-wrap: anywhere; }
+#music-more { margin-top: 14px; }
+
+#music .music-now .field-note { margin: 8px 0; }
+#music > .field-note { margin: 6px 0 16px; }
