@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { defaultDataDir } from '../desktop/fairy-cli.mjs';
-import { startFairyMcpServer } from '../desktop/fairy-mcp.mjs';
+import { defaultDataDir } from '../build-ts/desktop/fairy-cli.mjs';
+import { startFairyMcpServer } from '../build-ts/desktop/fairy-mcp.mjs';
 
 const args = process.argv.slice(2);
 const idx = args.indexOf('--data-dir');

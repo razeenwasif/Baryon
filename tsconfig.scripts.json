@@ -1,0 +1,31 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDirs": [".", "types/core-pro-stubs"],
+    "lib": ["ES2023", "DOM"],
+    "types": ["node"],
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true
+  },
+  "include": [
+    "scripts/**/*.ts",
+    "scripts/**/*.mts",
+    "scripts/types/**/*.d.ts",
+    "test/**/*.ts",
+    "test/**/*.mts",
+    "evals/**/*.ts",
+    "evals/**/*.mts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build-ts",
+    "release",
+    "release-core",
+    ".local-data",
+    "evals/projects"
+  ]
+}

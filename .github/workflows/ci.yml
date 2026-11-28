@@ -30,11 +30,11 @@ jobs:
       - name: Install dependencies safely (ignore postinstall scripts)
         run: npm ci --ignore-scripts
 
-      - name: Syntax check desktop runtime entrypoints
-        run: node --check desktop/main.cjs desktop/preload.cjs
+      - name: Build desktop TypeScript and run strict tsrs typechecks
+        run: npm run build:desktop && npm run build:tests && npm run typecheck && npm run typecheck:desktop && npm run typecheck:scripts && npm run typecheck:web && node --check build-ts/desktop/main.cjs build-ts/desktop/preload.cjs
 
       - name: Run repository security invariant checks
-        run: node --test test/repo-security.test.mjs
+        run: node --import ./scripts/ts-build-loader.mjs --test test/repo-security.test.mts
 
       - name: Build renderer bundle
         run: npm run build

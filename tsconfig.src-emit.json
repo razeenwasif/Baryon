@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.renderer.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "build-ts",
+    "noEmit": false
+  },
+  "include": [
+    "src/*.ts",
+    "src/viewers/*.ts",
+    "src/academy/*.ts",
+    "src/types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build-ts",
+    "release",
+    "release-core",
+    ".local-data",
+    "src/**/*.tsx"
+  ]
+}

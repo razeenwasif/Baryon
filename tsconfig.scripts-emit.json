@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.scripts.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": ".",
+    "outDir": "build-ts"
+  },
+  "include": [
+    "scripts/**/*.ts",
+    "scripts/**/*.mts",
+    "scripts/types/**/*.d.ts",
+    "evals/**/*.ts",
+    "evals/**/*.mts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build-ts",
+    "release",
+    "release-core",
+    ".local-data",
+    "evals/projects"
+  ]
+}
