@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { runCli } from '../desktop/fairy-cli.mjs';
+import { runCli } from '../build-ts/desktop/fairy-cli.mjs';
 
 const code = await runCli(process.argv.slice(2));
 process.exit(code);

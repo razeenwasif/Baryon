@@ -1,0 +1,42 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDirs": [".", "types/core-pro-stubs"],
+    "lib": ["ES2023", "DOM"],
+    "types": ["node"],
+    "rootDir": ".",
+    "outDir": "build-ts",
+    "allowJs": true,
+    "checkJs": false
+  },
+  "include": [
+    "desktop/**/*.ts",
+    "desktop/**/*.mts",
+    "desktop/**/*.cts",
+    "desktop/types/**/*.d.ts",
+    "src/defaults.ts",
+    "src/pane-layout.ts",
+    "src/wake-profile.ts",
+    "src/chat-routing.ts",
+    "src/work-context.ts",
+    "src/token-split.ts",
+    "src/note-heading.ts",
+    "src/clipboard-request.ts",
+    "src/local-file-types.ts",
+    "src/conditional-task.ts",
+    "src/model-menu.ts",
+    "src/auto-caption.ts",
+    "src/diff-walkthrough.ts",
+    "src/usage-logic.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build-ts",
+    "release",
+    "release-core",
+    ".local-data"
+  ]
+}

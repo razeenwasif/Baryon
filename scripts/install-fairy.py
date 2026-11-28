@@ -45,7 +45,11 @@ subprocess.run(['open','-a',str(target)],check=True)
 # The drop folder's tools for the Claude app's daily task (claude.ai Docs and Designs, claude-sync.mjs): kept current here.
 tools=Path.home()/'Library/Application Support/lyra-companion/face/claude-sync-drop/_tools'
 tools.mkdir(parents=True,exist_ok=True)
-for path in [root/'scripts/claude-drop/claude-drop.py',root/'scripts/claude-drop/export-docs.mjs',root/'desktop/doc-export.mjs']:shutil.copyfile(path,tools/path.name)
+doc_export=root/'build-ts/desktop/doc-export.mjs'
+if not doc_export.exists():doc_export=root/'desktop/doc-export.mjs'
+export_docs=root/'build-ts/scripts/claude-drop/export-docs.mjs'
+if not export_docs.exists():export_docs=root/'scripts/claude-drop/export-docs.mjs'
+for path in [root/'scripts/claude-drop/claude-drop.py',export_docs,doc_export]:shutil.copyfile(path,tools/path.name)
 # Symlink `baryon`, `baryon-mcp`, `fairy`, and `fairy-mcp` CLIs into ~/.local/bin so terminal commands resolve on PATH.
 for link_name, bin_name in [('baryon', 'baryon'), ('baryon-mcp', 'baryon-mcp'), ('fairy', 'fairy'), ('fairy-mcp', 'fairy-mcp')]:
     cli_src=root/'bin'/bin_name
